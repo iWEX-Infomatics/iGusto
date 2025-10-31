@@ -1,0 +1,19 @@
+{
+  "doctype": "DocType",
+  "name": "Room Amenity",
+  "module": "igusto",
+  "istable": 1,
+  "fields": [
+    {
+      "fieldname": "amenity_name",
+      "fieldtype": "Data",
+      "label": "Amenity Name",
+      "reqd": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Data",
+      "label": "Description"
+    }
+  ]
+}

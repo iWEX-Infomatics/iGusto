@@ -1,0 +1,137 @@
+{
+  "doctype": "DocType",
+  "name": "Guest",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "GUEST-.#####",
+  "title_field": "full_name",
+  "fields": [
+    {
+      "fieldname": "section_basic",
+      "fieldtype": "Section Break",
+      "label": "Basic Information"
+    },
+    {
+      "fieldname": "full_name",
+      "fieldtype": "Data",
+      "label": "Full Name",
+      "reqd": 1
+    },
+    {
+      "fieldname": "gender",
+      "fieldtype": "Select",
+      "label": "Gender",
+      "options": "Male\nFemale\nOther"
+    },
+    {
+      "fieldname": "dob",
+      "fieldtype": "Date",
+      "label": "Date of Birth"
+    },
+    {
+      "fieldname": "primary_contact",
+      "fieldtype": "Data",
+      "label": "Primary Contact Number",
+      "reqd": 1
+    },
+    {
+      "fieldname": "email",
+      "fieldtype": "Data",
+      "label": "Email Address"
+    },
+    {
+      "fieldname": "nationality",
+      "fieldtype": "Data",
+      "label": "Nationality"
+    },
+    {
+      "fieldname": "address",
+      "fieldtype": "Small Text",
+      "label": "Address"
+    },
+    {
+      "fieldname": "id_proof_type",
+      "fieldtype": "Select",
+      "label": "ID Proof Type",
+      "options": "Passport\nAadhar\nDriving License\nVoter ID\nOther"
+    },
+    {
+      "fieldname": "id_proof_number",
+      "fieldtype": "Data",
+      "label": "ID Proof Number"
+    },
+    {
+      "fieldname": "section_company",
+      "fieldtype": "Section Break",
+      "label": "Corporate / Company Information"
+    },
+    {
+      "fieldname": "company",
+      "fieldtype": "Link",
+      "options": "Customer",
+      "label": "Linked Company"
+    },
+    {
+      "fieldname": "designation",
+      "fieldtype": "Data",
+      "label": "Designation / Title"
+    },
+    {
+      "fieldname": "section_extra",
+      "fieldtype": "Section Break",
+      "label": "Other Details"
+    },
+    {
+      "fieldname": "guest_photo",
+      "fieldtype": "Attach Image",
+      "label": "Guest Photo"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes / Remarks"
+    },
+    {
+      "fieldname": "is_foreign_national",
+      "fieldtype": "Check",
+      "label": "Is Foreign National?"
+    },
+    {
+      "fieldname": "passport_no",
+      "fieldtype": "Data",
+      "label": "Passport Number"
+    },
+    {
+      "fieldname": "visa_type",
+      "fieldtype": "Data",
+      "label": "Visa Type"
+    },
+    {
+      "fieldname": "visa_valid_till",
+      "fieldtype": "Date",
+      "label": "Visa Valid Till"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Hotel Receptionist",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 0
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ],
+  "actions": [],
+  "allow_rename": 0,
+  "index_web_pages_for_search": 0
+}

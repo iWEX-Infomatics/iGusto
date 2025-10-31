@@ -1,0 +1,121 @@
+{
+  "doctype": "DocType",
+  "name": "Housekeeping Task",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "HKT-.#####",
+  "title_field": "room",
+  "fields": [
+    {
+      "fieldname": "task_date",
+      "fieldtype": "Date",
+      "label": "Task Date",
+      "default": "Today",
+      "reqd": 1
+    },
+    {
+      "fieldname": "room",
+      "fieldtype": "Link",
+      "options": "Room",
+      "label": "Room",
+      "reqd": 1
+    },
+    {
+      "fieldname": "room_type",
+      "fieldtype": "Link",
+      "options": "Room Type",
+      "label": "Room Type"
+    },
+    {
+    "fieldname": "checklist",
+    "fieldtype": "Table",
+    "options": "Housekeeping Checklist",
+    "label": "Cleaning Checklist"
+    },
+    {
+      "fieldname": "assigned_to",
+      "fieldtype": "Link",
+      "options": "User",
+      "label": "Assigned To"
+    },
+    {
+      "fieldname": "task_type",
+      "fieldtype": "Select",
+      "label": "Task Type",
+      "options": "Cleaning\nLinen Change\nDeep Cleaning\nInspection\nMaintenance Request\nOther",
+      "default": "Cleaning"
+    },
+    {
+      "fieldname": "priority",
+      "fieldtype": "Select",
+      "label": "Priority",
+      "options": "Low\nMedium\nHigh",
+      "default": "Medium"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nIn Progress\nCompleted\nCancelled",
+      "default": "Pending"
+    },
+    {
+      "fieldname": "check_in_reference",
+      "fieldtype": "Link",
+      "options": "Guest Registration",
+      "label": "Guest Registration"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Remarks / Notes"
+    },
+    {
+      "fieldname": "completed_on",
+      "fieldtype": "Datetime",
+      "label": "Completed On"
+    },
+    {
+      "fieldname": "verified_by",
+      "fieldtype": "Link",
+      "options": "User",
+      "label": "Verified By"
+    },
+    {
+      "fieldname": "attachments",
+      "fieldtype": "Attach",
+      "label": "Attachments (Photos/Checklist)"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Housekeeping Staff",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Hotel Receptionist",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Hotel Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ]
+}

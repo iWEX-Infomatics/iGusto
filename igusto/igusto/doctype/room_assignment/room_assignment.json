@@ -1,0 +1,145 @@
+{
+  "doctype": "DocType",
+  "name": "Room Assignment",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "ASSIGN-.#####",
+  "title_field": "booking",
+  "fields": [
+    {
+      "fieldname": "booking",
+      "fieldtype": "Link",
+      "options": "Booking",
+      "label": "Booking Reference",
+      "reqd": 1
+    },
+    {
+      "fieldname": "guest",
+      "fieldtype": "Link",
+      "options": "Guest",
+      "label": "Guest",
+      "reqd": 1
+    },
+    {
+      "fieldname": "room",
+      "fieldtype": "Link",
+      "options": "Room",
+      "label": "Assigned Room",
+      "reqd": 1
+    },
+    {
+      "fieldname": "room_type",
+      "fieldtype": "Link",
+      "options": "Room Type",
+      "label": "Room Type",
+      "reqd": 1
+    },
+    {
+      "fieldname": "check_in_time",
+      "fieldtype": "Datetime",
+      "label": "Check-In Time"
+    },
+    {
+      "fieldname": "check_out_time",
+      "fieldtype": "Datetime",
+      "label": "Check-Out Time"
+    },
+    {
+      "fieldname": "nights",
+      "fieldtype": "Int",
+      "label": "Total Nights"
+    },
+    {
+      "fieldname": "rfid_key",
+      "fieldtype": "Data",
+      "label": "RFID / Keycard ID"
+    },
+    {
+      "fieldname": "rfid_status",
+      "fieldtype": "Select",
+      "label": "RFID Status",
+      "options": "Not Issued\nActive\nDeactivated",
+      "default": "Not Issued"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Assignment Status",
+      "options": "Pending\nChecked-In\nChecked-Out\nCancelled",
+      "default": "Pending"
+    },
+    {
+      "fieldname": "verified_by",
+      "fieldtype": "Link",
+      "options": "User",
+      "label": "Verified By"
+    },
+    {
+      "fieldname": "verified_on",
+      "fieldtype": "Datetime",
+      "label": "Verified On"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes / Remarks"
+    },
+    {
+      "fieldname": "section_break1",
+      "fieldtype": "Section Break",
+      "label": "System Links"
+    },
+    {
+      "fieldname": "guest_registration",
+      "fieldtype": "Link",
+      "options": "Guest Registration",
+      "label": "Linked Guest Registration"
+    },
+    {
+      "fieldname": "housekeeping_status",
+      "fieldtype": "Select",
+      "label": "Housekeeping Status",
+      "options": "Clean\nDirty\nUnder Maintenance",
+      "default": "Clean"
+    },
+    {
+      "fieldname": "is_active",
+      "fieldtype": "Check",
+      "label": "Is Active?",
+      "default": "1"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Hotel Receptionist",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Housekeeping Staff",
+      "read": 1,
+      "write": 1
+    },
+    {
+      "role": "Hotel Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ],
+  "actions": [],
+  "allow_rename": 0,
+  "index_web_pages_for_search": 0
+}

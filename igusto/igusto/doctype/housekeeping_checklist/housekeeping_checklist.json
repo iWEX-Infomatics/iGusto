@@ -1,0 +1,26 @@
+{
+  "doctype": "DocType",
+  "name": "Housekeeping Checklist",
+  "module": "igusto",
+  "istable": 1,
+  "fields": [
+    {
+      "fieldname": "item",
+      "fieldtype": "Data",
+      "label": "Checklist Item",
+      "reqd": 1
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nDone\nNot Applicable",
+      "default": "Pending"
+    },
+    {
+      "fieldname": "remarks",
+      "fieldtype": "Data",
+      "label": "Remarks"
+    }
+  ]
+}

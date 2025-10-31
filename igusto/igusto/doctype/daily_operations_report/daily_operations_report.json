@@ -1,0 +1,134 @@
+{
+  "doctype": "DocType",
+  "name": "Daily Operations Report",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "DOR-.#####",
+  "title_field": "report_date",
+  "fields": [
+    {
+      "fieldname": "report_date",
+      "fieldtype": "Date",
+      "label": "Report Date",
+      "default": "Today",
+      "reqd": 1
+    },
+    {
+      "fieldname": "total_rooms",
+      "fieldtype": "Int",
+      "label": "Total Rooms"
+    },
+    {
+      "fieldname": "occupied_rooms",
+      "fieldtype": "Int",
+      "label": "Occupied Rooms"
+    },
+    {
+      "fieldname": "available_rooms",
+      "fieldtype": "Int",
+      "label": "Available Rooms"
+    },
+    {
+      "fieldname": "checkins_today",
+      "fieldtype": "Int",
+      "label": "Check-ins Today"
+    },
+    {
+      "fieldname": "checkouts_today",
+      "fieldtype": "Int",
+      "label": "Check-outs Today"
+    },
+    {
+      "fieldname": "new_bookings",
+      "fieldtype": "Int",
+      "label": "New Bookings Today"
+    },
+    {
+      "fieldname": "cancelled_bookings",
+      "fieldtype": "Int",
+      "label": "Cancelled Bookings"
+    },
+    {
+      "fieldname": "room_revenue",
+      "fieldtype": "Currency",
+      "label": "Room Revenue"
+    },
+    {
+      "fieldname": "service_revenue",
+      "fieldtype": "Currency",
+      "label": "Service Revenue"
+    },
+    {
+      "fieldname": "total_revenue",
+      "fieldtype": "Currency",
+      "label": "Total Revenue",
+      "read_only": 1
+    },
+    {
+      "fieldname": "occupancy_rate",
+      "fieldtype": "Percent",
+      "label": "Occupancy Rate (%)",
+      "read_only": 1
+    },
+    {
+      "fieldname": "average_daily_rate",
+      "fieldtype": "Currency",
+      "label": "Average Daily Rate (ADR)",
+      "read_only": 1
+    },
+    {
+      "fieldname": "revpar",
+      "fieldtype": "Currency",
+      "label": "RevPAR (Revenue per Available Room)",
+      "read_only": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Manager Notes / Remarks"
+    },
+    {
+      "fieldname": "prepared_by",
+      "fieldtype": "Link",
+      "options": "User",
+      "label": "Prepared By"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Draft\nFinalized\nReviewed",
+      "default": "Draft"
+    },
+    {
+      "fieldname": "operations_breakdown",
+      "fieldtype": "Table",
+      "options": "Operations Breakdown",
+      "label": "Operations Breakdown"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Hotel Receptionist",
+      "read": 1,
+      "create": 1
+    },
+    {
+      "role": "Hotel Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ]
+}

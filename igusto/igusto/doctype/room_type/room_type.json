@@ -1,0 +1,93 @@
+{
+  "doctype": "DocType",
+  "name": "Room Type",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "field:room_type_name",
+  "title_field": "room_type_name",
+  "fields": [
+    {
+      "fieldname": "room_type_name",
+      "fieldtype": "Data",
+      "label": "Room Type Name",
+      "reqd": 1,
+      "unique": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "label": "Description"
+    },
+    {
+      "fieldname": "base_rate",
+      "fieldtype": "Currency",
+      "label": "Base Rate (per night)",
+      "reqd": 1
+    },
+    {
+      "fieldname": "max_occupancy",
+      "fieldtype": "Int",
+      "label": "Maximum Occupancy",
+      "reqd": 1
+    },
+    {
+      "fieldname": "bed_type",
+      "fieldtype": "Select",
+      "label": "Bed Type",
+      "options": "Single\nDouble\nQueen\nKing\nTwin\nSuite"
+    },
+    {
+      "fieldname": "amenities_section",
+      "fieldtype": "Section Break",
+      "label": "Amenities"
+    },
+    {
+      "fieldname": "amenities",
+      "fieldtype": "Table",
+      "options": "Room Amenity",
+      "label": "Amenities"
+    },
+    {
+      "fieldname": "images_section",
+      "fieldtype": "Section Break",
+      "label": "Images"
+    },
+    {
+      "fieldname": "room_images",
+      "fieldtype": "Attach Image",
+      "label": "Room Image"
+    },
+    {
+      "fieldname": "is_active",
+      "fieldtype": "Check",
+      "label": "Is Active?",
+      "default": "1"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Hotel Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Hotel Receptionist",
+      "read": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ],
+  "actions": [],
+  "allow_rename": 0,
+  "index_web_pages_for_search": 0
+}

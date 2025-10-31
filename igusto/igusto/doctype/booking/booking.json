@@ -1,0 +1,208 @@
+{
+ "actions": [],
+ "autoname": "BK-.#####",
+ "creation": "2025-10-31 12:55:30.455645",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_basic",
+  "booking_date",
+  "guest",
+  "booking_source",
+  "check_in",
+  "check_out",
+  "room_type",
+  "rate_plan",
+  "total_amount",
+  "prepaid_amount",
+  "payment_status",
+  "booking_status",
+  "special_requests",
+  "source_reference",
+  "section_guest",
+  "guest_email",
+  "guest_phone",
+  "section_links",
+  "assigned_room",
+  "invoice",
+  "created_by",
+  "workflow_state",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_basic",
+   "fieldtype": "Section Break",
+   "label": "Booking Details"
+  },
+  {
+   "fieldname": "booking_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Booking Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "guest",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Guest",
+   "options": "Guest",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking_source",
+   "fieldtype": "Select",
+   "label": "Booking Source",
+   "options": "Website\nOTA (Agoda/Booking.com)\nTravel Agent\nWalk-in"
+  },
+  {
+   "fieldname": "check_in",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Check-in Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "check_out",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Check-out Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "label": "Room Type",
+   "options": "Room Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "rate_plan",
+   "fieldtype": "Data",
+   "label": "Rate Plan"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Currency",
+   "label": "Total Amount"
+  },
+  {
+   "fieldname": "prepaid_amount",
+   "fieldtype": "Currency",
+   "label": "Prepaid Amount"
+  },
+  {
+   "default": "Unpaid",
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Unpaid\nPartially Paid\nPaid"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "booking_status",
+   "fieldtype": "Select",
+   "label": "Booking Status",
+   "options": "Pending\nConfirmed\nCancelled\nNo-Show\nChecked-in\nChecked-out"
+  },
+  {
+   "fieldname": "special_requests",
+   "fieldtype": "Small Text",
+   "label": "Special Requests"
+  },
+  {
+   "fieldname": "source_reference",
+   "fieldtype": "Data",
+   "label": "Source Reference (OTA / Agent ID)"
+  },
+  {
+   "fieldname": "section_guest",
+   "fieldtype": "Section Break",
+   "label": "Guest & Contact Info"
+  },
+  {
+   "fieldname": "guest_email",
+   "fieldtype": "Data",
+   "label": "Guest Email"
+  },
+  {
+   "fieldname": "guest_phone",
+   "fieldtype": "Data",
+   "label": "Guest Phone"
+  },
+  {
+   "fieldname": "section_links",
+   "fieldtype": "Section Break",
+   "label": "Linked Docs"
+  },
+  {
+   "fieldname": "assigned_room",
+   "fieldtype": "Link",
+   "label": "Assigned Room",
+   "options": "Room"
+  },
+  {
+   "fieldname": "invoice",
+   "fieldtype": "Link",
+   "label": "Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "Created By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "workflow_state",
+   "fieldtype": "Select",
+   "label": "Workflow State",
+   "options": "Draft\nPending Confirmation\nConfirmed\nChecked-in\nChecked-out\nCancelled"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Booking",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-10-31 13:02:26.283188",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Booking",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "cancel": 1,
+   "create": 1,
+   "read": 1,
+   "role": "Hotel Receptionist",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "guest",
+ "track_changes": 1
+}

@@ -1,0 +1,97 @@
+{
+  "doctype": "DocType",
+  "name": "FRRO Report",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "FRRO-.#####",
+  "title_field": "report_date",
+  "fields": [
+    {
+      "fieldname": "report_date",
+      "fieldtype": "Date",
+      "label": "Report Date",
+      "default": "Today",
+      "reqd": 1
+    },
+    {
+      "fieldname": "report_period",
+      "fieldtype": "Select",
+      "label": "Report Period",
+      "options": "Daily\nWeekly\nMonthly",
+      "default": "Daily"
+    },
+    {
+      "fieldname": "frro_entries",
+      "fieldtype": "Table",
+      "options": "FRRO Entry",
+      "label": "FRRO Guest Entries",
+      "reqd": 1
+    },
+    {
+      "fieldname": "total_foreign_guests",
+      "fieldtype": "Int",
+      "label": "Total Foreign Guests",
+      "read_only": 1
+    },
+    {
+      "fieldname": "submission_file",
+      "fieldtype": "Attach",
+      "label": "Generated File (XML/CSV)"
+    },
+    {
+      "fieldname": "submission_time",
+      "fieldtype": "Datetime",
+      "label": "Submitted On"
+    },
+    {
+      "fieldname": "submitted_by",
+      "fieldtype": "Link",
+      "options": "User",
+      "label": "Submitted By"
+    },
+    {
+      "fieldname": "remarks",
+      "fieldtype": "Small Text",
+      "label": "Remarks / Notes"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Draft\nGenerated\nSubmitted",
+      "default": "Draft"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Hotel Receptionist",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Hotel Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Compliance Officer",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ]
+}

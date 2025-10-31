@@ -1,0 +1,31 @@
+{
+  "doctype": "DocType",
+  "name": "Operations Breakdown",
+  "module": "igusto",
+  "istable": 1,
+  "fields": [
+    {
+      "fieldname": "category",
+      "fieldtype": "Select",
+      "label": "Category",
+      "options": "Front Desk\nHousekeeping\nF&B\nMaintenance\nLaundry\nSecurity\nOther"
+    },
+    {
+      "fieldname": "task",
+      "fieldtype": "Data",
+      "label": "Task / Activity Description"
+    },
+    {
+      "fieldname": "issues",
+      "fieldtype": "Small Text",
+      "label": "Issues / Notes"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nIn Progress\nCompleted",
+      "default": "Pending"
+    }
+  ]
+}

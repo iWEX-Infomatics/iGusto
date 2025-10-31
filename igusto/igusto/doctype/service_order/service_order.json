@@ -1,0 +1,114 @@
+{
+  "doctype": "DocType",
+  "name": "Service Order",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "SERV-.#####",
+  "title_field": "guest",
+  "fields": [
+    {
+      "fieldname": "guest",
+      "fieldtype": "Link",
+      "options": "Guest",
+      "label": "Guest",
+      "reqd": 1
+    },
+    {
+      "fieldname": "room_assignment",
+      "fieldtype": "Link",
+      "options": "Room Assignment",
+      "label": "Room Assignment",
+      "reqd": 1
+    },
+    {
+      "fieldname": "room",
+      "fieldtype": "Link",
+      "options": "Room",
+      "label": "Room"
+    },
+    {
+      "fieldname": "order_datetime",
+      "fieldtype": "Datetime",
+      "label": "Order Date & Time",
+      "reqd": 1
+    },
+    {
+      "fieldname": "service_items",
+      "fieldtype": "Table",
+      "options": "Service Order Item",
+      "label": "Service Items",
+      "reqd": 1
+    },
+    {
+      "fieldname": "total_amount",
+      "fieldtype": "Currency",
+      "label": "Total Amount",
+      "read_only": 1
+    },
+    {
+      "fieldname": "payment_status",
+      "fieldtype": "Select",
+      "label": "Payment Status",
+      "options": "Unpaid\nPaid\nPosted to Room",
+      "default": "Unpaid"
+    },
+    {
+      "fieldname": "service_type",
+      "fieldtype": "Select",
+      "label": "Service Type",
+      "options": "Room Service\nRestaurant\nLaundry\nSpa\nTransport\nOther"
+    },
+    {
+      "fieldname": "served_by",
+      "fieldtype": "Link",
+      "options": "User",
+      "label": "Served By"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Special Instructions / Notes"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Pending\nIn Progress\nDelivered\nCancelled",
+      "default": "Pending"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Hotel Receptionist",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Restaurant Staff",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Hotel Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ],
+  "actions": [],
+  "allow_rename": 0,
+  "index_web_pages_for_search": 0
+}

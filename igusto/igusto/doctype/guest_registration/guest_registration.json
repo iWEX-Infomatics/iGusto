@@ -1,0 +1,291 @@
+{
+ "actions": [],
+ "autoname": "GR-.#####",
+ "creation": "2025-10-31 12:53:28.472822",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_basic",
+  "registration_date",
+  "booking",
+  "guest",
+  "check_in",
+  "expected_check_out",
+  "no_of_guests",
+  "section_id",
+  "id_proof_type",
+  "id_proof_number",
+  "nationality",
+  "visa_type",
+  "visa_number",
+  "visa_valid_till",
+  "passport_no",
+  "section_room",
+  "room",
+  "room_type",
+  "rate_plan",
+  "checkin_type",
+  "purpose",
+  "vehicle_no",
+  "section_payment",
+  "deposit_amount",
+  "payment_mode",
+  "billing_instruction",
+  "company",
+  "section_verify",
+  "verified_by",
+  "verification_status",
+  "guest_signature",
+  "guest_photo",
+  "section_system",
+  "frro_required",
+  "frro_report",
+  "workflow_state",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_basic",
+   "fieldtype": "Section Break",
+   "label": "Basic Details"
+  },
+  {
+   "fieldname": "registration_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Registration Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking",
+   "fieldtype": "Link",
+   "label": "Booking",
+   "options": "Booking"
+  },
+  {
+   "fieldname": "guest",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Guest",
+   "options": "Guest",
+   "reqd": 1
+  },
+  {
+   "fieldname": "check_in",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Check-in Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "expected_check_out",
+   "fieldtype": "Datetime",
+   "label": "Expected Check-out"
+  },
+  {
+   "fieldname": "no_of_guests",
+   "fieldtype": "Int",
+   "label": "Number of Guests"
+  },
+  {
+   "fieldname": "section_id",
+   "fieldtype": "Section Break",
+   "label": "Identification Details"
+  },
+  {
+   "fieldname": "id_proof_type",
+   "fieldtype": "Select",
+   "label": "ID Proof Type",
+   "options": "Passport\nAadhar\nDriving License\nVoter ID\nOther"
+  },
+  {
+   "fieldname": "id_proof_number",
+   "fieldtype": "Data",
+   "label": "ID Proof Number"
+  },
+  {
+   "fieldname": "nationality",
+   "fieldtype": "Data",
+   "label": "Nationality"
+  },
+  {
+   "fieldname": "visa_type",
+   "fieldtype": "Data",
+   "label": "Visa Type"
+  },
+  {
+   "fieldname": "visa_number",
+   "fieldtype": "Data",
+   "label": "Visa Number"
+  },
+  {
+   "fieldname": "visa_valid_till",
+   "fieldtype": "Date",
+   "label": "Visa Valid Till"
+  },
+  {
+   "fieldname": "passport_no",
+   "fieldtype": "Data",
+   "label": "Passport Number"
+  },
+  {
+   "fieldname": "section_room",
+   "fieldtype": "Section Break",
+   "label": "Room & Stay Details"
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "label": "Room Assigned",
+   "options": "Room"
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "label": "Room Type",
+   "options": "Room Type"
+  },
+  {
+   "fieldname": "rate_plan",
+   "fieldtype": "Data",
+   "label": "Rate Plan"
+  },
+  {
+   "fieldname": "checkin_type",
+   "fieldtype": "Select",
+   "label": "Check-in Type",
+   "options": "Walk-in\nBooking"
+  },
+  {
+   "fieldname": "purpose",
+   "fieldtype": "Data",
+   "label": "Purpose of Visit"
+  },
+  {
+   "fieldname": "vehicle_no",
+   "fieldtype": "Data",
+   "label": "Vehicle Number"
+  },
+  {
+   "fieldname": "section_payment",
+   "fieldtype": "Section Break",
+   "label": "Payment & Billing"
+  },
+  {
+   "fieldname": "deposit_amount",
+   "fieldtype": "Currency",
+   "label": "Deposit Amount"
+  },
+  {
+   "fieldname": "payment_mode",
+   "fieldtype": "Select",
+   "label": "Payment Mode",
+   "options": "Cash\nCard\nUPI\nOnline\nOther"
+  },
+  {
+   "fieldname": "billing_instruction",
+   "fieldtype": "Small Text",
+   "label": "Billing Instruction"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Linked Company",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "section_verify",
+   "fieldtype": "Section Break",
+   "label": "Verification & Approval"
+  },
+  {
+   "fieldname": "verified_by",
+   "fieldtype": "Link",
+   "label": "Verified By",
+   "options": "User"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "verification_status",
+   "fieldtype": "Select",
+   "label": "Verification Status",
+   "options": "Pending\nVerified"
+  },
+  {
+   "fieldname": "guest_signature",
+   "fieldtype": "Attach Image",
+   "label": "Guest Signature"
+  },
+  {
+   "fieldname": "guest_photo",
+   "fieldtype": "Attach Image",
+   "label": "Guest Photo"
+  },
+  {
+   "fieldname": "section_system",
+   "fieldtype": "Section Break",
+   "label": "System Info"
+  },
+  {
+   "default": "0",
+   "fieldname": "frro_required",
+   "fieldtype": "Check",
+   "label": "FRRO Required"
+  },
+  {
+   "fieldname": "frro_report",
+   "fieldtype": "Data",
+   "label": "FRRO Report"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "workflow_state",
+   "fieldtype": "Select",
+   "label": "Workflow State",
+   "options": "Draft\nSubmitted\nChecked-in\nCancelled"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Guest Registration",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-10-31 15:00:59.965453",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Guest Registration",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "cancel": 1,
+   "create": 1,
+   "read": 1,
+   "role": "Hotel Receptionist",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "guest",
+ "track_changes": 1
+}

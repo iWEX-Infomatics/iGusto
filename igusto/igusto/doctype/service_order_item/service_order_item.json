@@ -1,0 +1,44 @@
+{
+  "doctype": "DocType",
+  "name": "Service Order Item",
+  "module": "igusto",
+  "istable": 1,
+  "fields": [
+    {
+      "fieldname": "item",
+      "fieldtype": "Data",
+      "label": "Item / Service Name",
+      "reqd": 1
+    },
+    {
+      "fieldname": "category",
+      "fieldtype": "Select",
+      "label": "Category",
+      "options": "Food\nBeverage\nLaundry\nSpa\nTransport\nOther"
+    },
+    {
+      "fieldname": "quantity",
+      "fieldtype": "Float",
+      "label": "Quantity",
+      "reqd": 1,
+      "default": 1
+    },
+    {
+      "fieldname": "rate",
+      "fieldtype": "Currency",
+      "label": "Rate",
+      "reqd": 1
+    },
+    {
+      "fieldname": "amount",
+      "fieldtype": "Currency",
+      "label": "Amount",
+      "read_only": 1
+    },
+    {
+      "fieldname": "remarks",
+      "fieldtype": "Data",
+      "label": "Remarks"
+    }
+  ]
+}

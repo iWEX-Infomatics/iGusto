@@ -1,0 +1,44 @@
+{
+  "doctype": "DocType",
+  "name": "Guest Bill Item",
+  "module": "igusto",
+  "istable": 1,
+  "fields": [
+    {
+      "fieldname": "reference_type",
+      "fieldtype": "Select",
+      "label": "Reference Type",
+      "options": "Room Charge\nService Order\nExtra Service\nDiscount\nTax\nOther"
+    },
+    {
+      "fieldname": "reference_no",
+      "fieldtype": "Dynamic Link",
+      "label": "Reference No",
+      "options": "reference_type"
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Data",
+      "label": "Description",
+      "reqd": 1
+    },
+    {
+      "fieldname": "amount",
+      "fieldtype": "Currency",
+      "label": "Amount",
+      "reqd": 1
+    },
+    {
+      "fieldname": "tax_percent",
+      "fieldtype": "Float",
+      "label": "Tax %",
+      "default": 0
+    },
+    {
+      "fieldname": "total",
+      "fieldtype": "Currency",
+      "label": "Total (with Tax)",
+      "read_only": 1
+    }
+  ]
+}

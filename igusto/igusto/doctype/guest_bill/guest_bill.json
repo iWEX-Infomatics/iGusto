@@ -1,0 +1,139 @@
+{
+  "doctype": "DocType",
+  "name": "Guest Bill",
+  "module": "igusto",
+  "custom": 0,
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "BILL-.#####",
+  "title_field": "guest",
+  "fields": [
+    {
+      "fieldname": "guest",
+      "fieldtype": "Link",
+      "options": "Guest",
+      "label": "Guest",
+      "reqd": 1
+    },
+    {
+      "fieldname": "guest_registration",
+      "fieldtype": "Link",
+      "options": "Guest Registration",
+      "label": "Guest Registration",
+      "reqd": 1
+    },
+    {
+      "fieldname": "booking",
+      "fieldtype": "Link",
+      "options": "Booking",
+      "label": "Booking"
+    },
+    {
+      "fieldname": "room_assignment",
+      "fieldtype": "Link",
+      "options": "Room Assignment",
+      "label": "Room Assignment"
+    },
+    {
+      "fieldname": "room",
+      "fieldtype": "Link",
+      "options": "Room",
+      "label": "Room"
+    },
+    {
+      "fieldname": "stay_from",
+      "fieldtype": "Date",
+      "label": "Stay From"
+    },
+    {
+      "fieldname": "stay_to",
+      "fieldtype": "Date",
+      "label": "Stay To"
+    },
+    {
+      "fieldname": "billing_date",
+      "fieldtype": "Date",
+      "label": "Billing Date",
+      "default": "Today"
+    },
+    {
+      "fieldname": "bill_items",
+      "fieldtype": "Table",
+      "options": "Guest Bill Item",
+      "label": "Bill Items",
+      "reqd": 1
+    },
+    {
+      "fieldname": "subtotal",
+      "fieldtype": "Currency",
+      "label": "Subtotal",
+      "read_only": 1
+    },
+    {
+      "fieldname": "taxes",
+      "fieldtype": "Currency",
+      "label": "Taxes",
+      "read_only": 1
+    },
+    {
+      "fieldname": "discount",
+      "fieldtype": "Currency",
+      "label": "Discount",
+      "default": 0
+    },
+    {
+      "fieldname": "total_amount",
+      "fieldtype": "Currency",
+      "label": "Total Amount",
+      "read_only": 1
+    },
+    {
+      "fieldname": "payment_status",
+      "fieldtype": "Select",
+      "label": "Payment Status",
+      "options": "Unpaid\nPartially Paid\nPaid\nPosted",
+      "default": "Unpaid"
+    },
+    {
+      "fieldname": "payment_mode",
+      "fieldtype": "Select",
+      "label": "Payment Mode",
+      "options": "Cash\nCard\nUPI\nBank Transfer\nOther"
+    },
+    {
+      "fieldname": "remarks",
+      "fieldtype": "Small Text",
+      "label": "Remarks / Notes"
+    },
+    {
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "label": "Status",
+      "options": "Draft\nSubmitted\nCancelled",
+      "default": "Draft"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "Hotel Receptionist",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    },
+    {
+      "role": "Hotel Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    }
+  ]
+}

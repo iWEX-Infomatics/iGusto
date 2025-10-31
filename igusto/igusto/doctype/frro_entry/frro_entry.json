@@ -1,0 +1,65 @@
+{
+  "doctype": "DocType",
+  "name": "FRRO Entry",
+  "module": "igusto",
+  "istable": 1,
+  "fields": [
+    {
+      "fieldname": "guest",
+      "fieldtype": "Link",
+      "options": "Guest",
+      "label": "Guest",
+      "reqd": 1
+    },
+    {
+      "fieldname": "passport_no",
+      "fieldtype": "Data",
+      "label": "Passport Number",
+      "reqd": 1
+    },
+    {
+      "fieldname": "nationality",
+      "fieldtype": "Data",
+      "label": "Nationality",
+      "reqd": 1
+    },
+    {
+      "fieldname": "visa_type",
+      "fieldtype": "Data",
+      "label": "Visa Type"
+    },
+    {
+      "fieldname": "visa_no",
+      "fieldtype": "Data",
+      "label": "Visa Number"
+    },
+    {
+      "fieldname": "arrival_date",
+      "fieldtype": "Date",
+      "label": "Date of Arrival"
+    },
+    {
+      "fieldname": "departure_date",
+      "fieldtype": "Date",
+      "label": "Date of Departure"
+    },
+    {
+      "fieldname": "room_no",
+      "fieldtype": "Link",
+      "options": "Room",
+      "label": "Room Number"
+    },
+    {
+      "fieldname": "stay_duration",
+      "fieldtype": "Int",
+      "label": "Stay Duration (Days)"
+    },
+    {
+      "fieldname": "report_status",
+      "fieldtype": "Select",
+      "label": "Report Status",
+      "options": "Pending\nIncluded\nError",
+      "default": "Pending"
+    }
+  ]
+}
