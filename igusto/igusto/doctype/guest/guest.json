@@ -69,8 +69,9 @@
   },
   {
    "fieldname": "address",
-   "fieldtype": "Small Text",
-   "label": "Address"
+   "fieldtype": "Link",
+   "label": "Address",
+   "options": "Address"
   },
   {
    "fieldname": "id_proof_type",
@@ -137,7 +138,7 @@
   }
  ],
  "links": [],
- "modified": "2025-11-01 12:10:16.977908",
+ "modified": "2025-11-01 12:24:04.620985",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Guest",
