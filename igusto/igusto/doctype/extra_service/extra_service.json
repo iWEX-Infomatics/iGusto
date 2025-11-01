@@ -1,0 +1,60 @@
+{
+  "doctype": "DocType",
+  "name": "Extra Service",
+  "module": "igusto",
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "autoname": "ES-.#####",
+  "fields": [
+    {
+      "fieldname": "service_name",
+      "fieldtype": "Data",
+      "label": "Service Name",
+      "reqd": 1
+    },
+    {
+      "fieldname": "service_category",
+      "fieldtype": "Select",
+      "label": "Category",
+      "options": "Food\nBeverage\nLaundry\nTransport\nSpa\nOther"
+    },
+    {
+      "fieldname": "rate",
+      "fieldtype": "Currency",
+      "label": "Rate (₹)",
+      "reqd": 1
+    },
+    {
+      "fieldname": "uom",
+      "fieldtype": "Data",
+      "label": "Unit (e.g. per item, per hour)"
+    },
+    {
+      "fieldname": "is_active",
+      "fieldtype": "Check",
+      "label": "Is Active",
+      "default": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "label": "Description"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Receptionist",
+      "read": 1,
+      "write": 1,
+      "create": 1
+    }
+  ]
+}

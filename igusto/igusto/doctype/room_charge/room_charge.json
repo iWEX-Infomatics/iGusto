@@ -1,0 +1,75 @@
+{
+  "doctype": "DocType",
+  "name": "Room Charge",
+  "module": "igusto",
+  "autoname": "RC-.#####",
+  "istable": 0,
+  "editable_grid": 0,
+  "track_changes": 1,
+  "fields": [
+    {
+      "fieldname": "room_type",
+      "fieldtype": "Link",
+      "label": "Room Type",
+      "options": "Room Type",
+      "reqd": 1
+    },
+    {
+      "fieldname": "season",
+      "fieldtype": "Select",
+      "label": "Season",
+      "options": "Regular\nPeak\nOff Season"
+    },
+    {
+      "fieldname": "base_rate",
+      "fieldtype": "Currency",
+      "label": "Base Rate (₹)",
+      "reqd": 1
+    },
+    {
+      "fieldname": "tax_percentage",
+      "fieldtype": "Float",
+      "label": "Tax (%)"
+    },
+    {
+      "fieldname": "extra_person_charge",
+      "fieldtype": "Currency",
+      "label": "Extra Person Charge (₹)"
+    },
+    {
+      "fieldname": "effective_from",
+      "fieldtype": "Date",
+      "label": "Effective From"
+    },
+    {
+      "fieldname": "effective_to",
+      "fieldtype": "Date",
+      "label": "Effective To"
+    },
+    {
+      "fieldname": "is_active",
+      "fieldtype": "Check",
+      "label": "Is Active",
+      "default": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "label": "Notes / Description"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "System Manager",
+      "read": 1,
+      "write": 1,
+      "create": 1,
+      "delete": 1
+    },
+    {
+      "role": "Receptionist",
+      "read": 1,
+      "write": 1
+    }
+  ]
+}

@@ -1,44 +1,66 @@
 {
-  "doctype": "DocType",
-  "name": "Guest Bill Item",
-  "module": "igusto",
-  "istable": 1,
-  "fields": [
-    {
-      "fieldname": "reference_type",
-      "fieldtype": "Select",
-      "label": "Reference Type",
-      "options": "Room Charge\nService Order\nExtra Service\nDiscount\nTax\nOther"
-    },
-    {
-      "fieldname": "reference_no",
-      "fieldtype": "Dynamic Link",
-      "label": "Reference No",
-      "options": "reference_type"
-    },
-    {
-      "fieldname": "description",
-      "fieldtype": "Data",
-      "label": "Description",
-      "reqd": 1
-    },
-    {
-      "fieldname": "amount",
-      "fieldtype": "Currency",
-      "label": "Amount",
-      "reqd": 1
-    },
-    {
-      "fieldname": "tax_percent",
-      "fieldtype": "Float",
-      "label": "Tax %",
-      "default": 0
-    },
-    {
-      "fieldname": "total",
-      "fieldtype": "Currency",
-      "label": "Total (with Tax)",
-      "read_only": 1
-    }
-  ]
+ "actions": [],
+ "creation": "2025-10-31 13:21:11.174992",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "reference_type",
+  "reference_no",
+  "description",
+  "amount",
+  "tax_percent",
+  "total"
+ ],
+ "fields": [
+  {
+   "fieldname": "reference_type",
+   "fieldtype": "Select",
+   "label": "Reference Type",
+   "options": "Extra Service\nRoom Charge\nService Order"
+  },
+  {
+   "fieldname": "reference_no",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference No",
+   "options": "reference_type"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "tax_percent",
+   "fieldtype": "Float",
+   "label": "Tax %"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "label": "Total (with Tax)",
+   "read_only": 1
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-01 12:18:14.695788",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Guest Bill Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
 }
