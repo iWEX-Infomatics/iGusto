@@ -1,0 +1,151 @@
+<!-- file: your_app/your_app/page/customer_registration/customer_registration.html -->
+
+<style>
+  .registration-container {
+    max-width: 520px;
+    margin: 60px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .registration-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .registration-header h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1e40af;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-control, select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .form-control:focus, select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .btn-primary {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.1s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #1e3a8a;
+    transform: scale(1.03);
+  }
+
+  #success-msg {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 500;
+    display: none;
+  }
+</style>
+<!-- <div class="text-center mb-4">
+  <p class="fw-semibold mb-2">📱 Scan this QR to open this registration form:</p>
+  <img 
+    src="https://api.qrserver.com/v1/create-qr-code/?data=http://127.0.0.1:8003/app/customer-registratio&size=200x200" 
+    alt="QR Code" 
+    class="mx-auto rounded shadow">
+</div> -->
+
+<div class="registration-container">
+  <div class="registration-header">
+    <h2>Customer Registration</h2>
+    <p class="text-gray-500 mt-1 text-sm">
+      Fill in your details below to register a new customer.
+    </p>
+  </div>
+
+  <form id="customer-form">
+    <!-- Customer Name -->
+    <div class="mb-3">
+      <label for="customer_name" class="form-label">Full Name</label>
+      <input type="text" id="customer_name" class="form-control" placeholder="Enter full name" required>
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="email_id" class="form-label">Email</label>
+      <input type="email" id="email_id" class="form-control" placeholder="Enter email address" required>
+    </div>
+
+    <!-- Mobile -->
+    <div class="mb-3">
+      <label for="mobile_no" class="form-label">Mobile No</label>
+      <input type="text" id="mobile_no" class="form-control" placeholder="Enter mobile number" required>
+    </div>
+
+    <!-- Customer Type -->
+    <div class="mb-3">
+      <label for="customer_type" class="form-label">Customer Type</label>
+      <select id="customer_type" class="form-control" required>
+        <option value="">Select Type</option>
+      </select>
+    </div>
+
+    <!-- Customer Group -->
+    <div class="mb-3">
+      <label for="customer_group" class="form-label">Customer Group</label>
+      <select id="customer_group" class="form-control" required>
+        <option value="">Select Group</option>
+      </select>
+    </div>
+
+    <!-- Address -->
+    <div class="mb-3">
+      <label for="address_line1" class="form-label">Address</label>
+      <input type="text" id="address_line1" class="form-control" placeholder="Enter address">
+    </div>
+
+    <!-- City -->
+    <div class="mb-3">
+      <label for="city" class="form-label">City</label>
+      <input type="text" id="city" class="form-control" placeholder="Enter city">
+    </div>
+
+    <!-- Pincode -->
+    <div class="mb-3">
+      <label for="pincode" class="form-label">Pincode</label>
+      <input type="text" id="pincode" class="form-control" placeholder="Enter pincode">
+    </div>
+
+    <!-- Submit -->
+    <div class="mt-4 text-center">
+      <button type="submit" class="btn-primary w-100">Register</button>
+    </div>
+  </form>
+
+  <!-- Success Message -->
+  <div id="success-msg" class="mt-4 text-center">
+    🎉 Registration Successful! <br> Your customer has been created.
+  </div>
+</div>

@@ -7,7 +7,10 @@ app_license = "mit"
 
 # Apps
 # ------------------
-
+# required_apps = []
+override_whitelisted_methods = {
+    "frappe.utils.change_log.get_versions": "igusto.overrides.get_versions.custom_get_app_versions"
+}
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
