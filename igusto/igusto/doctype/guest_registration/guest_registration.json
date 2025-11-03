@@ -12,6 +12,7 @@
   "check_in",
   "expected_check_out",
   "no_of_guests",
+  "mobile_no",
   "section_id",
   "id_proof_type",
   "id_proof_number",
@@ -253,11 +254,16 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile No"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-31 15:00:59.965453",
+ "modified": "2025-11-03 15:04:59.119736",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Guest Registration",

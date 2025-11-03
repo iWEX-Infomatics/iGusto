@@ -1,0 +1,142 @@
+<!-- file: igusto/igusto/page/guest_onboarding/guest_onboarding.html -->
+
+<style>
+  .onboarding-container {
+    max-width: 520px;
+    margin: 0px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+  }
+
+  .onboarding-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .onboarding-header h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1e40af;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-control, select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+  }
+
+  .form-control:focus, select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .btn-primary {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .btn-primary:hover {
+    background-color: #1e3a8a;
+  }
+
+  #success-msg {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 500;
+    display: none;
+  }
+
+  @media (max-width: 480px) {
+    .onboarding-container {
+      margin: 20px;
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<div class="onboarding-container">
+  <div class="onboarding-header">
+    <h2>Guest Onboarding</h2>
+    <p class="text-gray-500 mt-1 text-sm">
+      Fill in guest details for check-in registration.
+    </p>
+  </div>
+
+  <form id="guest-onboarding-form">
+    <!-- Full Name -->
+    <div class="mb-3">
+      <label class="form-label">Full Name</label>
+      <input type="text" name="full_name" class="form-control" placeholder="Enter guest name" required>
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" placeholder="Enter email address">
+    </div>
+
+    <!-- Primary Contact -->
+    <div class="mb-3">
+      <label class="form-label">Primary Contact</label>
+      <input type="text" name="primary_contact" class="form-control" placeholder="Enter mobile number" required>
+    </div>
+
+    <!-- Nationality -->
+    <div class="mb-3">
+      <label class="form-label">Nationality</label>
+      <input type="text" name="nationality" class="form-control" placeholder="Enter nationality">
+    </div>
+
+    <!-- ID Proof Type -->
+    <div class="mb-3">
+      <label class="form-label">ID Proof Type</label>
+      <select name="id_proof_type" class="form-control">
+        <option value="">Select ID Proof</option>
+        <option value="Aadhar">Aadhar</option>
+        <option value="Passport">Passport</option>
+        <option value="Driving License">Driving License</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <!-- ID Proof Number -->
+    <div class="mb-3">
+      <label class="form-label">ID Proof Number</label>
+      <input type="text" name="id_proof_number" class="form-control" placeholder="Enter ID number">
+    </div>
+
+    <!-- Address -->
+    <!-- <div class="mb-3">
+      <label class="form-label">Address</label>
+      <input type="text" name="address" class="form-control" placeholder="Enter address">
+    </div> -->
+
+    <div class="mt-4 text-center">
+      <button type="submit" class="btn-primary">Submit</button>
+    </div>
+  </form>
+
+  <div id="success-msg" class="mt-4 text-center">
+     Guest Registered Successfully!
+  </div>
+</div>

@@ -1,0 +1,134 @@
+<style>
+  .booking-container {
+    max-width: 520px;
+    margin: 0px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 2.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .booking-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .booking-header h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1e40af;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-control, select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .form-control:focus, select:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .btn-primary {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.1s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #1e3a8a;
+    transform: scale(1.03);
+  }
+
+  #success-msg {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 500;
+    display: none;
+  }
+</style>
+
+<div class="booking-container">
+  <div class="booking-header">
+    <h2>Booking Form</h2>
+    <p class="text-gray-500 mt-1 text-sm">
+      Fill in the details below to create a booking.
+    </p>
+  </div>
+
+  <form id="booking-form">
+    <!-- Guest -->
+    <div class="mb-3">
+      <label for="guest_name" class="form-label">Guest Name</label>
+      <select id="guest_name" name="guest_name" class="form-control" required>
+        <option value="">Select Guest</option>
+      </select>
+    </div>
+
+    <!-- Check-in -->
+    <div class="mb-3">
+      <label for="check_in" class="form-label">Check-In Date</label>
+      <input type="date" id="check_in" name="check_in" class="form-control" required>
+    </div>
+
+    <!-- Check-out -->
+    <div class="mb-3">
+      <label for="check_out" class="form-label">Check-Out Date</label>
+      <input type="date" id="check_out" name="check_out" class="form-control" required>
+    </div>
+
+    <!-- Room Type -->
+    <div class="mb-3">
+      <label for="room_type" class="form-label">Room Type</label>
+      <select id="room_type" name="room_type" class="form-control" required>
+        <option value="">Select Room Type</option>
+      </select>
+    </div>
+
+    <!-- Booking Source -->
+    <div class="mb-3">
+      <label for="booking_source" class="form-label">Booking Source</label>
+      <select id="booking_source" name="booking_source" class="form-control">
+        <option>Website</option>
+        <option>OTA</option>
+        <option>Walk-in</option>
+        <option>Corporate / Travel Agent</option>
+      </select>
+    </div>
+
+    <!-- Advance -->
+    <!-- <div class="mb-3">
+      <label for="advance_amount" class="form-label">Advance Payment</label>
+      <input type="number" id="advance_amount" name="advance_amount" class="form-control" placeholder="Amount (optional)">
+    </div> -->
+
+    <!-- Submit -->
+    <div class="mt-4 text-center">
+      <button type="submit" class="btn-primary w-100">Submit Booking</button>
+    </div>
+  </form>
+
+  <div id="success-msg" class="mt-4 text-center">
+    ✅ Booking Successfully Created!
+  </div>
+</div>
