@@ -47,8 +47,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Guest",
-   "options": "Guest",
-   "reqd": 1
+   "options": "Guest"
   },
   {
    "fieldname": "booking_source",
@@ -175,10 +174,11 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2025-10-31 13:02:26.283188",
+ "modified": "2025-11-04 12:13:08.908822",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Booking",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

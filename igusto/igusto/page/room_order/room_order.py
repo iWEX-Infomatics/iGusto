@@ -1,38 +1,46 @@
-import frappe
-from frappe.model.document import Document
+import frappe, json
 
 @frappe.whitelist()
-def get_services_by_type(service_type):
-    """Return list of services from Extra Service DocType filtered by type."""
-    return frappe.get_all(
-        "Extra Service",
-        filters={"service_type": service_type},
-        fields=["service_name", "rate"]
+def get_latest_guest_room():
+    """Get latest Guest Onboarding for auto-fill."""
+    latest = frappe.db.get_all(
+        "Guest Onboarding",
+        fields=["guest", "room_number"],
+        order_by="creation desc",
+        limit=1
     )
+    if latest:
+        return {"guest_name": latest[0].guest, "room_number": latest[0].room_number}
+    return {}
 
 @frappe.whitelist()
-def create_service_order(data):
-    data = frappe.parse_json(data)
-    doc = frappe.new_doc("Service Order")
+def get_menu_items():
+    """Fetch active items from Item doctype."""
+    items = frappe.get_all(
+        "Item",
+        fields=["name", "item_name"],
+        filters={"disabled": 0},
+        order_by="item_name asc"
+    )
+    return items
 
-    doc.guest = data.get("guest")
-    doc.room_assignment = data.get("room_assignment")
-    doc.room = data.get("room")
-    doc.service_type = data.get("service_type")
-    doc.order_datetime = frappe.utils.now_datetime()
+@frappe.whitelist()
+def get_service_items():
+    """Static room services (can be from Doctype if you want)."""
+    return ["Towel Change", "Cleaning", "Water Bottle", "Extra Pillow"]
 
-    total = 0
-    for item in data.get("items", []):
-        doc.append("service_items", {
-            "item": item.get("item"),
-            "category": item.get("category"),
-            "quantity": item.get("quantity"),
-            "rate": item.get("rate"),
-            "amount": item.get("amount")
-        })
-        total += item.get("amount")
+@frappe.whitelist()
+def create_room_order(data):
+    """Create Room Order entry."""
+    if isinstance(data, str):
+        data = json.loads(data)
+    data = frappe._dict(data)
 
-    doc.total_amount = total
+    doc = frappe.new_doc("Room Order")
+    doc.guest = data.guest
+    doc.room_number = data.room_number
+    doc.order_type = data.order_type
+    doc.service_item = json.dumps(data.service_item)
     doc.insert(ignore_permissions=True)
     frappe.db.commit()
-    return {"name": doc.name}
+    return doc.name

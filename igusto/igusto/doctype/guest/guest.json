@@ -6,6 +6,9 @@
  "engine": "InnoDB",
  "field_order": [
   "section_basic",
+  "first_name",
+  "middle_name",
+  "last_name",
   "full_name",
   "gender",
   "dob",
@@ -37,7 +40,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Full Name",
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "gender",
@@ -135,10 +138,30 @@
    "fieldname": "visa_valid_till",
    "fieldtype": "Date",
    "label": "Visa Valid Till"
+  },
+  {
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "First Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "middle_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Middle Name"
+  },
+  {
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Last Name",
+   "reqd": 1
   }
  ],
  "links": [],
- "modified": "2025-11-01 12:24:04.620985",
+ "modified": "2025-11-04 11:10:24.766068",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Guest",

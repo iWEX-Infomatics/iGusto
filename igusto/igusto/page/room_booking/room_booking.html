@@ -1,0 +1,190 @@
+<div class="booking-wrapper">
+  <div class="booking-card">
+    <h1 class="booking-title">Room Booking</h1>
+    <p class="booking-subtitle">Enter details to confirm your booking</p>
+
+    <form id="booking-form">
+
+      <div class="booking-section">
+        <label class="booking-label">Guest Name</label>
+        <input type="text" id="guest_name" class="booking-input" readonly>
+      </div>
+
+      <!-- <div class="booking-section">
+        <label class="booking-label">Full Address *</label>
+        <textarea id="address" rows="2" class="booking-input" required></textarea>
+      </div> -->
+
+      <div class="booking-grid">
+        <div>
+          <label class="booking-label">Mobile *</label>
+          <input type="text" id="mobile" class="booking-input" required>
+        </div>
+        <div>
+          <label class="booking-label">Email *</label>
+          <input type="email" id="email" class="booking-input" required>
+        </div>
+      </div>
+
+      <div class="booking-grid">
+        <div>
+          <label class="booking-label">From Date *</label>
+          <input type="date" id="check_in" class="booking-input" required>
+        </div>
+        <div>
+          <label class="booking-label">To Date *</label>
+          <input type="date" id="check_out" class="booking-input" required>
+        </div>
+      </div>
+
+      <div class="booking-grid">
+        <div>
+          <label class="booking-label">Number of Guests *</label>
+          <input type="number" id="no_of_guests" class="booking-input" min="1" required>
+        </div>
+        <div>
+          <label class="booking-label">Room Type *</label>
+          <div id="room_type_wrapper"></div>
+        </div>
+      </div>
+
+      <div class="booking-grid">
+        <div>
+          <label class="booking-label">Nationality *</label>
+          <select id="nationality" class="booking-input" required>
+            <option value="">Select</option>
+            <option value="Indian">Indian</option>
+            <option value="Foreigner">Foreigner</option>
+          </select>
+        </div>
+        <div id="currency-section" style="display:none;">
+          <label class="booking-label">Currency *</label>
+          <div id="currency_wrapper"></div>
+        </div>
+      </div>
+
+      <div class="booking-actions">
+        <button id="create_booking_btn" class="booking-btn booking-btn-primary">Save Booking</button>
+        <button id="back_btn" type="button" class="booking-btn booking-btn-secondary">Back</button>
+      </div>
+
+      <div id="guest-onboard-section"></div>
+    </form>
+  </div>
+</div>
+
+<style>
+  body {
+    background: #f9fafb;
+  }
+
+  .booking-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 3rem;
+    min-height: 90vh;
+  }
+
+  .booking-card {
+    width: 100%;
+    max-width: 650px;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    padding: 2.5rem;
+    transition: 0.3s all ease-in-out;
+  }
+
+  .booking-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .booking-subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
+
+  .booking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .booking-input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    transition: all 0.2s;
+  }
+
+  .booking-input:focus {
+    border-color: #2563eb;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+  }
+
+  .booking-label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+  }
+
+  .booking-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 48%;
+    transition: 0.25s;
+  }
+
+  .booking-btn-primary {
+    background-color: #2563eb;
+    color: #fff;
+  }
+
+  .booking-btn-primary:hover {
+    background-color: #1d4ed8;
+  }
+
+  .booking-btn-secondary {
+    background-color: #e5e7eb;
+    color: #111827;
+  }
+
+  .booking-btn-secondary:hover {
+    background-color: #d1d5db;
+  }
+
+  .booking-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .booking-card {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+    .booking-btn {
+      width: 100%;
+    }
+    .booking-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

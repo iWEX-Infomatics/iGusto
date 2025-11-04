@@ -67,15 +67,14 @@ class BookingForm {
 
       frappe.call({
         method: 'igusto.igusto.page.booking_form.booking_form.create_booking',
-        args: { data: JSON.stringify(data) }, // ✅ JSON encode data
+        args: { data },
         callback: (r) => {
-          if (r.message && !r.message.startsWith('error')) {
+          if (r.message === 'success') {
             $('#success-msg').fadeIn();
             $('#booking-form').trigger('reset');
-            // frappe.msgprint(`✅ Booking Created Successfully<br><b>Booking ID:</b> ${r.message}`);
             setTimeout(() => $('#success-msg').fadeOut(), 3000);
           } else {
-            frappe.msgprint(' Something went wrong while creating booking.');
+            frappe.msgprint('Something went wrong.');
           }
         }
       });

@@ -1,0 +1,163 @@
+<div class="guest-form-wrapper">
+  <div class="guest-card">
+    <h1 class="guest-title">Guest Signup</h1>
+    <p class="guest-subtitle">Please fill in your details to continue.</p>
+
+    <div class="guest-grid">
+      <input type="text" id="first_name" placeholder="First Name *" class="guest-input">
+      <input type="text" id="middle_name" placeholder="Middle Name (optional)" class="guest-input">
+      <input type="text" id="last_name" placeholder="Last Name *" class="guest-input">
+    </div>
+
+    <div class="guest-grid">
+      <input type="text" id="mobile_no" placeholder="Mobile Number *" class="guest-input">
+      <input type="email" id="email" placeholder="Email Address *" class="guest-input">
+    </div>
+
+    <div class="guest-grid">
+      <select id="gender" class="guest-input">
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+      <input type="text" id="nationality" placeholder="Nationality" class="guest-input">
+    </div>
+
+    <div class="guest-actions">
+      <button id="signup_btn" class="guest-btn guest-btn-primary">Save Guest</button>
+      <button id="book_now_btn" class="guest-btn guest-btn-success hidden">Book Now</button>
+    </div>
+
+    <div id="success-msg" class="success-msg hidden">
+      ✅ Guest Registered Successfully!
+    </div>
+  </div>
+</div>
+
+<style>
+  body {
+    background: #f8fafc;
+  }
+
+  .guest-form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 3rem;
+    min-height: 90vh;
+  }
+
+  .guest-card {
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    padding: 2.5rem;
+    transition: 0.3s all ease-in-out;
+  }
+
+  .guest-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .guest-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  .guest-subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+  }
+
+  .guest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .guest-input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+    background-color: #f9fafb;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .guest-input:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+  }
+
+  .guest-btn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 48%;
+    transition: all 0.25s ease-in-out;
+  }
+
+  .guest-btn-primary {
+    background-color: #2563eb;
+    color: #fff;
+  }
+
+  .guest-btn-primary:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  .guest-btn-success {
+    background-color: #16a34a;
+    color: #fff;
+  }
+
+  .guest-btn-success:hover {
+    background-color: #15803d;
+    transform: translateY(-1px);
+  }
+
+  .guest-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+
+  .success-msg {
+    margin-top: 1.5rem;
+    padding: 0.75rem;
+    background-color: #dcfce7;
+    color: #166534;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    .guest-card {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+    .guest-btn {
+      width: 100%;
+    }
+    .guest-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+</style>

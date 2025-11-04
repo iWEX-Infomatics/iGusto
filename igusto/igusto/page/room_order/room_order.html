@@ -1,287 +1,104 @@
-<style>
-  .onboarding-container {
-    max-width: 520px;
-    margin: 0px auto;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    padding: 2.5rem;
-  }
+<div class="room-order-container">
+  <div class="order-card">
+    <h3 class="page-title">Room Order</h3>
 
-  .onboarding-header {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-
-  .onboarding-header h2 {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #1e40af;
-  }
-
-  .form-label {
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 6px;
-    display: block;
-  }
-
-  .form-control, select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid #d1d5db;
-    font-size: 0.95rem;
-  }
-
-  .form-control:focus, select:focus {
-    border-color: #2563eb;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-  }
-
-  .btn-primary {
-    background-color: #2563eb ;
-    color: white;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 500;
-    cursor: pointer;
-    width: 100%;
-  }
-
-  .btn-primary:hover {
-    background-color: #1e3a8a;
-  }
-
-  #success-msg {
-    background-color: #d1fae5;
-    color: #065f46;
-    border-radius: 10px;
-    padding: 12px;
-    font-weight: 500;
-    display: none;
-  }
-
-  @media (max-width: 480px) {
-    .onboarding-container {
-      margin: 20px;
-      padding: 1.5rem;
-    }
-  }
-</style>
-
-<div class="onboarding-container">
-  <form id="room-order-form">
-    <div class="mb-3">
-      <label>Guest</label>
-      <select id="guest" name="guest" class="form-control">
-        <option value="">Select Guest</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label>Guest</label>
+        <input type="text" id="guest_name" class="form-control" readonly>
+      </div>
+      <div class="form-group col-md-6">
+        <label>Room Number</label>
+        <input type="text" id="room_number" class="form-control" readonly>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label>Room Assignment</label>
-      <select id="room_assignment" name="room_assignment" class="form-control">
-        <option value="">Select Room Assignment</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label>Order Type</label>
+        <select id="order_type" class="form-control">
+          <option value="">Select Order Type</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Room Service">Room Service</option>
+          <option value="Laundry">Laundry</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label>Room</label>
-      <select id="room" name="room" class="form-control">
-        <option value="">Select Room</option>
-      </select>
-    </div>
+    <div id="dynamic_input" class="form-section"></div>
 
-    <div class="mb-3">
-      <label>Service Type</label>
-      <select id="service_type" name="service_type" class="form-control">
-        <option value="">Select Service Type</option>
-        <option value="Room Service">Room Service</option>
-        <option value="Restaurant">Restaurant</option>
-        <option value="Laundry">Laundry</option>
-        <option value="Spa">Spa</option>
-        <option value="Transport">Transport</option>
-        <option value="Other">Other</option>
-      </select>
+    <div class="form-actions">
+      <button id="submit_order" class="btn btn-primary">Submit Order</button>
     </div>
-
-    <!-- ✅ Service Item as Data field -->
-    <div class="mb-3">
-      <label>Service Item</label>
-      <input type="text" id="service_item" name="service_item" class="form-control" placeholder="Enter Service Item">
-    </div>
-
-    <div class="mb-3">
-      <label>Rate</label>
-      <input type="number" id="service_rate" name="service_rate" class="form-control" placeholder="Enter Rate">
-    </div>
-
-    <div class="mt-2">
-      <button type="button" class="btn btn-secondary w-100" id="add_service_item">Add Item</button>
-    </div>
-
-    <div id="order-items" class="mt-3"></div>
-    <div id="total_display" class="mt-3 fw-bold"></div>
-
-    <div class="mt-4">
-      <button type="submit" class="btn-primary w-100">Submit Order</button>
-    </div>
-  </form>
+  </div>
 </div>
 
-<script>
-frappe.ready(() => {
+<style>
+.room-order-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
 
-  // Load Guest dropdown
-  frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-      doctype: "Guest",
-      fields: ["name"],
-      limit_page_length: 100
-    },
-    callback: (r) => {
-      const guestSelect = $("#guest");
-      (r.message || []).forEach(g => {
-        guestSelect.append(`<option value="${g.name}">${g.name}</option>`);
-      });
-    }
-  });
+.order-card {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  width: 800px;
+}
 
-  // Load Room Assignments
-  frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-      doctype: "Room Assignment",
-      fields: ["name"],
-      limit_page_length: 100
-    },
-    callback: (r) => {
-      const assignSelect = $("#room_assignment");
-      (r.message || []).forEach(a => {
-        assignSelect.append(`<option value="${a.name}">${a.name}</option>`);
-      });
-    }
-  });
+.page-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 25px;
+}
 
-  // Load Rooms
-  frappe.call({
-    method: "frappe.client.get_list",
-    args: {
-      doctype: "Room",
-      fields: ["name"],
-      limit_page_length: 100
-    },
-    callback: (r) => {
-      const roomSelect = $("#room");
-      (r.message || []).forEach(rm => {
-        roomSelect.append(`<option value="${rm.name}">${rm.name}</option>`);
-      });
-    }
-  });
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
 
-  // Load items dynamically based on service type
-  $("#service_type").on("change", function() {
-    const type = $(this).val();
-    const select = $("#service_item");
-    select.empty().append(`<option value="">Loading...</option>`);
+.form-group {
+  flex: 1;
+}
 
-    if (!type) {
-      select.html(`<option value="">Select service type first</option>`);
-      return;
-    }
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+}
 
-    frappe.call({
-      method: "frappe.client.get_list",
-      args: {
-        doctype: "Extra Service",
-        fields: ["service_name", "rate"],
-        filters: { service_type: type }
-      },
-      callback: function(r) {
-        select.empty();
-        if (r.message && r.message.length > 0) {
-          select.append(`<option value="">Select Item</option>`);
-          r.message.forEach(s => {
-            select.append(`<option data-rate="${s.rate}" value="${s.service_name}">${s.service_name}</option>`);
-          });
-        } else {
-          select.append(`<option value="">No services found</option>`);
-        }
-      }
-    });
-  });
+.form-control:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+  outline: none;
+}
 
-  // Add selected item
-  $("#service_item").on("change", function() {
-    const selected = $(this).find("option:selected");
-    const serviceName = selected.val();
-    const rate = selected.data("rate");
-    if (!serviceName) return;
+.form-actions {
+  text-align: center;
+  margin-top: 30px;
+}
 
-    $("#order-items").append(`
-      <div class="item-row border p-2 rounded mt-2" data-item="${serviceName}">
-        <strong>${serviceName}</strong> - ₹${rate}
-        <input type="number" class="quantity ml-2" value="1" min="1" data-rate="${rate}" />
-        <span class="amount ml-2">₹${rate}</span>
-        <button type="button" class="btn btn-sm btn-danger remove-item ml-2">X</button>
-      </div>
-    `);
-  });
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-  // Quantity change
-  $(document).on("input", ".quantity", function() {
-    const qty = $(this).val();
-    const rate = $(this).data("rate");
-    const amount = qty * rate;
-    $(this).siblings(".amount").text("₹" + amount);
-  });
-
-  // Remove item
-  $(document).on("click", ".remove-item", function() {
-    $(this).closest(".item-row").remove();
-  });
-
-  // Submit order
-  $("#room-order-form").on("submit", function(e) {
-    e.preventDefault();
-
-    const data = {
-      guest: $("#guest").val(),
-      room_assignment: $("#room_assignment").val(),
-      room: $("#room").val(),
-      service_type: $("#service_type").val(),
-      items: []
-    };
-
-    $(".item-row").each(function() {
-      const name = $(this).data("item");
-      const qty = $(this).find(".quantity").val();
-      const rate = $(this).find(".quantity").data("rate");
-      data.items.push({
-        item: name,
-        category: $("#service_type").val(),
-        quantity: parseFloat(qty),
-        rate: rate,
-        amount: qty * rate
-      });
-    });
-
-    frappe.call({
-      method: "igusto.igusto.doctype.service_order.service_order.create_service_order",
-      args: { data: JSON.stringify(data) },
-      callback: function(r) {
-        if (r.message) {
-          $("#success-msg").show().text("✅ Order Created: " + r.message.name);
-          $("#room-order-form")[0].reset();
-          $("#order-items").empty();
-        }
-      }
-    });
-  });
-
-});
-</script>
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+</style>

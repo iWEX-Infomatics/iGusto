@@ -1,0 +1,157 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+"autoname": "guest-onboard-.####",
+ "creation": "2025-11-04 12:43:37.992321",
+ "name": "Guest Onboarding",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "guest",
+  "from_date",
+  "to_date",
+  "no_of_guests",
+  "nationality",
+  "passport_number",
+  "visa_number",
+  "id_proof_type",
+  "id_proof_number",
+  "guest_photo",
+  "room_type",
+  "room_number",
+  "rfid_card_no",
+  "check_in_time",
+  "check_out_time",
+  "roommates_section",
+  "roommates"
+ ],
+ "fields": [
+  {
+   "fieldname": "guest",
+   "label": "Guest Name",
+   "fieldtype": "Link",
+   "options": "Guest",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_date",
+   "label": "From Date",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "label": "To Date",
+   "fieldtype": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "no_of_guests",
+   "label": "Number of Guests",
+   "fieldtype": "Int",
+   "reqd": 1
+  },
+  {
+   "fieldname": "nationality",
+   "label": "Nationality",
+   "fieldtype": "Data",
+   "reqd": 1
+  },
+  {
+   "fieldname": "passport_number",
+   "label": "Passport Number",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.nationality && doc.nationality.toLowerCase() !== 'indian'",
+   "mandatory_depends_on": "eval:doc.nationality && doc.nationality.toLowerCase() !== 'indian'"
+  },
+  {
+   "fieldname": "visa_number",
+   "label": "Visa Number",
+   "fieldtype": "Data",
+   "depends_on": "eval:doc.nationality && doc.nationality.toLowerCase() !== 'indian'",
+   "mandatory_depends_on": "eval:doc.nationality && doc.nationality.toLowerCase() !== 'indian'"
+  },
+  {
+   "fieldname": "id_proof_type",
+   "label": "ID Proof Type",
+   "fieldtype": "Select",
+   "options": "Aadhar Card\nDriving License\nPassport\nVoter ID\nOther"
+  },
+  {
+   "fieldname": "id_proof_number",
+   "label": "ID Proof Number",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "guest_photo",
+   "label": "Guest Photo",
+   "fieldtype": "Attach Image"
+  },
+  {
+   "fieldname": "room_type",
+   "label": "Room Type",
+   "fieldtype": "Link",
+   "options": "Room Type"
+  },
+  {
+   "fieldname": "room_number",
+   "label": "Room Number",
+   "fieldtype": "Link",
+   "options": "Room"
+  },
+  {
+   "fieldname": "rfid_card_no",
+   "label": "RFID Card No",
+   "fieldtype": "Data"
+  },
+  {
+   "fieldname": "check_in_time",
+   "label": "Check-in Time",
+   "fieldtype": "Time",
+   "default": "14:00:00",
+   "description": "Check-in after 2 PM"
+  },
+  {
+   "fieldname": "check_out_time",
+   "label": "Check-out Time",
+   "fieldtype": "Time",
+   "default": "11:00:00",
+   "description": "Checkout before 11 AM"
+  },
+  {
+   "fieldname": "roommates_section",
+   "fieldtype": "Section Break",
+   "label": "Roommates Details"
+  },
+  {
+   "fieldname": "roommates",
+   "label": "Roommates",
+   "fieldtype": "Table",
+   "options": "Roommate Detail"
+  }
+ ],
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Receptionist",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "role": "System Manager"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "index_web_pages_for_search": 1,
+ "module": "igusto"
+}
