@@ -30,7 +30,7 @@ class GuestOnboarding {
 	}
 
 	prefill_guest_and_fields() {
-		// ✅ STEP 1: Load guest name from route or localStorage
+		//  STEP 1: Load guest name from route or localStorage
 		let guestName = frappe?.route_options?.guest || "";
 		if (!guestName) {
 			// fallback from localStorage (in case of page reload)
@@ -57,7 +57,7 @@ class GuestOnboarding {
 			});
 		}
 
-		// ✅ STEP 2: Load Room Types dynamically
+		//  STEP 2: Load Room Types dynamically
 		frappe.call({
 			method: "frappe.client.get_list",
 			args: { doctype: "Room Type", fields: ["name"] },
@@ -80,7 +80,7 @@ class GuestOnboarding {
 			}
 		});
 
-		// ✅ STEP 3: Load Room Numbers (Room Doctype)
+		//  STEP 3: Load Room Numbers (Room Doctype)
 		frappe.call({
 			method: "frappe.client.get_list",
 			args: { doctype: "Room", fields: ["name"] },
@@ -134,7 +134,7 @@ class GuestOnboarding {
 			});
 		};
 
-		// ✅ If photo is selected, upload it first
+		//  If photo is selected, upload it first
 	if (file) {
 		let formData = new FormData();
 		formData.append("file", file);
@@ -149,7 +149,7 @@ class GuestOnboarding {
 			processData: false,
 			contentType: false,
 			headers: {
-				"X-Frappe-CSRF-Token": frappe.csrf_token  // ✅ Add this line
+				"X-Frappe-CSRF-Token": frappe.csrf_token  //  Add this line
 			},
 			success: function (response) {
 				if (response.message && response.message.file_url) {
@@ -159,7 +159,7 @@ class GuestOnboarding {
 			},
 			error: function (xhr) {
 				console.error("File upload failed:", xhr);
-				frappe.msgprint("❌ File upload failed. Please try again.");
+				frappe.msgprint(" File upload failed. Please try again.");
 			}
 		});
 	} else {

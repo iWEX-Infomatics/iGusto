@@ -107,7 +107,7 @@ class RoomOrder {
         if (r.message) {
           frappe.msgprint({
             title: __("Success"),
-            message: `✅ Room Order Created: ${r.message}`,
+            message: ` Room Order Created: ${r.message}`,
             indicator: "green"
           });
         }

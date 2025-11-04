@@ -19,10 +19,10 @@ class RoomBooking {
         let guestName = frappe?.route_options?.guest;
         if (guestName) $("#guest_name").val(guestName);
 
-        // ✅ Load Room Types dynamically
+        //  Load Room Types dynamically
         this.load_room_types();
 
-        // ✅ Handle Nationality change
+        //  Handle Nationality change
         $("#nationality").on("change", function() {
             if ($(this).val() === "Foreigner") {
                 $("#currency-section").show();
@@ -43,7 +43,7 @@ class RoomBooking {
             }
         });
 
-        // ✅ Save Booking
+        //  Save Booking
         $("#create_booking_btn").on("click", (e) => {
             e.preventDefault();
             const bookingData = {
@@ -69,7 +69,7 @@ class RoomBooking {
                 args: bookingData,
                 callback: (r) => {
                     if (r.message) {
-                        frappe.msgprint("✅ Booking Saved Successfully!");
+                        frappe.msgprint(" Booking Saved Successfully!");
                         $("#create_booking_btn").hide();
 
                         const onboardBtn = `
@@ -97,7 +97,7 @@ class RoomBooking {
         });
     }
 
-    // ✅ Load Room Types into dropdown
+    //  Load Room Types into dropdown
     load_room_types() {
         frappe.call({
             method: "frappe.client.get_list",
