@@ -6,7 +6,7 @@ class RoomOrder {
   constructor(wrapper) {
     this.page = frappe.ui.make_app_page({
       parent: wrapper,
-      title: 'Room Order',
+      title: '',
       single_column: true
     });
     this.make();

@@ -6,7 +6,7 @@ class GuestSignupPage {
 	constructor(wrapper) {
 		this.page = frappe.ui.make_app_page({
 			parent: wrapper,
-			title: 'Guest Signup',
+			title: '',
 			single_column: true
 		});
 		this.make();

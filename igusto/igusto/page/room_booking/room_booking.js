@@ -6,7 +6,7 @@ class RoomBooking {
 	constructor(wrapper) {
 		this.page = frappe.ui.make_app_page({
 			parent: wrapper,
-			title: 'Room Booking',
+			title: '',
 			single_column: true
 		});
 		this.make();
