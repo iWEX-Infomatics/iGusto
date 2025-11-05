@@ -1,0 +1,234 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "Room-check-.#####",
+ "creation": "2025-11-05 15:19:43.855698",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "details_section",
+  "guest",
+  "room",
+  "booking_reference",
+  "checked_by",
+  "checkout_date",
+  "section_break_basic",
+  "room_cleanliness",
+  "bathroom_condition",
+  "linen_condition",
+  "furniture_condition",
+  "electronics_condition",
+  "room_damage",
+  "attach_image_blle",
+  "comments",
+  "section_break_usage",
+  "room_check_items",
+  "section_break_billing",
+  "room_rent",
+  "items_total",
+  "damages_total",
+  "grand_total",
+  "payment_status",
+  "section_break_actions",
+  "front_desk_approval",
+  "checkout_completed",
+  "status",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "guest",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Guest",
+   "options": "Guest",
+   "reqd": 1
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Room",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking_reference",
+   "fieldtype": "Link",
+   "label": "Booking Reference",
+   "options": "Booking"
+  },
+  {
+   "fieldname": "checked_by",
+   "fieldtype": "Link",
+   "label": "Checked By",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "checkout_date",
+   "fieldtype": "Date",
+   "label": "Checkout Date"
+  },
+  {
+   "fieldname": "section_break_basic",
+   "fieldtype": "Section Break",
+   "label": "Room Condition"
+  },
+  {
+   "fieldname": "room_cleanliness",
+   "fieldtype": "Select",
+   "label": "Room Cleanliness",
+   "options": "Excellent\nGood\nNeeds Cleaning"
+  },
+  {
+   "fieldname": "bathroom_condition",
+   "fieldtype": "Select",
+   "label": "Bathroom Condition",
+   "options": "Clean\nNeeds Cleaning\nDamaged"
+  },
+  {
+   "fieldname": "linen_condition",
+   "fieldtype": "Select",
+   "label": "Linen & Bedsheet",
+   "options": "Clean\nDirty\nDamaged"
+  },
+  {
+   "fieldname": "furniture_condition",
+   "fieldtype": "Select",
+   "label": "Furniture Condition",
+   "options": "Good\nDamaged"
+  },
+  {
+   "fieldname": "electronics_condition",
+   "fieldtype": "Select",
+   "label": "Electronics / Lights",
+   "options": "Working\nNot Working"
+  },
+  {
+   "default": "0",
+   "fieldname": "room_damage",
+   "fieldtype": "Check",
+   "label": "Room Damage Found"
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Comments / Notes"
+  },
+  {
+   "fieldname": "section_break_usage",
+   "fieldtype": "Section Break",
+   "label": "Usage & Consumption"
+  },
+  {
+   "fieldname": "room_check_items",
+   "fieldtype": "Table",
+   "label": "Room Check Items",
+   "options": "Room Check Items"
+  },
+  {
+   "fieldname": "section_break_billing",
+   "fieldtype": "Section Break",
+   "label": "Billing Summary"
+  },
+  {
+   "fieldname": "room_rent",
+   "fieldtype": "Currency",
+   "label": "Room Rent"
+  },
+  {
+   "fieldname": "items_total",
+   "fieldtype": "Currency",
+   "label": "Items Total"
+  },
+  {
+   "fieldname": "damages_total",
+   "fieldtype": "Currency",
+   "label": "Damages Total"
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand Total"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Pending\nPaid\nPartially Paid"
+  },
+  {
+   "fieldname": "section_break_actions",
+   "fieldtype": "Section Break",
+   "label": "Checkout Actions"
+  },
+  {
+   "default": "0",
+   "fieldname": "front_desk_approval",
+   "fieldtype": "Check",
+   "label": "Front Desk Approval"
+  },
+  {
+   "default": "0",
+   "fieldname": "checkout_completed",
+   "fieldtype": "Check",
+   "label": "Checkout Completed"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nIn Progress\nCompleted"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Room Check",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "depends_on": "eval:doc.room_damage==1;",
+   "fieldname": "attach_image_blle",
+   "fieldtype": "Attach Image",
+   "label": "Attach damage product image"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-11-05 16:28:50.391476",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Room Check",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
