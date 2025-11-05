@@ -66,7 +66,7 @@ class RoomBooking {
 				args: bookingData,
 				callback: (r) => {
 					if (r.message) {
-						frappe.msgprint(" Booking Saved Successfully!");
+						frappe.msgprint(" Room Booking Done Successfully!");
 
 						//  Create Guest Onboard button (green + fade animation)
 						const onboardBtn = $(`
