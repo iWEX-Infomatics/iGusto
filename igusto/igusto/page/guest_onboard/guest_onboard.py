@@ -8,7 +8,6 @@ def create_guest_onboarding(data):
         data = json.loads(data)
     data = frappe._dict(data)
 
-    # ✅ Normalize time format to HH:MM:SS
     def normalize_time(value, default):
         if not value:
             return default

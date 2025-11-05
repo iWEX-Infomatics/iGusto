@@ -15,49 +15,80 @@ class GuestOnboarding {
 	make() {
 		let me = this;
 
-		// Render HTML
+		// Render HTML template
 		let html = frappe.render_template("guest_onboard", {});
 		$(html).appendTo(this.page.body);
 
-		// Wait for DOM ready
+		// Prefill guest & fields
 		setTimeout(() => {
 			me.prefill_guest_and_fields();
 		}, 300);
 
+		// Submit button
 		this.page.body.find("#btn_submit_onboard").on("click", function () {
 			me.submit_onboarding();
 		});
 	}
 
-	prefill_guest_and_fields() {
-		//  STEP 1: Load guest name from route or localStorage
-		let guestName = frappe?.route_options?.guest || "";
+	async prefill_guest_and_fields() {
+		let guestName = "";
+
+		// Step 1: from route
+		if (frappe.route_options && frappe.route_options.guest) {
+			guestName = frappe.route_options.guest;
+		}
+
+		// Step 2: from localStorage
 		if (!guestName) {
-			// fallback from localStorage (in case of page reload)
 			const lastBooking = JSON.parse(localStorage.getItem("last_booking") || "{}");
 			guestName = lastBooking.guest || "";
 		}
 
+		// Step 3: from latest Guest entry
+		if (!guestName) {
+			try {
+				let res = await frappe.call({
+					method: "frappe.client.get_list",
+					args: {
+						doctype: "Guest",
+						fields: ["name"],
+						order_by: "creation desc",
+						limit: 1
+					}
+				});
+				if (res.message && res.message.length > 0) {
+					guestName = res.message[0].name;
+				}
+			} catch (e) {
+				console.error("Failed to fetch latest guest:", e);
+			}
+		}
+
+		// Step 4: Prefill values
+		let booking = JSON.parse(localStorage.getItem("last_booking") || "{}");
+
+		$("#guest").val(guestName || booking.guest || "");
+		$("#from_date").val(booking.from_date || "");
+		$("#to_date").val(booking.to_date || "");
+		$("#no_of_guests").val(booking.no_of_guests || "");
+		$("#nationality").val(booking.nationality || "");
+		$("#room_type").val(booking.room_type || "");
+
+		// Step 5: Fetch guest info
 		if (guestName) {
-			$("#guest").val(guestName);
-		} else {
-			// fallback to current session user (optional)
 			frappe.call({
-				method: "frappe.client.get_value",
-				args: {
-					doctype: "Guest",
-					filters: { email: frappe.session.user },
-					fieldname: ["name"]
-				},
+				method: "frappe.client.get",
+				args: { doctype: "Guest", name: guestName },
 				callback: function (r) {
 					if (r.message) {
-						$("#guest").val(r.message.name);
+						let g = r.message;
+						$("#nationality").val(g.nationality || "");
 					}
 				}
 			});
 		}
 
-		//  STEP 2: Load Room Types dynamically
+		// Step 6: Load Room Types
 		frappe.call({
 			method: "frappe.client.get_list",
 			args: { doctype: "Room Type", fields: ["name"] },
@@ -68,19 +99,12 @@ class GuestOnboarding {
 						options += `<option value="${rt.name}">${rt.name}</option>`;
 					});
 					$("#room_type").html(options);
-
-					// Prefill from route or saved booking
-					let room_type = frappe?.route_options?.room_type;
-					if (!room_type) {
-						const lastBooking = JSON.parse(localStorage.getItem("last_booking") || "{}");
-						room_type = lastBooking.room_type || "";
-					}
-					if (room_type) $("#room_type").val(room_type);
+					if (booking.room_type) $("#room_type").val(booking.room_type);
 				}
 			}
 		});
 
-		//  STEP 3: Load Room Numbers (Room Doctype)
+		// Step 7: Load Room Numbers
 		frappe.call({
 			method: "frappe.client.get_list",
 			args: { doctype: "Room", fields: ["name"] },
@@ -134,38 +158,33 @@ class GuestOnboarding {
 			});
 		};
 
-		//  If photo is selected, upload it first
-	if (file) {
-		let formData = new FormData();
-		formData.append("file", file);
-		formData.append("is_private", 0);
-		formData.append("doctype", "File");
-		formData.append("docname", $("#guest").val());
+		if (file) {
+			let formData = new FormData();
+			formData.append("file", file);
+			formData.append("is_private", 0);
+			formData.append("doctype", "File");
+			formData.append("docname", $("#guest").val());
 
-		$.ajax({
-			url: "/api/method/upload_file",
-			type: "POST",
-			data: formData,
-			processData: false,
-			contentType: false,
-			headers: {
-				"X-Frappe-CSRF-Token": frappe.csrf_token  //  Add this line
-			},
-			success: function (response) {
-				if (response.message && response.message.file_url) {
-					data.guest_photo = response.message.file_url;
+			$.ajax({
+				url: "/api/method/upload_file",
+				type: "POST",
+				data: formData,
+				processData: false,
+				contentType: false,
+				headers: { "X-Frappe-CSRF-Token": frappe.csrf_token },
+				success: function (response) {
+					if (response.message && response.message.file_url) {
+						data.guest_photo = response.message.file_url;
+					}
+					upload_and_save();
+				},
+				error: function (xhr) {
+					console.error("File upload failed:", xhr);
+					frappe.msgprint("File upload failed. Please try again.");
 				}
-				upload_and_save();
-			},
-			error: function (xhr) {
-				console.error("File upload failed:", xhr);
-				frappe.msgprint(" File upload failed. Please try again.");
-			}
-		});
-	} else {
-		upload_and_save();
+			});
+		} else {
+			upload_and_save();
+		}
 	}
-
-	}
-
 }
