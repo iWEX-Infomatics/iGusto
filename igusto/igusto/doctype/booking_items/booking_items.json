@@ -1,0 +1,161 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-06 10:53:21.468358",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "room_and_bill_info_section",
+  "booking_checkin",
+  "booking_checkout",
+  "booking_room",
+  "booking_nights",
+  "booking_rate",
+  "booking_amount",
+  "booking_staying_guest1",
+  "booking_staying_guest2",
+  "booking_details_status",
+  "column_break_11",
+  "property_and_belongings",
+  "vehicle_number",
+  "vehicle_type",
+  "brand_name",
+  "vehicle_image",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "room_and_bill_info_section",
+   "fieldtype": "Heading",
+   "label": "Room and Bill Info"
+  },
+  {
+   "default": "Today",
+   "fieldname": "booking_checkin",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "CheckIn",
+   "print_hide": 1,
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "booking_checkout",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "CheckOut",
+   "print_hide": 1,
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "booking_room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Room",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking_nights",
+   "fieldtype": "Float",
+   "label": "Nights"
+  },
+  {
+   "fieldname": "booking_rate",
+   "fieldtype": "Currency",
+   "label": "Rate"
+  },
+  {
+   "fieldname": "booking_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "booking_staying_guest1",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Guest 1",
+   "options": "Contact",
+   "reqd": 1
+  },
+  {
+   "fieldname": "booking_staying_guest2",
+   "fieldtype": "Link",
+   "label": "Guest 2",
+   "options": "Contact"
+  },
+  {
+   "fieldname": "booking_details_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Pending\nCheckIn\nCheckOut\nCancelled\nTrashed",
+   "print_hide": 1,
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break_11",
+   "fieldtype": "Column Break",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "property_and_belongings",
+   "fieldtype": "Heading",
+   "label": "Property and Belongings"
+  },
+  {
+   "fieldname": "vehicle_number",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Vehicle Number",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "vehicle_type",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Vehicle Type",
+   "options": "Vehicle Type",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "brand_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Brand Name",
+   "options": "Brand Name",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "vehicle_image",
+   "fieldtype": "Attach Image",
+   "label": "Image",
+   "print_hide": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes",
+   "print_hide": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-11-06 10:55:10.701538",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Booking Items",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

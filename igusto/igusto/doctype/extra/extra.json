@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-06 10:57:01.928522",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "extras_name",
+  "extras_description",
+  "extras_quantity",
+  "extras_price",
+  "extras_status",
+  "extras_notes",
+  "extras_id",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Extra",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "extras_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Extra",
+   "unique": 1
+  },
+  {
+   "fieldname": "extras_description",
+   "fieldtype": "Small Text",
+   "in_global_search": 1,
+   "label": "Description"
+  },
+  {
+   "fieldname": "extras_quantity",
+   "fieldtype": "Data",
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "extras_price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Price"
+  },
+  {
+   "fieldname": "extras_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Available\nNot Available"
+  },
+  {
+   "fieldname": "extras_notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "extras_id",
+   "fieldtype": "Data",
+   "label": "Extra ID"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-11-06 10:57:28.197079",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Extra",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

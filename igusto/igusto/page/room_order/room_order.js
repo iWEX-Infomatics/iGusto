@@ -13,32 +13,14 @@ class RoomOrder {
   }
 
   make() {
-    // Render HTML
     $(frappe.render_template("room_order", {})).appendTo(this.page.body);
 
-    // Load room
-    // this.load_room();
-
-    // On service type change
     $("#service_type").on("change", (e) => {
       this.render_dynamic_fields(e.target.value);
     });
 
-    // Submit order
     $("#submit_order").on("click", () => {
       this.submit_order();
-    });
-  }
-
-  load_room() {
-    frappe.call({
-      method: "igusto.igusto.page.room_order.room_order.get_latest_guest_room",
-      callback: function (r) {
-        if (r.message) {
-          $("#room_number").val(r.message.room_number);
-          $("#room_number").data("assign", r.message.assign);
-        }
-      }
     });
   }
 
@@ -56,7 +38,7 @@ class RoomOrder {
                 <label>Menu Item</label>
                 <select id="service_item" class="form-control">
                   <option value="">Select Item</option>
-                  ${r.message.map(item => `<option value="${item.item_name}">${item.item_name}</option>`).join("")}
+                  ${r.message.map(i => `<option value="${i.item_name}">${i.item_name}</option>`).join("")}
                 </select>
               </div>
               <div class="form-group">
@@ -73,20 +55,58 @@ class RoomOrder {
         method: "igusto.igusto.page.room_order.room_order.get_service_items",
         callback: function (r) {
           if (r.message) {
-            let html = `<label>Service Items</label>`;
+            let html = `<label>Room Service Items</label>`;
             r.message.forEach(item => {
-              html += `
-                <div>
-                  <input type="checkbox" name="service_item" value="${item}">
-                  ${item}
-                </div>`;
+              html += `<div><input type="checkbox" name="service_item" value="${item}"> ${item}</div>`;
             });
             container.html(html);
           }
         }
       });
 
-    } else if (["Spa", "Transport", "Laundry", "Other"].includes(service_type)) {
+    } else if (service_type === "Spa") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_spa_items",
+        callback: function (r) {
+          if (r.message) {
+            let html = `<label>Spa Services</label>`;
+            r.message.forEach(item => {
+              html += `<div><input type="checkbox" name="service_item" value="${item}"> ${item}</div>`;
+            });
+            container.html(html);
+          }
+        }
+      });
+
+    } else if (service_type === "Laundry") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_laundry_items",
+        callback: function (r) {
+          if (r.message) {
+            let html = `<label>Laundry Services</label>`;
+            r.message.forEach(item => {
+              html += `<div><input type="checkbox" name="service_item" value="${item}"> ${item}</div>`;
+            });
+            container.html(html);
+          }
+        }
+      });
+
+    } else if (service_type === "Transport") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_transport_items",
+        callback: function (r) {
+          if (r.message) {
+            let html = `<label>Transport Options</label>`;
+            r.message.forEach(item => {
+              html += `<div><input type="checkbox" name="service_item" value="${item}"> ${item}</div>`;
+            });
+            container.html(html);
+          }
+        }
+      });
+
+    } else if (service_type === "Other") {
       container.html(`
         <div class="form-group">
           <label>Describe Service</label>
@@ -96,50 +116,52 @@ class RoomOrder {
     }
   }
 
-submit_order() {
-  let data = {
-    guest: $("#guest_name").val(),
-    room_number: $("#room_number").val(),
-    service_type: $("#service_type").val(),
-    assign: $("#room_number").data("assign")
-  };
+  submit_order() {
+    let data = {
+      guest: $("#guest_name").val(),
+      room_number: $("#room_number").val(),
+      service_type: $("#service_type").val()
+    };
 
-  if (!data.guest) return frappe.msgprint("Please enter Guest Name.");
-  if (!data.room_number) return frappe.msgprint("Room Number is missing.");
-  if (!data.service_type) return frappe.msgprint("Please select Service Type.");
+    if (!data.guest) return frappe.msgprint("Please enter Guest Name.");
+    if (!data.room_number) return frappe.msgprint("Please enter Room Number.");
+    if (!data.service_type) return frappe.msgprint("Please select Service Type.");
 
-  if (data.service_type === "Restaurant") {
-    data.service_item = $("#service_item").val();
-    data.quantity = parseInt($("#quantity").val()) || 1;
+    // Handle input values
+    if (["Restaurant"].includes(data.service_type)) {
+      data.service_item = $("#service_item").val();
+      data.quantity = parseInt($("#quantity").val()) || 1;
 
-  } else if (data.service_type === "Room Service") {
-    data.service_item = [];
-    $("input[name='service_item']:checked").each(function () {
-      data.service_item.push($(this).val());
-    });
-    data.quantity = 1;
+    } else if (["Room Service", "Spa", "Laundry", "Transport"].includes(data.service_type)) {
+      data.service_item = [];
+      $("input[name='service_item']:checked").each(function () {
+        data.service_item.push($(this).val());
+      });
+      data.quantity = 1;
 
-  } else if (["Spa", "Transport", "Laundry", "Other"].includes(data.service_type)) {
-    data.service_item = $("#service_item").val();
-    data.quantity = 1;
-    data.describe_service = $("#service_item").val(); // will go into remarks
-  }
-
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.create_room_order",
-    args: { data: JSON.stringify(data) },
-    freeze: true,
-    freeze_message: __("Creating Service Order..."),
-    callback: function (r) {
-      if (r.message) {
-        frappe.msgprint({
-          title: __("Success"),
-          message: `Service Order Created: <b>${r.message}</b>`,
-          indicator: "green"
-        });
-      }
+    } else if (data.service_type === "Other") {
+      data.service_item = $("#service_item").val();
+      data.describe_service = $("#service_item").val();
+      data.quantity = 1;
     }
-  });
-}
 
+    frappe.call({
+      method: "igusto.igusto.page.room_order.room_order.create_room_order",
+      args: { data: JSON.stringify(data) },
+      freeze: true,
+      freeze_message: __("Creating Service & Sales Order..."),
+      callback: function (r) {
+        if (r.message) {
+          frappe.msgprint({
+            title: __("Success"),
+            message: `
+              <b>Service Order:</b> ${r.message.service_order} <br>
+              <b>Sales Order:</b> ${r.message.sales_order}
+            `,
+            indicator: "green"
+          });
+        }
+      }
+    });
+  }
 }
