@@ -1,3 +1,5 @@
+// igusto\igusto\igusto\page\guest_signup\guest_signup.js
+
 frappe.pages['guest-signup'].on_page_load = function (wrapper) {
 	new GuestSignupPage(wrapper);
 };
@@ -29,27 +31,36 @@ class GuestSignupPage {
 				return;
 			}
 
-			frappe.call({
-				method: "igusto.igusto.page.guest_signup.guest_signup.create_guest",
-				args: {
-					first_name: first,
-					middle_name: middle,
-					last_name: last,
-					full_name: full_name,
-					mobile_no: $('#mobile_no').val(),
-					email: $('#email').val(),
-					gender: $('#gender').val(),
-					nationality: $('#nationality').val()
-				},
-				callback: function (r) {
-					if (r.message) {
-						guest_name = r.message.name;
-						$('#success-msg').removeClass('hidden');
-						$('#book_now_btn').removeClass('hidden');
-						$('#signup_btn').addClass('hidden');
-					}
+		frappe.call({
+			method: "igusto.igusto.page.guest_signup.guest_signup.create_guest",
+			args: {
+				first_name: first,
+				middle_name: middle,
+				last_name: last,
+				full_name: full_name,
+				mobile_no: $('#mobile_no').val(),
+				email: $('#email').val(),
+				gender: $('#gender').val(),
+				nationality: $('#nationality').val(),
+				address_line1: $('#address_line1').val(),
+				city: $('#city').val(),
+				state: $('#state').val(),
+				country: $('#country').val(),
+				pincode: $('#pincode').val()
+			},
+			callback: function (r) {
+				if (r.message) {
+					guest_name = r.message.name;
+					let customer_name = r.message.customer;
+					$('#success-msg')
+						.text(`Signup Completed! Guest: ${guest_name}, Customer: ${customer_name}`)
+						.removeClass('hidden');
+					$('#book_now_btn').removeClass('hidden');
+					$('#signup_btn').addClass('hidden');
 				}
-			});
+			}
+		});
+
 		});
 
 		// Book Now

@@ -1,65 +1,75 @@
 import frappe
 from frappe.model.document import Document
+from frappe.utils import nowdate
 
 class RoomCheck(Document):
     pass
 
 
 @frappe.whitelist()
-def create_sales_order_from_room_check(room_check_name):
-    """Create a Sales Order automatically when Room Check is submitted"""
-    room_check = frappe.get_doc("Room Check", room_check_name)
+def create_sales_invoice(doc):
+    """Create Draft Sales Invoice from Room Check"""
+    room_check = frappe._dict(frappe.parse_json(doc))
 
-    # --- Step 1: Ensure Customer Exists ---
-    guest_name = room_check.guest
-    guest_doc = frappe.get_doc("Guest", guest_name)
-    customer_name = guest_doc.full_name or guest_name
+    #  Get Guest full name
+    guest_name = frappe.db.get_value("Guest", room_check.guest, "full_name")
+    if not guest_name:
+        frappe.throw("Guest not found or missing full name.")
 
-    customer = frappe.db.exists("Customer", {"customer_name": customer_name})
+    #  Check or create Customer
+    customer = frappe.db.exists("Customer", {"customer_name": guest_name})
     if not customer:
         customer_doc = frappe.get_doc({
             "doctype": "Customer",
-            "customer_name": customer_name,
-            "customer_type": "Individual",
-            "mobile_no": getattr(guest_doc, "mobile_no", ""),
-            "email_id": getattr(guest_doc, "email", "")
-        }).insert(ignore_permissions=True)
-        frappe.msgprint(f"Customer '{customer_name}' created successfully.")
+            "customer_name": guest_name,
+            "customer_type": "Individual"
+        })
+        customer_doc.insert(ignore_permissions=True)
         customer = customer_doc.name
 
-        # Optional: link back if Guest has a Customer field
-        if "customer" in guest_doc.as_dict():
-            guest_doc.db_set("customer", customer)
+    #  Get Company and Income Account
+    company = room_check.get("company") or frappe.defaults.get_user_default("company")
+    if not company:
+        frappe.throw("Company not found. Please set a default company for your user.")
 
-    # --- Step 2: Create Sales Order ---
-    so = frappe.new_doc("Sales Order")
-    so.customer = customer
-    so.delivery_date = frappe.utils.nowdate()
-    so.ig_room = getattr(room_check, "room", "")
-    so.ig_booking_reference = getattr(room_check, "booking_reference", "")
+    income_account = frappe.db.get_value("Company", company, "default_income_account")
+    if not income_account:
+        income_account = frappe.db.get_value("Account", {"account_type": "Income Account", "company": company})
+    if not income_account:
+        frappe.throw(f"No valid Income Account found for company {company}")
 
-    # Add child items
-    for item in room_check.room_check_items:
-        so.append("items", {
-            "item_code": item.item,
-            "item_name": item.item,
-            "qty": item.qty,
-            "rate": item.rate,
-            "amount": item.amount,
-            "description": item.category or "Room Check Item"
-        })
+    #  Create Sales Invoice (DRAFT)
+    si = frappe.new_doc("Sales Invoice")
+    si.customer = customer
+    si.company = company
+    si.due_date = nowdate()
 
-    # Add room rent if exists
-    if getattr(room_check, "room_rent", 0):
-        so.append("items", {
-            "item_code": "ROOM-RENT",
+    #  Add Room Rent
+    if room_check.get("room_rent") and float(room_check.room_rent) > 0:
+        si.append("items", {
             "item_name": "Room Rent",
             "qty": 1,
             "rate": room_check.room_rent,
-            "amount": room_check.room_rent
+            "amount": room_check.room_rent,
+            "income_account": income_account
         })
 
-    so.insert(ignore_permissions=True)
-    frappe.db.commit()
+    #  Add Room Check Items
+    for item in room_check.get("room_check_items", []):
+        si.append("items", {
+            "item_name": item.get("item"),
+            "qty": item.get("qty"),
+            "rate": item.get("rate"),
+            "amount": item.get("amount"),
+            "income_account": income_account
+        })
 
-    return so.name
+    #  Save as Draft (NOT submitted)
+    si.set_missing_values()
+    si.save(ignore_permissions=True)
+
+    #  Clickable Message Link
+    link = f'<a href="/app/sales-invoice/{si.name}" style="color: var(--blue-600); font-weight:600; text-decoration: underline;">{si.name}</a>'
+    frappe.msgprint(f" Sales Invoice {link} created successfully.", title="Success")
+
+    return si.name
