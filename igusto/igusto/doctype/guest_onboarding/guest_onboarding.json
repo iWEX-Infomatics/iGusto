@@ -6,6 +6,7 @@
  "name": "Guest Onboarding",
  "doctype": "DocType",
  "engine": "InnoDB",
+ "is_submittable":1,
  "field_order": [
   "guest",
   "from_date",
@@ -23,7 +24,8 @@
   "check_in_time",
   "check_out_time",
   "roommates_section",
-  "roommates"
+  "roommates",
+  "key_transaction_id"
  ],
  "fields": [
   {
@@ -103,6 +105,12 @@
    "fieldname": "rfid_card_no",
    "label": "RFID Card No",
    "fieldtype": "Data"
+  },
+  {
+    "fieldname": "key_transaction_id",
+    "label": "Key Transaction ID",
+    "fieldtype": "Data",
+    "read_only": 1
   },
   {
    "fieldname": "check_in_time",

@@ -11,7 +11,6 @@
   "extras_price",
   "extras_status",
   "extras_notes",
-  "extras_id",
   "amended_from"
  ],
  "fields": [
@@ -60,18 +59,13 @@
    "fieldname": "extras_notes",
    "fieldtype": "Small Text",
    "label": "Notes"
-  },
-  {
-   "fieldname": "extras_id",
-   "fieldtype": "Data",
-   "label": "Extra ID"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-06 10:57:28.197079",
+ "modified": "2025-11-07 10:25:15.885329",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Extra",

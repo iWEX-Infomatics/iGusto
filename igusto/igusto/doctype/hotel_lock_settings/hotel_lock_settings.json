@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-07 11:03:02.762414",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "base_url",
+  "hotel_id",
+  "encoder_id",
+  "api_key",
+  "use_mock"
+ ],
+ "fields": [
+  {
+   "default": "https://hmsapi.godrejenterprises.com/api/pms/v3",
+   "description": "Enter PMS API base URL",
+   "fieldname": "base_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Base URL",
+   "reqd": 1
+  },
+  {
+   "default": "2",
+   "fieldname": "hotel_id",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Hotel ID",
+   "reqd": 1
+  },
+  {
+   "description": "Fetched via GetEncoderID API",
+   "fieldname": "encoder_id",
+   "fieldtype": "Data",
+   "label": "Encoder ID"
+  },
+  {
+   "description": "Optional, if authentication required",
+   "fieldname": "api_key",
+   "fieldtype": "Password",
+   "label": "API Key / Token"
+  },
+  {
+   "default": "0",
+   "fieldname": "use_mock",
+   "fieldtype": "Check",
+   "label": "Use Mock"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-11-07 11:48:49.893538",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Hotel Lock Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
