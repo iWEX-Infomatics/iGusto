@@ -12,7 +12,6 @@
   "booking_room",
   "booking_nights",
   "booking_rate",
-  "booking_amount",
   "booking_staying_guest1",
   "booking_staying_guest2",
   "booking_details_status",
@@ -66,13 +65,6 @@
    "fieldname": "booking_rate",
    "fieldtype": "Currency",
    "label": "Rate"
-  },
-  {
-   "fieldname": "booking_amount",
-   "fieldtype": "Currency",
-   "in_list_view": 1,
-   "label": "Amount",
-   "read_only": 1
   },
   {
    "fieldname": "booking_staying_guest1",
@@ -148,7 +140,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-11-06 10:55:10.701538",
+ "modified": "2025-11-08 10:20:22.202881",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Booking Items",
