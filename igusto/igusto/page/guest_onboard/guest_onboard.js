@@ -1,3 +1,6 @@
+
+// igusto/igusto/page/guest_onboard/guest_onboard.js
+
 frappe.pages['guest-onboard'].on_page_load = function (wrapper) {
 	new GuestOnboarding(wrapper);
 };

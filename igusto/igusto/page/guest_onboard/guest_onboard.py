@@ -35,6 +35,12 @@ def create_guest_onboarding(data):
     doc.check_in_time = check_in_time
     doc.check_out_time = check_out_time
 
+    #  Save onboarding
     doc.insert(ignore_permissions=True)
+
+    #  Update room status to Occupied
+    if data.room_number:
+        frappe.db.set_value("Room", data.room_number, "status", "Occupied")
+
     frappe.db.commit()
     return doc.name
