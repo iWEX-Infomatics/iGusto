@@ -6,13 +6,12 @@ from frappe.utils import now_datetime
 @frappe.whitelist()
 def get_menu_items():
     """Fetch active items from Item doctype."""
-    items = frappe.get_all(
+    return frappe.get_all(
         "Item",
         fields=["name", "item_name"],
         filters={"disabled": 0},
         order_by="item_name asc"
     )
-    return items
 
 
 @frappe.whitelist()
@@ -29,16 +28,19 @@ def get_spa_items():
 
 @frappe.whitelist()
 def get_laundry_items():
+    """Static laundry options."""
     return ["Clothes Wash", "Ironing", "Dry Clean", "Fold & Pack"]
 
 
 @frappe.whitelist()
 def get_transport_items():
+    """Static transport service options."""
     return ["Airport Pickup", "Airport Drop", "City Tour", "Cab on Call"]
 
 
 @frappe.whitelist()
 def create_room_order(data):
+    """Creates a Service Order and linked Sales Order."""
     if isinstance(data, str):
         data = json.loads(data)
 
@@ -94,14 +96,22 @@ def create_room_order(data):
         ig.is_group = 0
         ig.insert(ignore_permissions=True)
 
+    # ✅ ---- Get Company dynamically from Company doctype ----
+    company = frappe.db.get_all("Company", filters={"disabled": 0}, fields=["name"], limit=1)
+    if not company:
+        frappe.throw("No active Company found in the system.")
+    company_name = company[0].name
+
     # ---- Create Sales Order ----
     so = frappe.new_doc("Sales Order")
     so.customer = customer
     so.transaction_date = now_datetime()
     so.delivery_date = now_datetime()
     so.order_type = "Sales"
+    so.company = company_name
     so.remarks = f"Auto created from Service Order: {service_doc.name}"
 
+    # ---- Normalize items ----
     if isinstance(service_items, str):
         service_items = [service_items]
 
@@ -166,9 +176,11 @@ def create_room_order(data):
         new_item.insert(ignore_permissions=True)
         so.append("items", {"item_code": new_item.name, "qty": 1})
 
+    # ---- Insert Sales Order ----
     so.insert(ignore_permissions=True)
 
     return {
         "service_order": service_doc.name,
-        "sales_order": so.name
+        "sales_order": so.name,
+        "company_used": company_name
     }
