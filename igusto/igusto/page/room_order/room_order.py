@@ -96,10 +96,10 @@ def create_room_order(data):
         ig.is_group = 0
         ig.insert(ignore_permissions=True)
 
-    # ✅ ---- Get Company dynamically from Company doctype ----
-    company = frappe.db.get_all("Company", filters={"disabled": 0}, fields=["name"], limit=1)
+    #  ---- Get Company dynamically from Company doctype ----
+    company = frappe.db.get_all("Company", fields=["name"], limit=1)
     if not company:
-        frappe.throw("No active Company found in the system.")
+        frappe.throw("No Company found in the system.")
     company_name = company[0].name
 
     # ---- Create Sales Order ----
