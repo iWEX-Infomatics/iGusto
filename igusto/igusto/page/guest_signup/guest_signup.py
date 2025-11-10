@@ -1,72 +1,104 @@
 import frappe
+import requests
+import json
 
 @frappe.whitelist()
-def create_guest(first_name, middle_name=None, last_name=None, full_name=None, mobile_no=None, email=None,
-                 gender=None, nationality=None, address_line1=None, city=None, state=None, country=None, pincode=None):
+def get_post_offices_api(pincode):
+    """Fetch post offices for Indian Pincode"""
+    if not pincode:
+        return []
+
+    url = f"https://api.postalpincode.in/pincode/{pincode}"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64;x64)"}
     try:
-        # --- Create Guest ---
-        doc = frappe.new_doc("Guest")
-        doc.first_name = first_name
-        doc.middle_name = middle_name
-        doc.last_name = last_name
-        doc.full_name = full_name
-        doc.primary_contact = mobile_no
-        doc.email = email
-        doc.gender = gender
-        doc.nationality = nationality
-        doc.insert(ignore_permissions=True)
+        resp = requests.get(url, timeout=5, headers=headers)
+        data = resp.json()
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "Pincode API Error")
+        return []
 
-        # --- Create Customer Automatically ---
-        customer_name = full_name or f"{first_name} {last_name}"
-        customer = frappe.new_doc("Customer")
-        customer.customer_name = customer_name
-        customer.customer_type = "Individual"
-        customer.customer_group = "All Customer Groups"
-        customer.territory = "All Territories"
-        customer.mobile_no = mobile_no
-        customer.email_id = email
-        customer.gender = gender
-        customer.nationality = nationality
+    if not data or data[0].get("Status") != "Success":
+        return []
 
-        # Link Guest → Customer
-        customer_meta = frappe.get_meta("Customer")
-        if "guest" in [f.fieldname for f in customer_meta.fields]:
-            customer.guest = doc.name
-        customer.insert(ignore_permissions=True)
+    result = []
+    for po in data[0].get("PostOffice", []):
+        result.append({
+            "post_office": po.get("Name"),
+            "taluk": po.get("Block") or po.get("Name"),
+            "state": po.get("State"),
+            "district": po.get("District"),
+            "country": po.get("Country") or "India"
+        })
+    return result
 
-        # Link Customer → Guest
-        guest_meta = frappe.get_meta("Guest")
-        if "customer" in [f.fieldname for f in guest_meta.fields]:
-            doc.db_set("customer", customer.name)
 
-        # --- Create Address ---
-        if address_line1 and city and country:
-            address_title = f"{full_name or first_name} Address"
-            address_doc = frappe.new_doc("Address")
-            address_doc.address_title = address_title
-            address_doc.address_line1 = address_line1
-            address_doc.city = city
-            address_doc.state = state
-            address_doc.country = country
-            address_doc.pincode = pincode
-            address_doc.address_type = "Billing"
-            address_doc.append("links", {"link_doctype": "Guest", "link_name": doc.name})
-            address_doc.append("links", {"link_doctype": "Customer", "link_name": customer.name})
-            address_doc.insert(ignore_permissions=True)
+@frappe.whitelist()
+def create_guest_with_address(first_name, middle_name=None, last_name=None, full_name=None,
+                              mobile_no=None, email=None, gender=None, nationality=None,
+                              address_data=None):
+    """Create Guest + Linked Address"""
+    try:
+        if isinstance(address_data, str):
+            address_data = json.loads(address_data)
 
-            # Update Guest and Customer address fields if they exist
-            if "address" in [f.fieldname for f in guest_meta.fields]:
-                doc.db_set("address", address_doc.name)
-            if "customer_primary_address" in [f.fieldname for f in customer_meta.fields]:
-                customer.db_set("customer_primary_address", address_doc.name)
+        #  Create Guest
+        guest = frappe.new_doc("Guest")
+        guest.first_name = first_name
+        guest.middle_name = middle_name
+        guest.last_name = last_name
+        guest.full_name = full_name
+        guest.primary_contact = mobile_no
+        guest.email = email
+        guest.gender = gender
+        guest.nationality = nationality
+        guest.insert(ignore_permissions=True)
+
+        #  Create Address linked to Guest
+        if address_data:
+            address = frappe.new_doc("Address")
+            address.address_title = guest.full_name or guest.name
+            address.address_line1 = address_data.get("address_line1")
+            address.city = address_data.get("city")
+            address.state = address_data.get("state")
+            address.country = (
+                address_data.get("country")
+                or detect_country_from_district(address_data.get("district"))
+                or "India"
+            )
+            address.county = address_data.get("district")
+
+            address.pincode = address_data.get("pincode")
+            address.custom_post_office = address_data.get("post_office")
+            address.custom_district = address_data.get("district")
+
+            address.append("links", {
+                "link_doctype": "Guest",
+                "link_name": guest.name
+            })
+
+            address.is_primary_address = 1
+            address.is_shipping_address = 1
+            address.insert(ignore_permissions=True)
 
         frappe.db.commit()
 
-        return {
-            "name": doc.name,
-            "customer": customer.name
-        }
+        return {"guest": guest.name, "address": address.name if address_data else None}
 
-    except Exception as e:
-        frappe.log_error(frappe.get_traceback(), "Guest Signup Error")
-        frappe.throw(f"Error creating Guest: {str(e)}")
+    except Exception:
+        frappe.log_error(frappe.get_traceback(), "Guest Signup with Address Error")
+        frappe.throw("Error creating Guest or Address. Please contact Administrator.")
+
+
+def detect_country_from_district(district):
+    """Optional helper to set country based on district (can expand logic later)"""
+    if not district:
+        return None
+
+    # For India (default), else future logic can be added
+    indian_districts = [
+        "Mumbai", "Pune", "Delhi", "Kolkata", "Chennai", "Bengaluru", "Hyderabad"
+    ]
+    if district in indian_districts:
+        return "India"
+
+    return "India"  # Default fallback

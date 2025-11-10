@@ -1,21 +1,27 @@
 
-<!-- igusto\igusto\igusto\page\guest_signup\guest_signup.html -->
 <div class="guest-form-wrapper">
   <div class="guest-card">
     <h1 class="guest-title">Guest Signup</h1>
     <p class="guest-subtitle">Please fill in your details to continue.</p>
 
+    <!-- Name Section -->
     <div class="guest-grid">
       <input type="text" id="first_name" placeholder="First Name *" class="guest-input">
       <input type="text" id="middle_name" placeholder="Middle Name (optional)" class="guest-input">
-      <input type="text" id="last_name" placeholder="Last Name *" class="guest-input">
     </div>
 
+    <div class="guest-grid">
+      <input type="text" id="last_name" placeholder="Last Name *" class="guest-input">
+      <input type="text" id="full_name" placeholder="Full Name (auto)" class="guest-input" readonly>
+    </div>
+
+    <!-- Contact Section -->
     <div class="guest-grid">
       <input type="text" id="mobile_no" placeholder="Mobile Number *" class="guest-input">
       <input type="email" id="email" placeholder="Email Address *" class="guest-input">
     </div>
 
+    <!-- Gender & Nationality -->
     <div class="guest-grid">
       <select id="gender" class="guest-input">
         <option value="">Select Gender</option>
@@ -23,20 +29,29 @@
         <option>Female</option>
         <option>Other</option>
       </select>
-      <input type="text" id="nationality" placeholder="Nationality" class="guest-input">
+      <input type="text" id="nationality" placeholder="Nationality *" class="guest-input">
     </div>
+
+    <!-- Address Section -->
+    <h3 style="margin-top:1rem;color:#1d4ed8;">Address Details</h3>
+
     <div class="guest-grid">
-      <input type="text" id="address_line1" placeholder="Address Line 1 *" class="guest-input">
+      <input type="text" id="address_line1" placeholder="Door / Building / Street *" class="guest-input">
+      <input type="text" id="pincode" placeholder="Pincode / Zip Code *" class="guest-input">
+    </div>
+
+    <div class="guest-grid">
+      <input type="text" id="post_office" placeholder="Post Office" class="guest-input">
+      <input type="text" id="district" placeholder="District / County" class="guest-input">
     </div>
 
     <div class="guest-grid">
       <input type="text" id="city" placeholder="City *" class="guest-input">
-      <input type="text" id="state" placeholder="State *" class="guest-input">
+      <input type="text" id="state" placeholder="State / Province *" class="guest-input">
     </div>
 
     <div class="guest-grid">
       <input type="text" id="country" placeholder="Country *" class="guest-input">
-      <input type="text" id="pincode" placeholder="Pincode *" class="guest-input">
     </div>
 
     <div class="guest-actions">
@@ -45,9 +60,8 @@
     </div>
 
     <div id="success-msg" class="success-msg hidden">
-       Signup Completed!
+      Signup Completed!
     </div>
-    
   </div>
 </div>
 
@@ -66,7 +80,7 @@
 
   .guest-card {
     width: 100%;
-    max-width: 600px;
+    max-width: 650px;
     background: #ffffff;
     border-radius: 18px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
@@ -74,17 +88,11 @@
     transition: 0.3s all ease-in-out;
   }
 
-  .guest-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-  }
-
   .guest-title {
     font-size: 1.8rem;
     font-weight: 700;
     color: #1d4ed8;
     text-align: center;
-    margin-bottom: 0.25rem;
   }
 
   .guest-subtitle {
@@ -95,7 +103,7 @@
 
   .guest-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
     margin-bottom: 1rem;
   }
@@ -107,12 +115,11 @@
     border: 1px solid #d1d5db;
     font-size: 0.95rem;
     background-color: #f9fafb;
-    transition: all 0.2s ease-in-out;
   }
 
   .guest-input:focus {
     border-color: #2563eb;
-    background-color: #ffffff;
+    background-color: #fff;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     outline: none;
   }
@@ -123,9 +130,7 @@
     border-radius: 10px;
     font-weight: 600;
     cursor: pointer;
-    width: auto;
-    margin: auto;
-    transition: all 0.25s ease-in-out;
+    transition: all 0.25s;
   }
 
   .guest-btn-primary {
@@ -133,19 +138,9 @@
     color: #fff;
   }
 
-  .guest-btn-primary:hover {
-    background-color: #1d4ed8;
-    transform: translateY(-1px);
-  }
-
   .guest-btn-success {
     background-color: #16a34a;
     color: #fff;
-  }
-
-  .guest-btn-success:hover {
-    background-color: #15803d;
-    transform: translateY(-1px);
   }
 
   .guest-actions {
@@ -164,14 +159,11 @@
     font-weight: 600;
   }
 
-  @media (max-width: 640px) {
-    .guest-card {
-      padding: 1.5rem;
-      margin: 1rem;
+  @media (max-width:640px) {
+    .guest-grid {
+      grid-template-columns: 1fr;
     }
-    .guest-btn {
-      width: 100%;
-    }
+
     .guest-actions {
       flex-direction: column;
       gap: 0.75rem;

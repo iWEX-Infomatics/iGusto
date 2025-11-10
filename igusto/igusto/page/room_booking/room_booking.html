@@ -4,25 +4,29 @@
     <p class="booking-subtitle">Enter details to confirm your booking</p>
 
     <form id="booking-form">
-
-      <div class="booking-section">
-        <label class="booking-label">Guest Name</label>
-        <input type="text" id="guest_name" class="booking-input" readonly>
+      <div class="booking-grid">
+        <div>
+          <label class="booking-label">Guest Name</label>
+          <input type="text" id="guest_name" class="booking-input" readonly>
+        </div>
+        <div>
+          <label class="booking-label">Mobile *</label>
+          <input type="text" id="mobile" placeholder="Mobile Number *" class="booking-input" required>
+        </div>
       </div>
-
-      <!-- <div class="booking-section">
-        <label class="booking-label">Full Address *</label>
-        <textarea id="address" rows="2" class="booking-input" required></textarea>
-      </div> -->
 
       <div class="booking-grid">
         <div>
-          <label class="booking-label">Mobile *</label>
-          <input type="text" id="mobile" class="booking-input" required>
+          <label class="booking-label">Email *</label>
+          <input type="email" id="email" placeholder="Email Address *" class="booking-input" required>
         </div>
         <div>
-          <label class="booking-label">Email *</label>
-          <input type="email" id="email" class="booking-input" required>
+          <label class="booking-label">Nationality *</label>
+          <select id="nationality" class="booking-input" required>
+            <option value="">Select Nationality</option>
+            <option value="Indian">Indian</option>
+            <option value="Foreigner">Foreigner</option>
+          </select>
         </div>
       </div>
 
@@ -50,16 +54,12 @@
 
       <div class="booking-grid">
         <div>
-          <label class="booking-label">Nationality *</label>
-          <select id="nationality" class="booking-input" required>
-            <option value="">Select</option>
-            <option value="Indian">Indian</option>
-            <option value="Foreigner">Foreigner</option>
-          </select>
+          <label class="booking-label">Rate Plan *</label>
+          <input type="number" id="rate_plan" class="booking-input" placeholder="Enter Rate" required>
         </div>
         <div id="currency-section" style="display:none;">
           <label class="booking-label">Currency *</label>
-          <div id="currency_wrapper"></div>
+          <input type="text" id="currency" class="booking-input" placeholder="Currency" readonly required>
         </div>
       </div>
 
@@ -67,12 +67,11 @@
         <button id="create_booking_btn" class="booking-btn booking-btn-primary">Save Booking</button>
         <button id="back_btn" type="button" class="booking-btn booking-btn-secondary">Back</button>
       </div>
-
-      <div id="guest-onboard-section"></div>
     </form>
   </div>
 </div>
 
+<!-- ✅ STYLES -->
 <style>
   body {
     background: #f9fafb;
@@ -88,7 +87,7 @@
 
   .booking-card {
     width: 100%;
-    max-width: 650px;
+    max-width: 700px;
     background: #fff;
     border-radius: 18px;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
@@ -112,8 +111,8 @@
 
   .booking-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 1.5rem;
     margin-bottom: 1rem;
   }
 
@@ -179,6 +178,9 @@
       padding: 1.5rem;
       margin: 1rem;
     }
+    .booking-grid {
+      grid-template-columns: 1fr;
+    }
     .booking-btn {
       width: 100%;
     }
@@ -188,3 +190,25 @@
     }
   }
 </style>
+
+<!-- ✅ JS -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const nationality = document.getElementById("nationality");
+    const currencySection = document.getElementById("currency-section");
+    const currencyInput = document.getElementById("currency");
+
+    nationality.addEventListener("change", function () {
+      if (this.value === "Foreigner") {
+        currencySection.style.display = "block";
+        currencyInput.value = "USD";
+      } else if (this.value === "Indian") {
+        currencySection.style.display = "block";
+        currencyInput.value = "INR";
+      } else {
+        currencySection.style.display = "none";
+        currencyInput.value = "";
+      }
+    });
+  });
+</script>
