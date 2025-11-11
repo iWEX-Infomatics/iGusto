@@ -18,8 +18,8 @@
   "vehicle_number",
   "vehicle_type",
   "brand_name",
-  "vehicle_image",
-  "notes"
+  "notes",
+  "vehicle_image"
  ],
  "fields": [
   {
@@ -124,7 +124,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-11-10 13:48:03.384085",
+ "modified": "2025-11-11 10:24:04.959830",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Booking Items",
