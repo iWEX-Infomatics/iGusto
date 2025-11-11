@@ -9,12 +9,15 @@
   "first_name",
   "middle_name",
   "last_name",
+  "column_break_nagr",
   "full_name",
   "gender",
   "dob",
+  "address_and_contact_section",
+  "nationality",
   "primary_contact",
   "email",
-  "nationality",
+  "column_break_uqra",
   "address",
   "id_proof_type",
   "id_proof_number",
@@ -158,10 +161,23 @@
    "in_list_view": 1,
    "label": "Last Name",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_nagr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address_and_contact_section",
+   "fieldtype": "Section Break",
+   "label": "Address and Contact"
+  },
+  {
+   "fieldname": "column_break_uqra",
+   "fieldtype": "Column Break"
   }
  ],
  "links": [],
- "modified": "2025-11-04 11:10:24.766068",
+ "modified": "2025-11-11 16:51:14.937350",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Guest",
