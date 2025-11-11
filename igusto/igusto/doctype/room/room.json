@@ -29,6 +29,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Room Number",
+   "no_copy": 1,
    "reqd": 1,
    "unique": 1
   },
@@ -123,7 +124,7 @@
   }
  ],
  "links": [],
- "modified": "2025-11-11 10:56:44.107002",
+ "modified": "2025-11-11 16:01:27.203930",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Room",

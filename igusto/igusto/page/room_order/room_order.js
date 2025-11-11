@@ -15,6 +15,20 @@ class RoomOrder {
 
   make() {
     $(frappe.render_template("room_order", {})).appendTo(this.page.body);
+  // ✅ Get room_id from URL (for QR code scan)
+  const urlParams = new URLSearchParams(window.location.search);
+  const room_id = urlParams.get("room_id");
+
+  if (room_id) {
+    // auto-fill room_id and fetch room number if available
+    frappe.db.get_value("Room", room_id, ["room_number"])
+      .then(r => {
+        if (r.message && r.message.room_number) {
+          // set room number dropdown
+          $("#room_number").val(r.message.room_number).trigger("change");
+        }
+      });
+  }
 
     // listeners
     $("#service_type").on("change", (e) => {
