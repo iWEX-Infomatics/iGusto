@@ -50,7 +50,6 @@ class RoomOrder {
   }
 
   load_room_numbers() {
-    // fetch room numbers from Guest Onboarding doctype
     frappe.call({
       method: "igusto.igusto.page.room_order.room_order.get_room_numbers",
       callback: (r) => {
