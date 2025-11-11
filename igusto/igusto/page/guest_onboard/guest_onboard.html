@@ -1,86 +1,88 @@
 <div class="onboarding-container">
   <div class="form-layout">
+    
     <div class="form-section">
       <h4>Guest Details</h4>
-      <div class="form-group">
-        <label>Guest Name</label>
-        <input type="text" class="form-control" id="guest" readonly>
-      </div>
-      <div class="form-group">
-        <label>Guest Photo</label>
-        <input type="file" id="guest_photo" class="form-control" style="padding-top: 0px !important;" accept="image/*">
-      </div>
-      <div class="form-group">
-        <label>From Date</label>
-        <input type="date" class="form-control" id="from_date">
-      </div>
-      <div class="form-group">
-        <label>To Date</label>
-        <input type="date" class="form-control" id="to_date">
-      </div>
-      <div class="form-group">
-        <label>No. of Guests</label>
-        <input type="number" class="form-control" id="no_of_guests">
-      </div>
-      <div class="form-group">
-        <label>Nationality</label>
-        <input type="text" class="form-control" id="nationality" placeholder="e.g. Indian">
-      </div>
-      <div class="form-group passport-fields">
-        <label>Passport Number</label>
-        <input type="text" class="form-control" id="passport_number">
-      </div>
-      <div class="form-group visa-fields">
-        <label>Visa Number</label>
-        <input type="text" class="form-control" id="visa_number">
+      <div class="form-grid-col">
+        <div class="form-group">
+          <label>Guest Name</label>
+          <input type="text" class="form-control" id="guest" readonly>
+        </div>
+        <div class="form-group">
+          <label>Guest Photo</label>
+          <input type="file" id="guest_photo" class="form-control" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label>From Date</label>
+          <input type="date" class="form-control" id="from_date">
+        </div>
+        <div class="form-group">
+          <label>To Date</label>
+          <input type="date" class="form-control" id="to_date">
+        </div>
+        <div class="form-group">
+          <label>No. of Guests</label>
+          <input type="number" class="form-control" id="no_of_guests">
+        </div>
+        <div class="form-group">
+          <label>Nationality</label>
+          <input type="text" class="form-control" id="nationality" placeholder="e.g. Indian">
+        </div>
+        <div class="form-group passport-fields">
+          <label>Passport Number</label>
+          <input type="text" class="form-control" id="passport_number">
+        </div>
+        <div class="form-group visa-fields">
+          <label>Visa Number</label>
+          <input type="text" class="form-control" id="visa_number">
+        </div>
       </div>
     </div>
-
-    <hr>
 
     <div class="form-section">
       <h4>ID Proof Details</h4>
-      <div class="form-group">
-        <label>ID Proof Type</label>
-        <select class="form-control" id="id_proof_type">
-          <option value="">Select</option>
-          <option>Aadhar Card</option>
-          <option>Driving License</option>
-          <option>Passport</option>
-          <option>Voter ID</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>ID Proof Number</label>
-        <input type="text" class="form-control" id="id_proof_number">
+      <div class="form-grid-col">
+        <div class="form-group">
+          <label>ID Proof Type</label>
+          <select class="form-control" id="id_proof_type">
+            <option value="">Select</option>
+            <option>Aadhar Card</option>
+            <option>Driving License</option>
+            <option>Passport</option>
+            <option>Voter ID</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ID Proof Number</label>
+          <input type="text" class="form-control" id="id_proof_number">
+        </div>
       </div>
     </div>
-
-    <hr>
 
     <div class="form-section">
       <h4>Room Details</h4>
-      <div class="form-group">
-        <label>Room Type</label>
-        <select id="room_type" class="form-control"></select>
-      </div>
-    <div class="form-group">
-    <label>Room Number</label>
-    <select id="room_number" class="form-control"></select>
-    </div>
-
-      <div class="form-group">
-        <label>RFID Card No</label>
-        <input type="text" class="form-control" id="rfid_card_no">
-      </div>
-      <div class="form-group">
-        <label>Check-in Time</label>
-        <input type="time" class="form-control" id="check_in_time" value="14:00">
-      </div>
-      <div class="form-group">
-        <label>Check-out Time</label>
-        <input type="time" class="form-control" id="check_out_time" value="11:00">
+      <div class="form-grid-col">
+        <div class="form-group">
+          <label>Room Type</label>
+          <select id="room_type" class="form-control"></select>
+        </div>
+        <div class="form-group">
+          <label>Room Number</label>
+          <select id="room_number" class="form-control"></select>
+        </div>
+        <div class="form-group">
+          <label>RFID Card No</label>
+          <input type="text" class="form-control" id="rfid_card_no">
+        </div>
+        <div class="form-group">
+          <label>Check-in Time</label>
+          <input type="time" class="form-control" id="check_in_time" value="14:00">
+        </div>
+        <div class="form-group">
+          <label>Check-out Time</label>
+          <input type="time" class="form-control" id="check_out_time" value="11:00">
+        </div>
       </div>
     </div>
 
@@ -99,9 +101,66 @@
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
+
+  .form-section {
+    margin-bottom: 25px;
+    padding-bottom: 5px;
+    border: none !important;
+  }
+
   .form-section h4 {
     color: #444;
     margin-bottom: 10px;
+    font-weight: 600;
   }
-  label { font-weight: 600; }
+
+  .form-grid-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 24px;
+    border: none !important;
+  }
+
+  label {
+    font-weight: 600;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-control {
+    /* border-radius: 6px; */
+    /* border: 1px solid #ddd; */
+    /* padding: 8px 10px; */
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+        height: 50px;
+    border: 1px solid #d1d5db;
+    font-size: 0.95rem;
+    background-color: #f9fafb;
+  }
+
+  .form-control:focus {
+    border-color: #2563eb;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    outline: none;
+  }
+
+  select.form-control{
+        height: 50px;
+  }
+
+  hr {
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid-col {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>

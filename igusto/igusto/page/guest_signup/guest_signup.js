@@ -146,7 +146,7 @@ class GuestSignupPage {
 						localStorage.setItem("guest_data", JSON.stringify(guestData));
 
 						$('#success-msg')
-							.text(`Signup Completed! Guest: ${guest_name}`)
+							.text(`Signup Completed!`)
 							.removeClass('hidden');
 						$('#book_now_btn').removeClass('hidden');
 						$('#signup_btn').addClass('hidden');
