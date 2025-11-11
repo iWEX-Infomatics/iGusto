@@ -1,128 +1,164 @@
 {
-  "doctype": "DocType",
-  "name": "Room",
-  "module": "igusto",
-  "custom": 0,
-  "istable": 0,
-  "editable_grid": 0,
-  "track_changes": 1,
-  "autoname": "field:room_number",
-  "title_field": "room_number",
-  "fields": [
-    {
-      "fieldname": "room_number",
-      "fieldtype": "Data",
-      "label": "Room Number",
-      "reqd": 1,
-      "unique": 1
-    },
-    {
-      "fieldname": "room_type",
-      "fieldtype": "Link",
-      "options": "Room Type",
-      "label": "Room Type",
-      "reqd": 1
-    },
-    {
-      "fieldname": "floor",
-      "fieldtype": "Data",
-      "label": "Floor"
-    },
-    {
-      "fieldname": "building",
-      "fieldtype": "Data",
-      "label": "Building / Block"
-    },
-    {
-      "fieldname": "status",
-      "fieldtype": "Select",
-      "label": "Room Status",
-      "options": "Available\nOccupied\nCleaning\nMaintenance\nBlocked",
-      "default": "Available"
-    },
-    {
-      "fieldname": "housekeeping_status",
-      "fieldtype": "Select",
-      "label": "Housekeeping Status",
-      "options": "Clean\nDirty\nUnder Maintenance",
-      "default": "Clean"
-    },
-    {
-      "fieldname": "occupancy_section",
-      "fieldtype": "Section Break",
-      "label": "Occupancy & Details"
-    },
-    {
-      "fieldname": "current_guest",
-      "fieldtype": "Link",
-      "options": "Guest",
-      "label": "Current Guest"
-    },
-    {
-      "fieldname": "current_booking",
-      "fieldtype": "Link",
-      "options": "Booking",
-      "label": "Current Booking"
-    },
-    {
-      "fieldname": "rfid_key",
-      "fieldtype": "Data",
-      "label": "RFID / Keycard ID"
-    },
-    {
-      "fieldname": "maintenance_section",
-      "fieldtype": "Section Break",
-      "label": "Maintenance Info"
-    },
-    {
-      "fieldname": "last_cleaned_on",
-      "fieldtype": "Datetime",
-      "label": "Last Cleaned On"
-    },
-    {
-      "fieldname": "next_cleaning_due",
-      "fieldtype": "Datetime",
-      "label": "Next Cleaning Due"
-    },
-    {
-      "fieldname": "notes",
-      "fieldtype": "Small Text",
-      "label": "Notes / Remarks"
-    },
-    {
-      "fieldname": "is_active",
-      "fieldtype": "Check",
-      "label": "Is Active?",
-      "default": "1"
-    }
-  ],
-  "permissions": [
-    {
-      "role": "Hotel Manager",
-      "read": 1,
-      "write": 1,
-      "create": 1,
-      "delete": 1
-    },
-    {
-      "role": "Hotel Receptionist",
-      "read": 1,
-      "write": 1
-    },
-    {
-      "role": "Housekeeping Staff",
-      "read": 1,
-      "write": 1
-    },
-    {
-      "role": "System Manager",
-      "read": 1,
-      "write": 1,
-      "create": 1,
-      "delete": 1
-    }
-  ],
-  "actions": [],
-  "allow_rename": 0,
-  "index_web_pages_for_search": 0
+ "actions": [],
+ "autoname": "field:room_number",
+ "creation": "2025-10-31 14:41:48.879963",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "room_number",
+  "room_type",
+  "floor",
+  "building",
+  "status",
+  "housekeeping_status",
+  "column_break_mtng",
+  "room_id",
+  "occupancy_section",
+  "current_guest",
+  "current_booking",
+  "rfid_key",
+  "maintenance_section",
+  "last_cleaned_on",
+  "next_cleaning_due",
+  "notes",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "room_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Room Number",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room Type",
+   "options": "Room Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "floor",
+   "fieldtype": "Data",
+   "label": "Floor"
+  },
+  {
+   "fieldname": "building",
+   "fieldtype": "Data",
+   "label": "Building / Block"
+  },
+  {
+   "default": "Available",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Room Status",
+   "options": "Available\nOccupied\nCleaning\nMaintenance\nBlocked"
+  },
+  {
+   "default": "Clean",
+   "fieldname": "housekeeping_status",
+   "fieldtype": "Select",
+   "label": "Housekeeping Status",
+   "options": "Clean\nDirty\nUnder Maintenance"
+  },
+  {
+   "fieldname": "occupancy_section",
+   "fieldtype": "Section Break",
+   "label": "Occupancy & Details"
+  },
+  {
+   "fieldname": "current_guest",
+   "fieldtype": "Link",
+   "label": "Current Guest",
+   "options": "Guest"
+  },
+  {
+   "fieldname": "current_booking",
+   "fieldtype": "Link",
+   "label": "Current Booking",
+   "options": "Booking"
+  },
+  {
+   "fieldname": "rfid_key",
+   "fieldtype": "Data",
+   "label": "RFID / Keycard ID"
+  },
+  {
+   "fieldname": "maintenance_section",
+   "fieldtype": "Section Break",
+   "label": "Maintenance Info"
+  },
+  {
+   "fieldname": "last_cleaned_on",
+   "fieldtype": "Datetime",
+   "label": "Last Cleaned On"
+  },
+  {
+   "fieldname": "next_cleaning_due",
+   "fieldtype": "Datetime",
+   "label": "Next Cleaning Due"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes / Remarks"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active?"
+  },
+  {
+   "fieldname": "column_break_mtng",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "room_id",
+   "fieldtype": "HTML",
+   "label": "Room ID"
+  }
+ ],
+ "links": [],
+ "modified": "2025-11-11 10:56:44.107002",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Room",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Hotel Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Hotel Receptionist",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Housekeeping Staff",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "room_number",
+ "track_changes": 1
 }

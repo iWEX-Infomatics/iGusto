@@ -4,24 +4,17 @@
     <h1 class="guest-title">Guest Signup</h1>
     <p class="guest-subtitle">Please fill in your details to continue.</p>
 
-    <!-- Name Section -->
+    <!-- Name & Nationality Section -->
     <div class="guest-grid">
+      <input type="text" id="nationality" placeholder="Nationality *" class="guest-input">
       <input type="text" id="first_name" placeholder="First Name *" class="guest-input">
+    </div>
+
+    <div class="guest-grid">
       <input type="text" id="middle_name" placeholder="Middle Name (optional)" class="guest-input">
-    </div>
-
-    <div class="guest-grid">
       <input type="text" id="last_name" placeholder="Last Name *" class="guest-input">
-      <input type="text" id="full_name" placeholder="Full Name (auto)" class="guest-input" readonly>
     </div>
 
-    <!-- Contact Section -->
-    <div class="guest-grid">
-      <input type="text" id="mobile_no" placeholder="Mobile Number *" class="guest-input">
-      <input type="email" id="email" placeholder="Email Address *" class="guest-input">
-    </div>
-
-    <!-- Gender & Nationality -->
     <div class="guest-grid">
       <select id="gender" class="guest-input">
         <option value="">Select Gender</option>
@@ -29,35 +22,43 @@
         <option>Female</option>
         <option>Other</option>
       </select>
-      <input type="text" id="nationality" placeholder="Nationality *" class="guest-input">
+      <input type="text" id="full_name" placeholder="Full Name" class="guest-input" readonly>
+    </div>
+
+    <div class="guest-grid">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <input type="text" id="country_code" value="+91" class="guest-input" style="width:80px;flex-shrink:0;">
+        <input type="text" id="mobile_no" placeholder="Mobile Number *" class="guest-input" style="flex:1;">
+      </div>
+      <input type="email" id="email" placeholder="Email Address *" class="guest-input">
     </div>
 
     <!-- Address Section -->
     <h3 style="margin-top:1rem;color:#1d4ed8;">Address Details</h3>
 
-
-
     <div class="guest-grid">
       <input type="text" id="country" placeholder="Country *" class="guest-input">
-            <input type="text" id="pincode" placeholder="Pincode / Zip Code *" class="guest-input">
-
+      <input type="text" id="pincode" placeholder="Pincode / Zip Code *" class="guest-input">
     </div>
+
+    <div class="guest-grid">
+      <input type="text" id="address_line1" placeholder="Door / Building / Street *" class="guest-input">
+    <!-- </div>
+
+    <div class="guest-grid"> -->
+      <input type="text" id="city" placeholder="City *" class="guest-input">
+    </div>
+
     <div class="guest-grid">
       <input type="text" id="post_office" placeholder="Post Office" class="guest-input">
       <input type="text" id="district" placeholder="District / County" class="guest-input">
     </div>
 
     <div class="guest-grid">
-      <input type="text" id="city" placeholder="City *" class="guest-input">
       <input type="text" id="state" placeholder="State / Province *" class="guest-input">
-    </div>
+    <!-- </div>
 
-    <div class="guest-grid">
-      <input type="text" id="address_line1" placeholder="Door / Building / Street *" class="guest-input">
-    </div>
-
-
-    <div class="guest-actions">
+    <div class="guest-actions"> -->
       <button id="signup_btn" class="guest-btn guest-btn-primary">Save Guest</button>
       <button id="book_now_btn" class="guest-btn guest-btn-success hidden">Book Now</button>
     </div>
@@ -77,7 +78,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 3rem;
+    /* padding-top: 3rem; */
     min-height: 90vh;
   }
 

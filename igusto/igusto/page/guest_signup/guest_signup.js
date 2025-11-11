@@ -27,12 +27,26 @@ class GuestSignupPage {
 		};
 		$('#first_name, #middle_name, #last_name').on('input', updateFullName);
 
-		//  Nationality logic
+		// 🟢 Auto-format Mobile for +91 (space after 5 digits)
+		$('#mobile_no').on('input', function () {
+			const countryCode = $('#country_code').val().trim();
+			let val = $(this).val().replace(/\s/g, ''); // remove all spaces
+
+			if (countryCode === '+91') {
+				if (val.length > 5) {
+					val = val.slice(0, 5) + ' ' + val.slice(5, 10);
+				}
+			}
+			$(this).val(val);
+		});
+
+		// Nationality logic
 		$('#nationality').on('input', function () {
 			const val = $(this).val()?.toLowerCase() || '';
 			if (val === 'indian' || val === 'india') {
 				$('#country').val('India').prop('readonly', true);
 				$('#pincode').attr('placeholder', 'Pincode *');
+				$('#country_code').val('+91');
 			} else {
 				$('#country').val('').prop('readonly', false);
 				$('#pincode').attr('placeholder', 'Zip / Postal Code *');
@@ -82,21 +96,21 @@ class GuestSignupPage {
 
 					function set_address_fields(po) {
 						$('#post_office').val(po.post_office);
-						$('#city').val(po.taluk || po.post_office);
 						$('#district').val(po.district);
 						$('#state').val(po.state);
+						// 🔴 Removed city autofill intentionally as per requirement
 					}
 				}
 			});
 		});
 
-		//  Save Guest + Auto Create Address
+		// Save Guest + Auto Create Address
 		this.$body.find('#signup_btn').on('click', function () {
 			const first = $('#first_name').val()?.trim();
 			const middle = $('#middle_name').val()?.trim();
 			const last = $('#last_name').val()?.trim();
 			const full_name = $('#full_name').val();
-			const mobile = $('#mobile_no').val();
+			const mobile = $('#mobile_no').val()?.replace(/\s/g, ''); // remove space before saving
 			const email = $('#email').val();
 			const nationality = $('#nationality').val();
 

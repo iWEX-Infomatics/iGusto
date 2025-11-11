@@ -1,286 +1,324 @@
-frappe.pages['room-booking'].on_page_load = function (wrapper) {
-	new RoomBooking(wrapper);
+frappe.pages['room-order'].on_page_load = function (wrapper) {
+  new RoomOrder(wrapper);
 };
 
-class RoomBooking {
-	constructor(wrapper) {
-		this.page = frappe.ui.make_app_page({
-			parent: wrapper,
-			title: '',
-			single_column: true
-		});
-		this.make();
-	}
+class RoomOrder {
+  constructor(wrapper) {
+    this.page = frappe.ui.make_app_page({
+      parent: wrapper,
+      title: '',
+      single_column: true
+    });
+    this.make();
+    this.load_room_numbers();
+  }
 
-	make() {
-		$(frappe.render_template("room_booking")).appendTo(this.page.main);
+  make() {
+    $(frappe.render_template("room_order", {})).appendTo(this.page.body);
 
-		// ✅ Wait till DOM loads before filling data
-		frappe.after_ajax(() => {
-			// ✅ CRITICAL FIX: Use setTimeout with callback chain
-			setTimeout(() => {
-				this.load_guest_data();
-			}, 300);
-			
-			this.load_room_types();
-			this.setup_events();
-		});
-	}
+    // listeners
+    $("#service_type").on("change", (e) => {
+      this.render_dynamic_fields(e.target.value);
+    });
 
-	load_guest_data() {
-		let storedGuest = localStorage.getItem("guest_data");
-		
-		if (!storedGuest) {
-			console.warn("⚠️ No guest data found in localStorage");
-			return;
-		}
+    $("#room_number").on("change", (e) => {
+      const room = e.target.value;
+      if (room) {
+        this.fetch_guest_for_room(room);
+      } else {
+        $("#guest_name").val("");
+      }
+    });
 
-		try {
-			const guestData = JSON.parse(storedGuest);
-			console.log("📥 Loaded from localStorage:", guestData);
+    $("#submit_order").on("click", () => {
+      this.submit_order();
+    });
+  }
 
-			// ✅ FIXED: Direct assignment without nested setTimeout
-			if (guestData.guest) {
-				const guestField = $("#guest_name");
-				if (guestField.length) {
-					guestField.val(guestData.guest);
-					console.log("✅ Guest Name set:", guestData.guest);
-				} else {
-					console.error("❌ #guest_name field not found in DOM");
-				}
-			}
+  load_room_numbers() {
+    // fetch room numbers from Guest Onboarding doctype
+    frappe.call({
+      method: "igusto.igusto.page.room_order.room_order.get_room_numbers",
+      callback: (r) => {
+        if (r.message) {
+          const sel = $("#room_number");
+          sel.empty();
+          sel.append(`<option value="">Select Room Number</option>`);
+          r.message.forEach(rn => {
+            sel.append(`<option value="${frappe.utils.escape_html(rn)}">${frappe.utils.escape_html(rn)}</option>`);
+          });
+        }
+      }
+    });
+  }
 
-			if (guestData.mobile) {
-				const mobileField = $("#mobile");
-				if (mobileField.length) {
-					mobileField.val(guestData.mobile);
-					console.log("✅ Mobile set:", guestData.mobile);
-				} else {
-					console.error("❌ #mobile field not found in DOM");
-				}
-			}
+  fetch_guest_for_room(room_number) {
+    frappe.call({
+      method: "igusto.igusto.page.room_order.room_order.get_guest_by_room",
+      args: { room_number },
+      callback: (r) => {
+        if (r.message) {
+          $("#guest_name").val(r.message);
+        } else {
+          $("#guest_name").val("");
+          frappe.msgprint("No guest found for selected room.");
+        }
+      }
+    });
+  }
 
-			// ✅ CRITICAL FIX: Email was missing proper field assignment
-			if (guestData.email) {
-				const emailField = $("#email");
-				if (emailField.length) {
-					emailField.val(guestData.email);
-					console.log("✅ Email set:", guestData.email);
-				} else {
-					console.error("❌ #email field not found in DOM");
-				}
-			}
+  render_dynamic_fields(service_type) {
+    const container = $("#dynamic_input");
+    container.empty();
 
-			// ✅ CRITICAL FIX: Nationality needs proper value matching
-			if (guestData.nationality) {
-				const nationalityField = $("#nationality");
-				if (nationalityField.length) {
-					// ✅ Ensure exact match with dropdown options
-					let nationalityValue = guestData.nationality;
-					
-					// Normalize to match dropdown options exactly
-					if (nationalityValue.toLowerCase() === 'indian' || nationalityValue.toLowerCase() === 'india') {
-						nationalityValue = 'Indian';
-					} else if (nationalityValue.toLowerCase() === 'foreigner' || nationalityValue.toLowerCase() === 'foreign') {
-						nationalityValue = 'Foreigner';
-					}
-					
-					nationalityField.val(nationalityValue);
-					console.log("✅ Nationality set:", nationalityValue);
-					
-					// ✅ Trigger change event to show currency field if needed
-					nationalityField.trigger("change");
-				} else {
-					console.error("❌ #nationality field not found in DOM");
-				}
-			}
+    if (!service_type) return;
 
-		} catch (e) {
-			console.error("❌ Failed to parse localStorage data:", e);
-			frappe.msgprint("Error loading guest data. Please re-enter your details.");
-		}
-	}
+    if (service_type === "Restaurant") {
+      // restaurant: dropdown of menu items + qty + remarks
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_menu_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<div class="form-group"><label>Menu Item</label>
+              <select id="service_item" class="form-control"><option value="">Select Item</option>
+              ${r.message.map(i => `<option value="${i.item_name}">${i.item_name}</option>`).join("")}
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Quantity</label>
+              <input type="number" id="quantity" class="form-control" min="1" value="1">
+            </div>
+            <div class="form-group">
+              <label>Custom Remarks</label>
+              <input type="text" id="custom_remarks" class="form-control" placeholder="Any custom instructions">
+            </div>
+            <div class="form-group">
+              <label>Preview Rate</label>
+              <div id="preview_rate">Select item to see rate</div>
+            </div>`;
+            container.html(html);
 
-	setup_events() {
-		// Handle Nationality Change
-		$("#nationality").on("change", function () {
-			const nationality = $(this).val();
-			console.log("🌍 Nationality changed to:", nationality);
-			
-			if (nationality === "Foreigner") {
-				$("#currency-section").show();
-				$("#currency_wrapper").empty(); // Clear previous field
-				
-				frappe.ui.form.make_control({
-					df: {
-						fieldtype: "Link",
-						label: "Currency",
-						fieldname: "currency",
-						options: "Currency",
-						reqd: 1
-					},
-					parent: $("#currency_wrapper"),
-					render_input: true
-				});
-			} else {
-				$("#currency-section").hide();
-				$("#currency_wrapper").empty();
-			}
-		});
+            $("#service_item").on("change", (e) => {
+              const item_name = e.target.value;
+              if (item_name) {
+                frappe.call({
+                  method: "igusto.igusto.page.room_order.room_order.get_item_rate",
+                  args: { item_name },
+                  callback: (res) => {
+                    $("#preview_rate").text(res.message != null ? res.message : "0");
+                  }
+                });
+              } else {
+                $("#preview_rate").text("Select item to see rate");
+              }
+            });
+          }
+        }
+      });
 
-		// Save Booking
-		$("#create_booking_btn").on("click", (e) => {
-			e.preventDefault();
+    } else if (service_type === "Room Service") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_service_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Room Service Items</label>`;
+            r.message.forEach((item, idx) => {
+              html += `<div class="item-row" data-item-index="${idx}">
+                  <div>
+                    <input type="checkbox" id="rs_chk_${idx}" name="service_item" value="${item}"> <label for="rs_chk_${idx}">${item}</label>
+                  </div>
+                  <div class="item-controls">
+                    <input type="number" id="rs_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled>
+                  </div>
+                  <div>
+                    <input type="text" id="rs_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled>
+                  </div>
+                </div>`;
+            });
+            container.html(html);
+            // enable qty/remark when checked
+            r.message.forEach((item, idx) => {
+              $(`#rs_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#rs_qty_${idx}`).prop("disabled", !checked);
+                $(`#rs_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
-			const bookingData = {
-				guest: $("#guest_name").val().trim(),
-				mobile: $("#mobile").val().trim(),
-				email: $("#email").val().trim(),
-				check_in: $("#check_in").val(),
-				check_out: $("#check_out").val(),
-				no_of_guests: $("#no_of_guests").val(),
-				room_type: $("#room_type").val(),
-				nationality: $("#nationality").val(),
-				currency: $("#currency_wrapper input").val() || ""
-			};
+    } else if (service_type === "Spa") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_spa_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Spa Services</label>`;
+            r.message.forEach((item, idx) => {
+              html += `<div class="item-row" data-item-index="${idx}">
+                <div><input type="checkbox" id="spa_chk_${idx}" name="service_item" value="${item}"> <label for="spa_chk_${idx}">${item}</label></div>
+                <div class="item-controls"><input type="number" id="spa_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled></div>
+                <div><input type="text" id="spa_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled></div>
+              </div>`;
+            });
+            container.html(html);
+            r.message.forEach((item, idx) => {
+              $(`#spa_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#spa_qty_${idx}`).prop("disabled", !checked);
+                $(`#spa_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
-			console.log("📝 Booking Data:", bookingData);
+    } else if (service_type === "Laundry") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_laundry_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Laundry Services</label>`;
+            r.message.forEach((item, idx) => {
+              html += `<div class="item-row" data-item-index="${idx}">
+                <div><input type="checkbox" id="laundry_chk_${idx}" name="service_item" value="${item}"> <label for="laundry_chk_${idx}">${item}</label></div>
+                <div class="item-controls"><input type="number" id="laundry_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled></div>
+                <div><input type="text" id="laundry_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled></div>
+              </div>`;
+            });
+            container.html(html);
+            r.message.forEach((item, idx) => {
+              $(`#laundry_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#laundry_qty_${idx}`).prop("disabled", !checked);
+                $(`#laundry_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
-			// ✅ Enhanced validation
-			if (!bookingData.guest) {
-				frappe.msgprint("⚠️ Please enter Guest name.");
-				$("#guest_name").focus();
-				return;
-			}
-			if (!bookingData.mobile) {
-				frappe.msgprint("⚠️ Please enter Mobile number.");
-				$("#mobile").focus();
-				return;
-			}
-			if (!bookingData.email) {
-				frappe.msgprint("⚠️ Please enter Email.");
-				$("#email").focus();
-				return;
-			}
-			if (!bookingData.check_in || !bookingData.check_out) {
-				frappe.msgprint("⚠️ Please select Check-in and Check-out dates.");
-				return;
-			}
-			if (!bookingData.no_of_guests || bookingData.no_of_guests < 1) {
-				frappe.msgprint("⚠️ Please enter number of guests.");
-				$("#no_of_guests").focus();
-				return;
-			}
-			if (!bookingData.room_type) {
-				frappe.msgprint("⚠️ Please select Room Type.");
-				return;
-			}
-			if (!bookingData.nationality) {
-				frappe.msgprint("⚠️ Please select Nationality.");
-				$("#nationality").focus();
-				return;
-			}
-			if (bookingData.nationality === "Foreigner" && !bookingData.currency) {
-				frappe.msgprint("⚠️ Please select Currency for foreign guests.");
-				return;
-			}
+    } else if (service_type === "Transport") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_transport_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Transport Options</label>`;
+            r.message.forEach((item, idx) => {
+              html += `<div class="item-row" data-item-index="${idx}">
+                <div><input type="checkbox" id="trans_chk_${idx}" name="service_item" value="${item}"> <label for="trans_chk_${idx}">${item}</label></div>
+                <div class="item-controls"><input type="number" id="trans_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled></div>
+                <div><input type="text" id="trans_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled></div>
+              </div>`;
+            });
+            container.html(html);
+            r.message.forEach((item, idx) => {
+              $(`#trans_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#trans_qty_${idx}`).prop("disabled", !checked);
+                $(`#trans_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
-			frappe.call({
-				method: "igusto.igusto.page.room_booking.room_booking.create_booking",
-				args: bookingData,
-				callback: (r) => {
-					if (r.message) {
-						frappe.msgprint("✅ Room Booking Done Successfully!");
-						
-						// ✅ Clear localStorage after successful booking
-						localStorage.removeItem("guest_data");
-						console.log("🗑️ Cleared guest_data from localStorage");
+    } else if (service_type === "Other") {
+      let html = `
+        <div class="form-group">
+          <label>Describe Service</label>
+          <input type="text" id="service_item_other" class="form-control" placeholder="Enter service details">
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" id="quantity_other" class="form-control" min="1" value="1">
+        </div>
+        <div class="form-group">
+          <label>Custom Remarks</label>
+          <input type="text" id="custom_remarks_other" class="form-control" placeholder="Any custom instructions">
+        </div>
+      `;
+      container.html(html);
+    }
+  }
 
-						// ✅ Show Guest Onboard button
-						const onboardBtn = $(`
-							<button class="booking-btn booking-btn-success" id="guest_onboard_btn" style="
-								background-color: #28a745;
-								color: white;
-								border: none;
-								padding: 10px 18px;
-								border-radius: 10px;
-								font-weight: 600;
-								cursor: pointer;
-								width: 100%;
-								margin-top: 1rem;
-							">
-								Guest Onboard
-							</button>
-						`);
+  collect_items(service_type) {
+    const items = [];
 
-						$("#create_booking_btn").fadeOut(200, function () {
-							$(this).replaceWith(onboardBtn);
-							onboardBtn.fadeIn(300);
-						});
+    if (service_type === "Restaurant") {
+      const item_name = $("#service_item").val();
+      if (item_name) {
+        items.push({
+          item_name,
+          quantity: parseInt($("#quantity").val() || 1),
+          custom_remarks: $("#custom_remarks").val() || ""
+        });
+      }
+    } else if (["Room Service", "Spa", "Laundry", "Transport"].includes(service_type)) {
+      $(`input[name='service_item']`).each(function (idx, el) {
+        const $el = $(el);
+        if ($el.is(":checked")) {
+          const idxAttr = $el.attr("id").split("_").pop();
+          // create consistent ids as used above
+          const qty = $(`#${$el.attr("id").replace('_chk_', '_qty_')}`).val() || 1;
+          const remark = $(`#${$el.attr("id").replace('_chk_', '_remark_')}`).val() || "";
+          items.push({
+            item_name: $el.val(),
+            quantity: parseInt(qty),
+            custom_remarks: remark
+          });
+        }
+      });
+    } else if (service_type === "Other") {
+      const desc = $("#service_item_other").val();
+      if (desc) {
+        items.push({
+          item_name: desc,
+          quantity: parseInt($("#quantity_other").val() || 1),
+          custom_remarks: $("#custom_remarks_other").val() || ""
+        });
+      }
+    }
 
-						onboardBtn.on("click", () => {
-							localStorage.setItem("last_booking", JSON.stringify({
-								guest: bookingData.guest,
-								from_date: bookingData.check_in,
-								to_date: bookingData.check_out,
-								no_of_guests: bookingData.no_of_guests,
-								nationality: bookingData.nationality,
-								room_type: bookingData.room_type
-							}));
+    return items;
+  }
 
-							frappe.set_route("guest-onboard", {
-								guest: bookingData.guest,
-								room_type: bookingData.room_type
-							});
-						});
-					} else {
-						frappe.msgprint("❌ Something went wrong while saving booking.");
-					}
-				},
-				error: (err) => {
-					console.error("❌ Booking Error:", err);
-					frappe.msgprint("❌ Failed to create booking. Please try again.");
-				}
-			});
-		});
+  submit_order() {
+    const data = {
+      room_number: $("#room_number").val(),
+      guest: $("#guest_name").val(),
+      service_type: $("#service_type").val(),
+      delivery_to: $("#delivery_to").val(),
+    };
 
-		// Back button
-		$("#back_btn").on("click", function () {
-			frappe.set_route("guest-signup");
-		});
-	}
+    if (!data.room_number) return frappe.msgprint("Please select Room Number.");
+    if (!data.guest) return frappe.msgprint("Guest not found for selected room.");
+    if (!data.service_type) return frappe.msgprint("Please select Service Type.");
 
-	load_room_types() {
-		frappe.call({
-			method: "frappe.client.get_list",
-			args: {
-				doctype: "Room Type",
-				fields: ["name"]
-			},
-			callback: (r) => {
-				if (r.message && r.message.length > 0) {
-					let options = `<option value="">Select Room Type</option>`;
-					r.message.forEach(rt => {
-						options += `<option value="${rt.name}">${rt.name}</option>`;
-					});
-					$("#room_type_wrapper").html(`
-						<select id="room_type" class="booking-input" required>
-							${options}
-						</select>
-					`);
-					console.log("✅ Room types loaded:", r.message.length);
-				} else {
-					console.warn("⚠️ No room types found");
-					$("#room_type_wrapper").html(`
-						<select id="room_type" class="booking-input" required disabled>
-							<option value="">No Room Types Available</option>
-						</select>
-					`);
-				}
-			},
-			error: (err) => {
-				console.error("❌ Failed to load room types:", err);
-			}
-		});
-	}
+    const collected = this.collect_items(data.service_type);
+    if (!collected.length) return frappe.msgprint("Please select at least one service item.");
+
+    data.items = collected;
+
+    frappe.call({
+      method: "igusto.igusto.page.room_order.room_order.create_room_order",
+      args: { data: JSON.stringify(data) },
+      freeze: true,
+      freeze_message: __("Creating Room Order..."),
+      callback: (r) => {
+        if (r.message) {
+          frappe.msgprint({
+            title: __("Success"),
+            message: `<b>Room Order Created</b>`,
+            indicator: "green"
+          });
+          // reset form
+          $("#service_type").val("");
+          $("#dynamic_input").empty();
+        } else {
+          frappe.msgprint("Could not create Room Order. Check server logs.");
+        }
+      }
+    });
+  }
 }

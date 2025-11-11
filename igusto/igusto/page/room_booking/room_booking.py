@@ -3,7 +3,7 @@ import frappe
 @frappe.whitelist()
 def create_booking(guest, mobile, email, check_in, check_out,
                    no_of_guests, room_type, nationality, rate_plan, currency=None):
-    """Create Booking, Customer, Item (Room Type) and Sales Order automatically"""
+    """Create Sales Order only (no Booking document)"""
 
     # -------------------------------
     #  Fetch Guest
@@ -48,34 +48,13 @@ def create_booking(guest, mobile, email, check_in, check_out,
         frappe.db.commit()
 
     # -------------------------------
-    #  Create Booking Document
-    # -------------------------------
-    booking = frappe.get_doc({
-        "doctype": "Booking",
-        "guest": guest,
-        "customer": customer.name,
-        "mobile": guest_mobile,
-        "email": guest_email,
-        "check_in": check_in,
-        "check_out": check_out,
-        "no_of_guests": no_of_guests,
-        "room_type": room_type,
-        "rate_plan": rate_plan,
-        "nationality": guest_nationality,
-        "currency": currency if guest_nationality != "Indian" else "INR",
-        "booking_date": frappe.utils.nowdate()
-    })
-    booking.insert(ignore_permissions=True)
-    frappe.db.commit()
-
-    # -------------------------------
-    #  Create Sales Order
+    #  Create Sales Order Only
     # -------------------------------
     so = frappe.get_doc({
         "doctype": "Sales Order",
         "customer": customer.name,
-        "transaction_date": frappe.utils.nowdate(),
-        "delivery_date": check_in,
+        "transaction_date": check_in,   # ✅ check-in → transaction_date
+        "delivery_date": check_out,     # ✅ check-out → delivery_date
         "currency": currency if guest_nationality != "Indian" else "INR",
         "items": [
             {
@@ -90,12 +69,11 @@ def create_booking(guest, mobile, email, check_in, check_out,
     so.insert(ignore_permissions=True)
     frappe.db.commit()
 
-    frappe.logger().info(f" Booking + Sales Order created for Guest: {full_name}")
+    frappe.logger().info(f" Sales Order created for Guest: {full_name}")
 
     # -------------------------------
-    #  Return Booking Name & SO Name
+    #  Return only Sales Order name
     # -------------------------------
     return {
-        "booking": booking.name,
         "sales_order": so.name
     }

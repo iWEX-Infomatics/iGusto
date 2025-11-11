@@ -6,36 +6,29 @@
       <div class="form-grid-col">
         <div class="form-group">
           <label>Guest Name</label>
-          <input type="text" class="form-control" id="guest" readonly>
+          <input type="text" class="form-control-col" id="guest" readonly>
         </div>
         <div class="form-group">
           <label>Guest Photo</label>
-          <input type="file" id="guest_photo" class="form-control" accept="image/*">
+          <input type="file" id="guest_photo" class="form-control-col" accept="image/*">
         </div>
         <div class="form-group">
           <label>From Date</label>
-          <input type="date" class="form-control" id="from_date">
+          <input type="date" class="form-control-col" id="from_date">
         </div>
         <div class="form-group">
           <label>To Date</label>
-          <input type="date" class="form-control" id="to_date">
+          <input type="date" class="form-control-col" id="to_date">
         </div>
         <div class="form-group">
           <label>No. of Guests</label>
-          <input type="number" class="form-control" id="no_of_guests">
+          <input type="number" class="form-control-col" id="no_of_guests">
         </div>
         <div class="form-group">
           <label>Nationality</label>
-          <input type="text" class="form-control" id="nationality" placeholder="e.g. Indian">
+          <input type="text" class="form-control-col" id="nationality" placeholder="e.g. Indian">
         </div>
-        <div class="form-group passport-fields">
-          <label>Passport Number</label>
-          <input type="text" class="form-control" id="passport_number">
-        </div>
-        <div class="form-group visa-fields">
-          <label>Visa Number</label>
-          <input type="text" class="form-control" id="visa_number">
-        </div>
+
       </div>
     </div>
 
@@ -44,7 +37,7 @@
       <div class="form-grid-col">
         <div class="form-group">
           <label>ID Proof Type</label>
-          <select class="form-control" id="id_proof_type">
+          <select class="form-control-col" id="id_proof_type">
             <option value="">Select</option>
             <option>Aadhar Card</option>
             <option>Driving License</option>
@@ -55,7 +48,15 @@
         </div>
         <div class="form-group">
           <label>ID Proof Number</label>
-          <input type="text" class="form-control" id="id_proof_number">
+          <input type="text" class="form-control-col" id="id_proof_number">
+        </div>
+          <div class="form-group passport-fields">
+          <label>Passport Number</label>
+          <input type="text" class="form-control-col" id="passport_number">
+        </div>
+        <div class="form-group visa-fields">
+          <label>Visa Number</label>
+          <input type="text" class="form-control-col" id="visa_number">
         </div>
       </div>
     </div>
@@ -65,23 +66,23 @@
       <div class="form-grid-col">
         <div class="form-group">
           <label>Room Type</label>
-          <select id="room_type" class="form-control"></select>
+          <select id="room_type" class="form-control-col"></select>
         </div>
         <div class="form-group">
           <label>Room Number</label>
-          <select id="room_number" class="form-control"></select>
+          <select id="room_number" class="form-control-col"></select>
         </div>
         <div class="form-group">
           <label>RFID Card No</label>
-          <input type="text" class="form-control" id="rfid_card_no">
+          <input type="text" class="form-control-col" id="rfid_card_no">
         </div>
         <div class="form-group">
           <label>Check-in Time</label>
-          <input type="time" class="form-control" id="check_in_time" value="14:00">
+          <input type="time" class="form-control-col" id="check_in_time" value="14:00">
         </div>
         <div class="form-group">
           <label>Check-out Time</label>
-          <input type="time" class="form-control" id="check_out_time" value="11:00">
+          <input type="time" class="form-control-col" id="check_out_time" value="11:00">
         </div>
       </div>
     </div>
@@ -103,7 +104,7 @@
   }
 
   .form-section {
-    margin-bottom: 25px;
+    /* margin-bottom: 25px; */
     padding-bottom: 5px;
     border: none !important;
   }
@@ -117,7 +118,7 @@
   .form-grid-col {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px 24px;
+    gap: 0px 12px;
     border: none !important;
   }
 
@@ -130,7 +131,7 @@
     flex-direction: column;
   }
 
-  .form-control {
+  .form-control-col {
     /* border-radius: 6px; */
     /* border: 1px solid #ddd; */
     /* padding: 8px 10px; */
@@ -143,14 +144,14 @@
     background-color: #f9fafb;
   }
 
-  .form-control:focus {
+  .form-control-col:focus {
     border-color: #2563eb;
     background-color: #fff;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     outline: none;
   }
 
-  select.form-control{
+  select.form-control-col{
         height: 50px;
   }
 

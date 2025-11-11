@@ -2,16 +2,16 @@ import frappe
 import json
 from frappe.utils import now_datetime
 
-
 @frappe.whitelist()
 def get_menu_items():
     """Fetch active items from Item doctype."""
-    return frappe.get_all(
+    items = frappe.get_all(
         "Item",
         fields=["name", "item_name"],
         filters={"disabled": 0},
         order_by="item_name asc"
     )
+    return items
 
 
 @frappe.whitelist()
@@ -28,159 +28,109 @@ def get_spa_items():
 
 @frappe.whitelist()
 def get_laundry_items():
-    """Static laundry options."""
     return ["Clothes Wash", "Ironing", "Dry Clean", "Fold & Pack"]
 
 
 @frappe.whitelist()
 def get_transport_items():
-    """Static transport service options."""
     return ["Airport Pickup", "Airport Drop", "City Tour", "Cab on Call"]
 
 
 @frappe.whitelist()
+def get_room_numbers():
+    """
+    Return a list of room_number values from Guest Onboarding doctype.
+    Assumes Guest Onboarding doctype has field `room_number`.
+    """
+    try:
+        rows = frappe.get_all("Guest Onboarding", fields=["room_number"], filters={"room_number": ["!=", ""]}, order_by="room_number asc")
+        return [r.room_number for r in rows]
+    except Exception:
+        # fallback: return empty list if doctype not present
+        return []
+
+
+@frappe.whitelist()
+def get_guest_by_room(room_number):
+    """
+    Return guest (name) for given room_number from Guest Onboarding.
+    Assumes Guest Onboarding has `guest` field which may be Guest ID or guest name.
+    """
+    if not room_number:
+        return None
+    guest = frappe.db.get_value("Guest Onboarding", {"room_number": room_number}, "guest")
+    # if stored guest is a Link to Guest doctype, try to fetch full_name
+    if guest and frappe.db.exists("Guest", guest):
+        full_name = frappe.db.get_value("Guest", guest, "full_name")
+        return full_name or guest
+    return guest
+
+
+@frappe.whitelist()
+def get_item_rate(item_name):
+    """
+    Return a preview rate for an item_name (by Item.item_name lookup).
+    Falls back to 0 if not found.
+    """
+    if not item_name:
+        return 0
+    item_code = frappe.db.get_value("Item", {"item_name": item_name}, "name")
+    if item_code:
+        # common field in custom setups: standard_rate
+        rate = frappe.db.get_value("Item", item_code, "standard_rate")
+        if rate is None:
+            # try other common fields
+            rate = frappe.db.get_value("Item", item_code, "last_purchase_rate")
+        return rate or 0
+    return 0
+
+
+import frappe
+import json
+from frappe.utils import nowdate
+
+@frappe.whitelist()
 def create_room_order(data):
-    """Creates a Service Order and linked Sales Order."""
-    if isinstance(data, str):
+    """
+    Create a new Room Order document with child table entries.
+    Auto-sets current date and guest name as room_order_customer.
+    """
+    try:
         data = json.loads(data)
 
-    # ---- Create Service Order ----
-    service_doc = frappe.new_doc("Service Order")
-    service_doc.guest = data.get("guest")
-    service_doc.room = data.get("room_number")
-    service_doc.service_type = data.get("service_type")
-    service_doc.payment_status = "Unpaid"
-    service_doc.order_datetime = now_datetime()
+        # --- Parent Document ---
+        room_order = frappe.new_doc("Room Orders")
+        room_order.room_number = data.get("room_number")
+        room_order.room_order_date = nowdate()  # ✅ current date
+        room_order.room_order_customer = data.get("guest")  # ✅ guest as customer
+        room_order.guest = data.get("guest")
+        room_order.delivery_to = data.get("delivery_to")
+        room_order.service_type = data.get("service_type")
 
-    # ---- Add service items ----
-    service_items = data.get("service_item")
-    if isinstance(service_items, list):
-        for i in service_items:
-            service_doc.append("service_items", {
-                "item": i,
-                "category": data.get("service_type"),
-                "quantity": data.get("quantity", 1)
+        # --- Child Table (room_order_booking_items) ---
+        items = data.get("items", [])
+        for i in items:
+            room_order.append("room_order_booking_items", {
+                "item": i.get("item_name"),
+                "quantity": i.get("quantity") or 1,
+                "rate": i.get("rate") or 0,
+                "custom_remarks": i.get("custom_remarks") or "",
+                "category": data.get("service_type") or "General"  # ✅ map service_type → category
             })
-    else:
-        service_doc.append("service_items", {
-            "item": service_items,
-            "category": data.get("service_type"),
-            "quantity": data.get("quantity", 1)
-        })
 
-    service_doc.insert(ignore_permissions=True)
+        room_order.insert(ignore_permissions=True)
+        frappe.db.commit()
 
-    # ---- Guest Full Name ----
-    guest_id = data.get("guest")
-    full_name = frappe.db.get_value("Guest", guest_id, "full_name")
-    if not full_name:
-        frappe.throw(f"Guest full name not found for Guest ID: {guest_id}")
+        return {
+            "status": "success",
+            "message": f"Room Order {room_order.name} created successfully.",
+            "name": room_order.name
+        }
 
-    # ---- Create Customer if not exist ----
-    customer = frappe.db.exists("Customer", {"customer_name": full_name})
-    if not customer:
-        cust = frappe.new_doc("Customer")
-        cust.customer_name = full_name
-        cust.customer_type = "Individual"
-        cust.customer_group = "All Customer Groups"
-        cust.territory = "All Territories"
-        cust.insert(ignore_permissions=True)
-        customer = cust.name
-
-    # ---- Create Item Group if not exist ----
-    service_type = data.get("service_type")
-    if service_type and not frappe.db.exists("Item Group", service_type):
-        ig = frappe.new_doc("Item Group")
-        ig.item_group_name = service_type
-        ig.parent_item_group = "All Item Groups"
-        ig.is_group = 0
-        ig.insert(ignore_permissions=True)
-
-    #  ---- Get Company dynamically from Company doctype ----
-    company = frappe.db.get_all("Company", fields=["name"], limit=1)
-    if not company:
-        frappe.throw("No Company found in the system.")
-    company_name = company[0].name
-
-    # ---- Create Sales Order ----
-    so = frappe.new_doc("Sales Order")
-    so.customer = customer
-    so.transaction_date = now_datetime()
-    so.delivery_date = now_datetime()
-    so.order_type = "Sales"
-    so.company = company_name
-    so.remarks = f"Auto created from Service Order: {service_doc.name}"
-
-    # ---- Normalize items ----
-    if isinstance(service_items, str):
-        service_items = [service_items]
-
-    # ---- Handle Room Service ----
-    if service_type.lower() == "room service":
-        for item_name in service_items:
-            item_code = frappe.db.get_value("Item", {"item_name": item_name}, "name")
-            if not item_code:
-                new_item = frappe.new_doc("Item")
-                new_item.item_code = item_name
-                new_item.item_name = item_name
-                new_item.item_group = service_type
-                new_item.is_stock_item = 0
-                new_item.insert(ignore_permissions=True)
-                item_code = new_item.name
-            so.append("items", {"item_code": item_code, "qty": data.get("quantity", 1)})
-
-    # ---- Handle Restaurant ----
-    elif service_type.lower() == "restaurant":
-        for item_name in service_items:
-            item_code = frappe.db.get_value("Item", {"item_name": item_name}, "name")
-            if not item_code:
-                frappe.throw(f"Item not found for {item_name}")
-            so.append("items", {"item_code": item_code, "qty": data.get("quantity", 1)})
-
-    # ---- Handle Spa ----
-    elif service_type.lower() == "spa":
-        for item_name in service_items:
-            item_code = frappe.db.get_value("Item", {"item_name": item_name}, "name")
-            if not item_code:
-                new_item = frappe.new_doc("Item")
-                new_item.item_code = item_name
-                new_item.item_name = item_name
-                new_item.item_group = "Spa"
-                new_item.is_stock_item = 0
-                new_item.insert(ignore_permissions=True)
-                item_code = new_item.name
-            so.append("items", {"item_code": item_code, "qty": 1})
-
-    # ---- Handle Laundry / Transport ----
-    elif service_type.lower() in ["laundry", "transport"]:
-        for item_name in service_items:
-            item_code = frappe.db.get_value("Item", {"item_name": item_name}, "name")
-            if not item_code:
-                new_item = frappe.new_doc("Item")
-                new_item.item_code = item_name
-                new_item.item_name = item_name
-                new_item.item_group = service_type
-                new_item.is_stock_item = 0
-                new_item.insert(ignore_permissions=True)
-                item_code = new_item.name
-            so.append("items", {"item_code": item_code, "qty": 1})
-
-    # ---- Handle Other ----
-    elif service_type.lower() == "other":
-        desc = data.get("describe_service") or "Other Service"
-        new_item = frappe.new_doc("Item")
-        new_item.item_code = desc
-        new_item.item_name = desc
-        new_item.item_group = "Other"
-        new_item.is_stock_item = 0
-        new_item.insert(ignore_permissions=True)
-        so.append("items", {"item_code": new_item.name, "qty": 1})
-
-    # ---- Insert Sales Order ----
-    so.insert(ignore_permissions=True)
-
-    return {
-        "service_order": service_doc.name,
-        "sales_order": so.name,
-        "company_used": company_name
-    }
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Create Room Order Error")
+        frappe.throw(f"Error creating Room Order: {str(e)}")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
