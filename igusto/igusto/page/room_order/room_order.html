@@ -1,37 +1,36 @@
-<!-- igusto\igusto\igusto\page\room_order\room_order.html -->
-
 <div class="room-order-container">
   <div class="order-card">
     <h3 class="page-title">Room Order</h3>
 
-    <div class="form-group">
-      <label>Room Number</label>
-      <select id="room_number" class="form-control">
-        <option value="">Select Room Number</option>
-      </select>
-    </div>
+    <!-- Two Column Grid -->
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Room Number</label>
+        <input type="text" id="room_number" class="form-control" placeholder="Enter Room Number">
+      </div>
 
-    <div class="form-group">
-      <label>Guest</label>
-      <input type="text" id="guest_name" class="form-control" placeholder="Guest will auto-fill" readonly>
-    </div>
+      <div class="form-group">
+        <label>Guest</label>
+        <input type="text" id="guest_name" class="form-control" placeholder="Guest will auto-fill" readonly>
+      </div>
 
-    <div class="form-group">
-      <label>Service Type</label>
-      <select id="service_type" class="form-control">
-        <option value="">Select Service Type</option>
-        <option value="Restaurant">Restaurant</option>
-        <option value="Room Service">Room Service</option>
-        <option value="Spa">Spa</option>
-        <option value="Transport">Transport</option>
-        <option value="Laundry">Laundry</option>
-        <option value="Other">Other</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label>Service Type</label>
+        <select id="service_type" class="form-control">
+          <option value="">Select Service Type</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Room Service">Room Service</option>
+          <option value="Spa">Spa</option>
+          <option value="Transport">Transport</option>
+          <option value="Laundry">Laundry</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
 
-    <div class="form-group">
-      <label>Delivery To</label>
-      <input type="text" id="delivery_to" class="form-control" placeholder="Delivery location (e.g. Room / Reception)">
+      <div class="form-group">
+        <label>Delivery To</label>
+        <input type="text" id="delivery_to" class="form-control" placeholder="Room">
+      </div>
     </div>
 
     <div id="dynamic_input" class="form-section"></div>
@@ -43,29 +42,24 @@
 </div>
 
 <style>
-  /*  Page container */
   .room-order-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
   }
 
-  /*  Card */
   .order-card {
     background: #ffffff;
     padding: 35px 40px;
     border-radius: 16px;
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
     width: 100%;
-    max-width: 600px;
+    max-width: 700px;
     transition: 0.3s ease;
   }
 
-  .order-card:hover {
-    transform: translateY(-3px);
-  }
+  .order-card:hover { transform: translateY(-3px); }
 
-  /*  Title */
   .page-title {
     text-align: center;
     font-size: 24px;
@@ -74,11 +68,20 @@
     margin-bottom: 30px;
   }
 
-  /*  Single column form */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 24px;
+    border: none !important;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+
   .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 18px;
   }
 
   label {
@@ -88,7 +91,6 @@
     margin-bottom: 6px;
   }
 
-  /*  Inputs */
   .form-control {
     width: 100%;
     padding: 10px 12px;
@@ -103,10 +105,7 @@
     outline: none;
   }
 
-  .form-section {
-    margin-top: 10px;
-    margin-bottom: 15px;
-  }
+  .form-section { margin-top: 25px; margin-bottom: 15px; }
 
   .form-actions {
     text-align: center;
@@ -128,38 +127,49 @@
     box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
   }
 
-  /* item row styling */
   .item-row {
     display: grid;
     grid-template-columns: 1fr 80px 1fr;
     gap: 8px;
-    margin-bottom: 8px;
     align-items: center;
   }
 
-  .item-row .label {
-    font-weight: 500;
-    font-size: 13px;
-    color: #374151;
+  /* --- Restaurant child table --- */
+  .child-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
   }
 
-  .item-controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
+  .child-table th, .child-table td {
+    border: 1px solid #e5e7eb;
+    padding: 8px;
+    text-align: left;
+    font-size: 14px;
   }
 
-  @media (max-width: 480px) {
-    .order-card {
-      padding: 25px 20px;
-    }
+  .child-table th {
+    background: #f9fafb;
+    font-weight: 600;
+  }
 
-    .page-title {
-      font-size: 20px;
-    }
+  .add-row-btn {
+    background-color: #16a34a;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 10px;
+    font-size: 14px;
+  }
 
-    .item-row {
-      grid-template-columns: 1fr;
-    }
+  .add-row-btn:hover {
+    background-color: #15803d;
+  }
+
+  .remove-row {
+    color: #dc2626;
+    cursor: pointer;
+    font-weight: bold;
   }
 </style>

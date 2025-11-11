@@ -112,10 +112,10 @@ def create_room_order(data):
         for i in items:
             room_order.append("room_order_booking_items", {
                 "item": i.get("item_name"),
-                "quantity": i.get("quantity") or 1,
+                "qty": i.get("qty") or 1,
                 "rate": i.get("rate") or 0,
                 "custom_remarks": i.get("custom_remarks") or "",
-                "category": data.get("service_type") or "General"  # ✅ map service_type → category
+                "category": data.get("service_type") or "General"
             })
 
         room_order.insert(ignore_permissions=True)

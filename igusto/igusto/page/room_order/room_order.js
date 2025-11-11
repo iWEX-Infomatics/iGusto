@@ -67,56 +67,79 @@ class RoomOrder {
     });
   }
 
-  render_dynamic_fields(service_type) {
+   render_dynamic_fields(service_type) {
     const container = $("#dynamic_input");
     container.empty();
 
     if (!service_type) return;
 
     if (service_type === "Restaurant") {
-      // restaurant: dropdown of menu items + qty + remarks
       frappe.call({
         method: "igusto.igusto.page.room_order.room_order.get_menu_items",
         callback: (r) => {
           if (r.message) {
-            let html = `<div class="form-group"><label>Menu Item</label>
-              <select id="service_item" class="form-control"><option value="">Select Item</option>
-              ${r.message.map(i => `<option value="${i.item_name}">${i.item_name}</option>`).join("")}
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Quantity</label>
-              <input type="number" id="quantity" class="form-control" min="1" value="1">
-            </div>
-            <div class="form-group">
-              <label>Custom Remarks</label>
-              <input type="text" id="custom_remarks" class="form-control" placeholder="Any custom instructions">
-            </div>
-            <div class="form-group">
-              <label>Preview Rate</label>
-              <div id="preview_rate">Select item to see rate</div>
-            </div>`;
+            // Restaurant child table UI
+            let html = `
+              <label><b>Restaurant Order Items</b></label>
+              <table class="child-table" id="restaurant_table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Rate</th>
+                    <th>Qty</th>
+                    <th>Remarks</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+              <button type="button" class="add-row-btn" id="add_row_btn">+ Add Row</button>
+            `;
             container.html(html);
 
-            $("#service_item").on("change", (e) => {
-              const item_name = e.target.value;
+            const addRow = () => {
+              const options = r.message
+                .map(i => `<option value="${i.item_name}">${i.item_name}</option>`)
+                .join("");
+              const row = `
+                <tr>
+                  <td><select class="form-control item_name"><option value="">Select</option>${options}</select></td>
+                  <td><input type="number" class="form-control rate" min="0" value="0"></td>
+                  <td><input type="number" class="form-control qty" min="1" value="1"></td>
+                  <td><input type="text" class="form-control remarks" placeholder="Remarks (optional)"></td>
+                  <td><span class="remove-row">✕</span></td>
+                </tr>`;
+              $("#restaurant_table tbody").append(row);
+            };
+
+            $("#add_row_btn").on("click", addRow);
+            addRow(); // add one row by default
+
+            // remove row
+            container.on("click", ".remove-row", function () {
+              $(this).closest("tr").remove();
+            });
+
+            // auto fill rate on item change
+            container.on("change", ".item_name", function () {
+              const item_name = $(this).val();
+              const rateInput = $(this).closest("tr").find(".rate");
               if (item_name) {
                 frappe.call({
                   method: "igusto.igusto.page.room_order.room_order.get_item_rate",
                   args: { item_name },
                   callback: (res) => {
-                    $("#preview_rate").text(res.message != null ? res.message : "0");
+                    rateInput.val(res.message || 0);
                   }
                 });
               } else {
-                $("#preview_rate").text("Select item to see rate");
+                rateInput.val("0");
               }
             });
           }
         }
       });
-
-    } else if (service_type === "Room Service") {
+    }  else if (service_type === "Room Service") {
       frappe.call({
         method: "igusto.igusto.page.room_order.room_order.get_service_items",
         callback: (r) => {
@@ -245,16 +268,24 @@ class RoomOrder {
   collect_items(service_type) {
     const items = [];
 
-    if (service_type === "Restaurant") {
-      const item_name = $("#service_item").val();
+  if (service_type === "Restaurant") {
+    $("#restaurant_table tbody tr").each(function () {
+      const item_name = $(this).find(".item_name").val();
+      const rate = parseFloat($(this).find(".rate").val() || 0);
+      const qty = parseInt($(this).find(".qty").val() || 1);
+      const remarks = $(this).find(".remarks").val() || "";
+
       if (item_name) {
         items.push({
           item_name,
-          quantity: parseInt($("#quantity").val() || 1),
-          custom_remarks: $("#custom_remarks").val() || ""
+          rate,
+          qty, 
+          custom_remarks: remarks
         });
       }
-    } else if (["Room Service", "Spa", "Laundry", "Transport"].includes(service_type)) {
+    });
+  }
+ else if (["Room Service", "Spa", "Laundry", "Transport"].includes(service_type)) {
       $(`input[name='service_item']`).each(function (idx, el) {
         const $el = $(el);
         if ($el.is(":checked")) {

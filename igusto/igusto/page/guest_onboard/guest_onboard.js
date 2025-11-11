@@ -152,7 +152,7 @@ class GuestOnboarding {
 					if (!r.exc) {
 						frappe.msgprint({
 							title: __("Success"),
-							message: __("Guest Onboarding Done Successfully: "),
+							message: __("Guest Onboarding Done Successfully"),
 							indicator: "green"
 						});
 						frappe.set_route("Form", "Guest Onboarding", r.message);
