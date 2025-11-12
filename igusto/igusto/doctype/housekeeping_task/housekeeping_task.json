@@ -1,39 +1,44 @@
 {
  "actions": [],
- "autoname": "HKT-.#####",
- "creation": "2025-10-31 13:37:04.602737",
+ "allow_rename": 1,
+ "autoname": "HKTASK-.#####",
+ "creation": "2025-11-12 16:21:39.342168",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "task_date",
+  "section_task_details",
   "room",
   "room_type",
-  "checklist",
-  "assigned_to",
   "task_type",
-  "priority",
-  "status",
-  "notes",
-  "completed_on",
+  "task_description",
+  "column_break_lrmq",
+  "task_priority",
+  "assigned_to",
+  "task_status",
+  "start_time",
+  "end_time",
   "verified_by",
-  "attachments"
+  "task_remarks",
+  "tasksheet_section",
+  "housekeeping_task_detail",
+  "checklist_section",
+  "refill_checklist",
+  "maintenance_required",
+  "maintenance_request",
+  "issue_description"
  ],
  "fields": [
   {
-   "default": "Today",
-   "fieldname": "task_date",
-   "fieldtype": "Date",
-   "in_list_view": 1,
-   "label": "Task Date",
-   "reqd": 1
+   "fieldname": "section_task_details",
+   "fieldtype": "Section Break",
+   "label": "Task Details"
   },
   {
    "fieldname": "room",
    "fieldtype": "Link",
-   "in_list_view": 1,
    "label": "Room",
-   "options": "Room",
-   "reqd": 1
+   "options": "Room"
   },
   {
    "fieldname": "room_type",
@@ -42,47 +47,44 @@
    "options": "Room Type"
   },
   {
-   "fieldname": "checklist",
-   "fieldtype": "Table",
-   "label": "Cleaning Checklist",
-   "options": "Housekeeping Checklist"
+   "fieldname": "task_type",
+   "fieldtype": "Data",
+   "label": "Task Type",
+   "options": "Cleaning\nGuest Request\nLinen\nInspection"
+  },
+  {
+   "fieldname": "task_description",
+   "fieldtype": "Text",
+   "label": "Task Description"
+  },
+  {
+   "fieldname": "task_priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "Low\nMedium\nHigh\nUrgent"
   },
   {
    "fieldname": "assigned_to",
    "fieldtype": "Link",
    "label": "Assigned To",
-   "options": "User"
+   "options": "Employee"
   },
   {
-   "default": "Cleaning",
-   "fieldname": "task_type",
-   "fieldtype": "Select",
-   "label": "Task Type",
-   "options": "Cleaning\nLinen Change\nDeep Cleaning\nInspection\nMaintenance Request\nOther"
-  },
-  {
-   "default": "Medium",
-   "fieldname": "priority",
-   "fieldtype": "Select",
-   "label": "Priority",
-   "options": "Low\nMedium\nHigh"
-  },
-  {
-   "default": "Pending",
-   "fieldname": "status",
+   "fieldname": "task_status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Pending\nIn Progress\nCompleted\nCancelled"
+   "options": "Pending\nIn Progress\nCompleted\nVerified",
+   "read_only": 1
   },
   {
-   "fieldname": "notes",
-   "fieldtype": "Small Text",
-   "label": "Remarks / Notes"
-  },
-  {
-   "fieldname": "completed_on",
+   "fieldname": "start_time",
    "fieldtype": "Datetime",
-   "label": "Completed On"
+   "label": "Start Time"
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Datetime",
+   "label": "End Time"
   },
   {
    "fieldname": "verified_by",
@@ -91,42 +93,79 @@
    "options": "User"
   },
   {
-   "fieldname": "attachments",
-   "fieldtype": "Attach",
-   "label": "Attachments (Photos/Checklist)"
+   "fieldname": "task_remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "default": "0",
+   "fieldname": "maintenance_required",
+   "fieldtype": "Check",
+   "label": "Maintenance Required"
+  },
+  {
+   "fieldname": "issue_description",
+   "fieldtype": "Small Text",
+   "label": "Issue Description"
+  },
+  {
+   "fieldname": "column_break_lrmq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "checklist_section",
+   "fieldtype": "Section Break",
+   "label": "Checklist"
+  },
+  {
+   "fieldname": "tasksheet_section",
+   "fieldtype": "Section Break",
+   "label": "Tasksheet"
+  },
+  {
+   "fieldname": "housekeeping_task_detail",
+   "fieldtype": "Table",
+   "label": "Housekeeping Task Detail",
+   "options": "Housekeeping Task Detail"
+  },
+  {
+   "fieldname": "refill_checklist",
+   "fieldtype": "Table",
+   "label": "Refill Checklist",
+   "options": "Refill Checklist"
+  },
+  {
+   "fieldname": "maintenance_request",
+   "fieldtype": "Link",
+   "label": "Maintenance Request",
+   "options": "Maintenance Request"
   }
  ],
  "links": [],
- "modified": "2025-11-06 15:01:13.682675",
+ "modified": "2025-11-12 18:15:44.959514",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Housekeeping Task",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
    "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
    "read": 1,
-   "role": "Housekeeping Staff",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "read": 1,
-   "role": "Hotel Receptionist",
+   "report": 1,
+   "role": "Housekeeping User",
+   "share": 1,
    "write": 1
   },
   {
    "create": 1,
    "delete": 1,
    "read": 1,
-   "role": "Hotel Manager",
-   "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "read": 1,
-   "role": "System Manager",
+   "role": "Housekeeping Supervisor",
    "write": 1
   }
  ],
@@ -134,6 +173,5 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "room",
  "track_changes": 1
 }

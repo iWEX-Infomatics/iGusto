@@ -1,0 +1,107 @@
+{
+ "actions": [],
+ "creation": "2025-11-12 16:19:45.055106",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "schedule_name",
+  "department",
+  "frequency",
+  "column_break_urje",
+  "from_template",
+  "supervisor",
+  "status",
+  "section_break_oxbk",
+  "assigned_staff",
+  "room_list"
+ ],
+ "fields": [
+  {
+   "fieldname": "schedule_name",
+   "fieldtype": "Data",
+   "label": "Schedule Name"
+  },
+  {
+   "fieldname": "frequency",
+   "fieldtype": "Select",
+   "label": "Frequency",
+   "options": "Daily\nWeekly\nMonthly"
+  },
+  {
+   "fieldname": "assigned_staff",
+   "fieldtype": "Table",
+   "label": "Assigned Staff",
+   "options": "Housekeeping Assigned Staff"
+  },
+  {
+   "fieldname": "room_list",
+   "fieldtype": "Table",
+   "label": "Room List",
+   "options": "Housekeeping Room List"
+  },
+  {
+   "fieldname": "supervisor",
+   "fieldtype": "Link",
+   "label": "Supervisor",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nCompleted\nSuspended"
+  },
+  {
+   "fieldname": "column_break_urje",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_oxbk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "from_template",
+   "fieldtype": "Link",
+   "label": "From Template",
+   "options": "Project Template"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
+  }
+ ],
+ "links": [],
+ "modified": "2025-11-12 18:46:45.437482",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Housekeeping Schedule",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Housekeeping User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Housekeeping Supervisor",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

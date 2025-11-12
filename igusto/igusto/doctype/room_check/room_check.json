@@ -10,28 +10,36 @@
   "guest",
   "room",
   "booking_reference",
+  "column_break_cblb",
   "checked_by",
   "checkout_date",
   "section_break_basic",
   "room_cleanliness",
-  "bathroom_condition",
   "linen_condition",
+  "comments",
+  "column_break_gdbe",
+  "bathroom_condition",
   "furniture_condition",
   "electronics_condition",
   "room_damage",
   "attach_image_blle",
-  "comments",
   "section_break_usage",
   "room_check_items",
   "section_break_billing",
   "room_rent",
+  "column_break_zeah",
   "items_total",
+  "column_break_tyzt",
   "damages_total",
+  "column_break_pnui",
   "grand_total",
+  "column_break_qzyf",
   "payment_status",
   "section_break_actions",
   "front_desk_approval",
+  "column_break_lrml",
   "checkout_completed",
+  "column_break_qxhv",
   "status",
   "amended_from"
  ],
@@ -56,7 +64,7 @@
    "fieldname": "booking_reference",
    "fieldtype": "Link",
    "label": "Booking Reference",
-   "options": "Booking"
+   "options": "Sales Order"
   },
   {
    "fieldname": "checked_by",
@@ -71,6 +79,7 @@
    "label": "Checkout Date"
   },
   {
+   "collapsible": 1,
    "fieldname": "section_break_basic",
    "fieldtype": "Section Break",
    "label": "Room Condition"
@@ -201,16 +210,49 @@
    "fieldname": "attach_image_blle",
    "fieldtype": "Attach Image",
    "label": "Attach damage product image"
+  },
+  {
+   "fieldname": "column_break_cblb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_gdbe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_zeah",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_tyzt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_pnui",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qzyf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_lrml",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qxhv",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-05 16:28:50.391476",
+ "modified": "2025-11-12 11:04:28.505589",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Room Check",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

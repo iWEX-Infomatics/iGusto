@@ -43,6 +43,6 @@ def generate_room_qr(room_name):
         </div>
     """
 
-    #  Save HTML in a custom field (like room_qr_html)
+    #  Save HTML in a custom field (like room_room_id)
     frappe.db.set_value("Room", room_name, "room_id", html)
     return html

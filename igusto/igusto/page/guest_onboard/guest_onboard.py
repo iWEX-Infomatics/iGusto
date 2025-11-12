@@ -38,9 +38,27 @@ def create_guest_onboarding(data):
     #  Save onboarding
     doc.insert(ignore_permissions=True)
 
-    #  Update room status to Occupied
+    # Update Room status, guest, and RFID
     if data.room_number:
-        frappe.db.set_value("Room", data.room_number, "status", "Occupied")
+        frappe.db.set_value("Room", data.room_number, {
+            "status": "Occupied",
+            "current_guest": data.guest,
+            "rfid_key": data.rfid_card_no
+        })
+
+        # --- Find matching Sales Order for this guest ---
+        guest_doc = frappe.get_doc("Guest", data.guest)
+        guest_name = " ".join(filter(None, [guest_doc.first_name, guest_doc.middle_name, guest_doc.last_name]))
+
+        # Search Sales Order linked with this guest
+        so_name = frappe.db.get_value("Sales Order", {"customer_name": guest_name}, "name")
+
+        # If found, set it as current_booking in Room
+        if so_name:
+            frappe.db.set_value("Room", data.room_number, "current_booking", so_name)
+            frappe.logger().info(f"Room {data.room_number} linked with Sales Order {so_name} for guest {guest_name}")
+
+
 
     frappe.db.commit()
     return doc.name

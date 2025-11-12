@@ -119,7 +119,7 @@ class RoomOrder {
                   <td><select class="form-control item_name"><option value="">Select</option>${options}</select></td>
                   <td><input type="number" class="form-control rate" min="0" value="0"></td>
                   <td><input type="number" class="form-control qty" min="1" value="1"></td>
-                  <td><input type="text" class="form-control remarks" placeholder="Remarks (optional)"></td>
+                  <td><input type="text" class="form-control remarks" placeholder="Remarks"></td>
                   <td><span class="remove-row">✕</span></td>
                 </tr>`;
               $("#restaurant_table tbody").append(row);
@@ -167,7 +167,7 @@ class RoomOrder {
                     <input type="number" id="rs_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled>
                   </div>
                   <div>
-                    <input type="text" id="rs_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled>
+                    <input type="text" id="rs_remark_${idx}" class="form-control" placeholder="Remarks" disabled>
                   </div>
                 </div>`;
             });
@@ -194,7 +194,7 @@ class RoomOrder {
               html += `<div class="item-row" data-item-index="${idx}">
                 <div><input type="checkbox" id="spa_chk_${idx}" name="service_item" value="${item}"> <label for="spa_chk_${idx}">${item}</label></div>
                 <div class="item-controls"><input type="number" id="spa_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled></div>
-                <div><input type="text" id="spa_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled></div>
+                <div><input type="text" id="spa_remark_${idx}" class="form-control" placeholder="Remarks" disabled></div>
               </div>`;
             });
             container.html(html);
@@ -219,7 +219,7 @@ class RoomOrder {
               html += `<div class="item-row" data-item-index="${idx}">
                 <div><input type="checkbox" id="laundry_chk_${idx}" name="service_item" value="${item}"> <label for="laundry_chk_${idx}">${item}</label></div>
                 <div class="item-controls"><input type="number" id="laundry_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled></div>
-                <div><input type="text" id="laundry_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled></div>
+                <div><input type="text" id="laundry_remark_${idx}" class="form-control" placeholder="Remarks" disabled></div>
               </div>`;
             });
             container.html(html);
@@ -244,7 +244,7 @@ class RoomOrder {
               html += `<div class="item-row" data-item-index="${idx}">
                 <div><input type="checkbox" id="trans_chk_${idx}" name="service_item" value="${item}"> <label for="trans_chk_${idx}">${item}</label></div>
                 <div class="item-controls"><input type="number" id="trans_qty_${idx}" class="form-control" min="1" value="1" style="width:80px;" disabled></div>
-                <div><input type="text" id="trans_remark_${idx}" class="form-control" placeholder="Remarks (optional)" disabled></div>
+                <div><input type="text" id="trans_remark_${idx}" class="form-control" placeholder="Remarks" disabled></div>
               </div>`;
             });
             container.html(html);

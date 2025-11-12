@@ -17,7 +17,7 @@ def get_menu_items():
 @frappe.whitelist()
 def get_service_items():
     """Return static room service options."""
-    return ["Towel Change", "Cleaning", "Water Bottle", "Extra Pillow"]
+    return ["Towel Change", "Cleaning", "Extra Pillow"]
 
 
 @frappe.whitelist()

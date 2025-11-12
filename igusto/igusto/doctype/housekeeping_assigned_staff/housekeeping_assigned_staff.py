@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class HousekeepingChecklist(Document):
+class HousekeepingAssignedStaff(Document):
 	pass

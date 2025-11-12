@@ -1,0 +1,92 @@
+{
+ "actions": [],
+ "autoname": "format:RS-{room}-{current_status}-{#####}",
+ "creation": "2025-11-12 16:38:09.586635",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "room",
+  "date",
+  "current_status",
+  "changed_by",
+  "column_break_hnpp",
+  "linked_task",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "label": "Room",
+   "options": "Room"
+  },
+  {
+   "fetch_from": "linked_task.end_time",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "current_status",
+   "fieldtype": "Select",
+   "label": "Current Status",
+   "options": "Vacant Clean\nVacant Dirty\nOccupied\nOut of Order\nInspection Pending"
+  },
+  {
+   "fetch_from": "linked_task.verified_by",
+   "fieldname": "changed_by",
+   "fieldtype": "Link",
+   "label": "Changed By",
+   "options": "User"
+  },
+  {
+   "fetch_from": "linked_task.task_remarks",
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "linked_task",
+   "fieldtype": "Link",
+   "label": "Linked Task",
+   "options": "Housekeeping Task"
+  },
+  {
+   "fieldname": "column_break_hnpp",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "links": [],
+ "modified": "2025-11-12 17:22:55.052444",
+ "modified_by": "Administrator",
+ "module": "igusto",
+ "name": "Room Status Log",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Housekeeping User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "Housekeeping Supervisor",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

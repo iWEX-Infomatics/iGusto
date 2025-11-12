@@ -8,6 +8,12 @@ frappe.ui.form.on("Room Check Items", {
         let row = frappe.get_doc(cdt, cdn);
         row.amount = (row.qty || 0) * (row.rate || 0);
         frm.refresh_field("room_check_items");
+    },
+        amount: function(frm, cdt, cdn) {
+        calculate_total(frm);
+    },
+    room_check_items_remove: function(frm) {
+        calculate_total(frm);
     }
 });
 
@@ -48,5 +54,35 @@ frappe.ui.form.on("Room Check", {
                 });
             }).addClass("btn-primary");
         }
+         calculate_total(frm);
+         calculate_grand_totals(frm);
+    },
+    room_rent: function(frm) {
+        calculate_grand_totals(frm);
+    },
+    damages_total: function(frm) {
+        calculate_grand_totals(frm);
     }
 });
+function calculate_total(frm) {
+    let total = 0;
+    (frm.doc.room_check_items || []).forEach(row => {
+        total += flt(row.amount);
+    });
+    frm.set_value("items_total", total);
+}
+
+function calculate_grand_totals(frm) {
+    let items_total = 0;
+    (frm.doc.room_check_items || []).forEach(row => {
+        items_total += flt(row.amount);
+    });
+
+    frm.set_value("items_total", items_total);
+
+    const room_rent = flt(frm.doc.room_rent);
+    const damages_total = flt(frm.doc.damages_total);
+    const grand_total = room_rent + items_total + damages_total;
+
+    frm.set_value("grand_total", grand_total);
+}

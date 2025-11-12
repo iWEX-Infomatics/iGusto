@@ -71,16 +71,10 @@
    "label": "Occupancy & Details"
   },
   {
-   "fieldname": "current_guest",
-   "fieldtype": "Link",
-   "label": "Current Guest",
-   "options": "Guest"
-  },
-  {
    "fieldname": "current_booking",
    "fieldtype": "Link",
    "label": "Current Booking",
-   "options": "Booking"
+   "options": "Sales Order"
   },
   {
    "fieldname": "rfid_key",
@@ -121,10 +115,16 @@
    "fieldname": "room_id",
    "fieldtype": "HTML",
    "label": "Room ID"
+  },
+  {
+   "fieldname": "current_guest",
+   "fieldtype": "Link",
+   "label": "Current Occupency",
+   "options": "Guest"
   }
  ],
  "links": [],
- "modified": "2025-11-11 18:04:01.297334",
+ "modified": "2025-11-12 12:29:56.438656",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Room",
