@@ -64,17 +64,40 @@ load_company_details() {
   make() {
     $(frappe.render_template("room_order", {})).appendTo(this.page.body);
 
-    // Get room_id from URL (for QR code scan)
-    const urlParams = new URLSearchParams(window.location.search);
-    const room_id = urlParams.get("room_id");
+const urlParams = new URLSearchParams(window.location.search);
+const qr_room_number = urlParams.get("room_number");
 
-    if (room_id) {
-      frappe.db.get_value("Room", room_id, ["room_number"]).then(r => {
-        if (r.message && r.message.room_number) {
-          $("#room_number").val(r.message.room_number).trigger("change");
+if (qr_room_number) {
+  // Fill "Order From" field
+  const $orderFrom = $("input[placeholder='Enter Room Number']");
+  $orderFrom
+    .val(qr_room_number)
+    .prop("readonly", true)
+    .css({
+      background: "#f5f5f5",
+      fontWeight: "600",
+      color: "#333",
+    });
+
+  frappe.show_alert({
+    message: `Room ${qr_room_number} detected from QR!`,
+    indicator: "green",
+  });
+
+  // Fetch and fill guest name
+    frappe.call({
+      method: "igusto.igusto.page.room_order.room_order.get_guest_by_room",
+      args: { room_number: qr_room_number },
+      callback: function (r) {
+        console.log("Guest Response:", r);
+        if (r.message) {
+          $("#guest_name").val(r.message);
+        } else {
+          frappe.msgprint("No guest found for this room.");
         }
-      });
-    }
+      }
+    });
+}
 
     // listeners
     $("#service_type").on("change", (e) => {

@@ -18,7 +18,7 @@ frappe.ui.form.on('Room', {
                      width="150" height="150"
                      style="border:1px solid #ccc; border-radius:10px; padding:6px; background:#fafafa;">
                 <div style="margin-top:6px;">
-                  <a href="/app/room-order?room_id=${frm.doc.name}" target="_blank"
+                  <a href="/app/room-order?room_number=${frm.doc.room_number}" target="_blank"
                      style="color:#007bff; text-decoration:none; font-weight:500;">
                      Open Room Link
                   </a>

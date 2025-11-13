@@ -11,12 +11,15 @@ class Room(Document):
 @frappe.whitelist()
 def generate_room_qr(room_name):
     """Generate and return a base64 QR Code (not stored in DB)."""
+    room = frappe.get_doc("Room", room_name)
     base_url = frappe.utils.get_url()
-    qr_target_url = f"{base_url}/app/room-order?room_id={room_name}"
+    qr_target_url = f"{base_url}/app/room-order?room_number={room.room_number}"
+
+    import qrcode, base64
+    from io import BytesIO
 
     qr = qrcode.make(qr_target_url)
     buffer = BytesIO()
     qr.save(buffer, format="PNG")
     qr_base64 = base64.b64encode(buffer.getvalue()).decode()
-
     return qr_base64
