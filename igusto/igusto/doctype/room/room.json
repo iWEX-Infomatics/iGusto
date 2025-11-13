@@ -7,12 +7,11 @@
  "field_order": [
   "room_number",
   "room_type",
+  "column_break_esiv",
   "floor",
   "building",
   "status",
   "housekeeping_status",
-  "column_break_mtng",
-  "room_id",
   "occupancy_section",
   "current_guest",
   "current_booking",
@@ -108,23 +107,18 @@
    "label": "Is Active?"
   },
   {
-   "fieldname": "column_break_mtng",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "room_id",
-   "fieldtype": "HTML",
-   "label": "Room ID"
-  },
-  {
    "fieldname": "current_guest",
    "fieldtype": "Link",
    "label": "Current Occupency",
    "options": "Guest"
+  },
+  {
+   "fieldname": "column_break_esiv",
+   "fieldtype": "Column Break"
   }
  ],
  "links": [],
- "modified": "2025-11-12 12:29:56.438656",
+ "modified": "2025-11-13 18:44:31.757357",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Room",
