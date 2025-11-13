@@ -10,8 +10,62 @@ class GuestSignupPage {
 			single_column: true
 		});
 		this.make();
+		this.load_company_details();
 	}
+  
+load_company_details() {
+  frappe.call({
+    method: "igusto.igusto.page.room_order.room_order.get_company_details",
+    callback: (r) => {
+      const data = r.message;
+      if (!data) return;
 
+      const logo_html = data.logo
+        ? `<img src="${data.logo}" class="company-logo">`
+        : `<div class="company-logo-placeholder">No Logo</div>`;
+
+      let address_html = "";
+      if (data.address) {
+        const addr = data.address;
+        address_html = `
+          <div class="company-address">
+            ${addr.address_line1 || ""}<br>
+            ${addr.address_line2 || ""}<br>
+            ${addr.city || ""}, ${addr.state || ""} - ${addr.pincode || ""}<br>
+            ${addr.country || ""}
+          </div>
+        `;
+      }
+
+      const contact_html = `
+        <div class="company-contact">
+          ${data.phone_no ? `<b>Phone:</b> ${data.phone_no}` : ""}
+          ${data.email ? ` | <b>Email:</b> ${data.email}` : ""}
+        </div>
+      `;
+
+    const header_html = `
+      <div class="company-header-wrapper">
+        <div class="company-header">
+          <div class="company-row1">
+            <div class="company-logo-box">${logo_html}</div>
+            <div class="company-info">
+              <h2 class="company-name">${data.company_name}</h2>
+            </div>
+          </div>
+          <div class="company-row2">
+            <div class="company-address-box">${address_html}</div>
+            <div class="company-contact-box">${contact_html}</div>
+          </div>
+        </div>
+      </div>
+    `;
+    $(".company-header-wrapper").remove();
+
+    $(".page-content").prepend(header_html);
+    }
+  });
+}
 	make() {
 		let me = this;
 		this.$body = $(frappe.render_template("guest_signup")).appendTo(this.page.main);

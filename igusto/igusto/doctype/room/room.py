@@ -9,9 +9,9 @@ class Room(Document):
         # Generate QR right after the document is created
         generate_room_qr(self.name)
 
-    def on_update(self):
-        # Also regenerate if updated
-        generate_room_qr(self.name)
+    # def on_update(self):
+    #     # Also regenerate if updated
+    #     generate_room_qr(self.name)
 
 
 @frappe.whitelist()

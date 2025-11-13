@@ -1,6 +1,6 @@
 import frappe
 import json
-from frappe.utils import now_datetime
+from frappe.utils import now_datetime, nowdate
 
 @frappe.whitelist()
 def get_menu_items():
@@ -84,47 +84,211 @@ def get_item_rate(item_name):
         return rate or 0
     return 0
 
+@frappe.whitelist(allow_guest=True)
+def get_company_details():
+    company = frappe.get_all("Company", fields=["name", "company_name", "phone_no", "email"], limit=1)
+    if not company:
+        return {}
 
-import frappe
-import json
-from frappe.utils import nowdate
+    company = company[0]
+
+    # ✅ Get address where is_your_company_address == 1
+    address = frappe.get_all(
+        "Address",
+        filters={"is_your_company_address": 1},
+        fields=["name", "address_line1", "address_line2", "city", "state", "pincode", "country"],
+        limit=1
+    )
+    address = address[0] if address else {}
+
+    # ✅ Get logo from File (attachment to Company)
+    file = frappe.get_all(
+        "File",
+        filters={
+            "attached_to_doctype": "Company",
+            "attached_to_name": company.name,
+            "is_private": 0
+        },
+        fields=["file_url"],
+        limit=1
+    )
+    logo_url = file[0].file_url if file else ""
+
+    return {
+        "company_name": company.company_name,
+        "email": company.email,
+        "phone_no": company.phone_no,
+        "address": address,
+        "logo": logo_url
+    }
+
 
 @frappe.whitelist()
 def create_room_order(data):
     """
-    Create a new Room Order document with child table entries.
+    Create a new Room Order or Task (for Room Service) document with child table entries.
     Auto-sets current date and guest name as room_order_customer.
     """
     try:
         data = json.loads(data)
+        service_type = data.get("service_type")
 
-        # --- Parent Document ---
+        # Helper: get item_code
+        def get_item_code(item_name):
+            if not item_name:
+                return None
+            return frappe.db.get_value("Item", {"item_name": item_name}, "name")
+
+        # Helper: ensure Task Type exists
+        def ensure_task_type(task_type_name):
+            """Safely create Task Type if it doesn't exist."""
+            if not task_type_name:
+                return
+
+            # If already exists, no need to create
+            if frappe.db.exists("Task Type", task_type_name):
+                return
+
+            # Create a new Task Type doc
+            tt = frappe.new_doc("Task Type")
+
+            # Try all naming possibilities (covers all ERPNext setups)
+            try:
+                tt.task_type = task_type_name
+            except Exception:
+                pass
+
+            try:
+                tt.name = task_type_name
+            except Exception:
+                pass
+
+            try:
+                tt.__newname = task_type_name
+            except Exception:
+                pass
+
+            # Fallback if none of the above fields work
+            if not tt.name:
+                tt.set("name", task_type_name)
+
+            tt.insert(ignore_permissions=True)
+
+        # ------------------ ROOM SERVICE FLOW ------------------
+        if service_type == "Room Service":
+            items = data.get("items", [])
+            guest = data.get("guest")
+            room_no = data.get("room_number")
+            delivery_to = data.get("delivery_to")
+
+            created_tasks = []
+
+            # --- Create separate Task for each item ---
+            for i in items:
+                item_name = i.get("item_name")
+                if not item_name:
+                    continue
+
+                # Ensure Task Type exists
+                ensure_task_type(item_name)
+
+                # Create Task
+                task = frappe.new_doc("Task")
+                task.subject = f"{item_name} - Room {room_no}"
+                task.status = "Open"
+                task.task_type = item_name  # ✅ show as Task Type in UI
+                task.room_number = room_no
+                task.delivery_to = delivery_to
+
+                # Description with details
+                task.description = (
+                    f"<b>Guest:</b> {guest}<br>"
+                    f"<b>Room:</b> {room_no}<br>"
+                    f"<b>Requested Service:</b> {service_type}<br>"
+                    f"<b>Item:</b> {item_name}<br>"
+                )
+
+                task.insert(ignore_permissions=True)
+                created_tasks.append(task.name)
+
+            frappe.db.commit()
+
+            # --- Create ONE Sales Order for all items ---
+            so = frappe.new_doc("Sales Order")
+            so.customer = guest
+            so.delivery_date = nowdate()
+
+            for i in items:
+                item_code = get_item_code(i.get("item_name"))
+                if not item_code:
+                    continue
+                so.append("items", {
+                    "item_code": item_code,
+                    "item_name": i.get("item_name"),
+                    "qty": i.get("quantity") or i.get("qty") or 1,
+                    "rate": i.get("rate") or 0,
+                    "description": f"{service_type} - {i.get('custom_remarks') or ''}"
+                })
+
+            so.insert(ignore_permissions=True)
+            frappe.db.commit()
+
+            return {
+                "status": "success",
+                "message": f"{len(created_tasks)} Tasks and Sales Order {so.name} created successfully.",
+                "tasks": created_tasks,
+                "sales_order": so.name
+            }
+
+        # ------------------ OTHER SERVICE TYPES ------------------
         room_order = frappe.new_doc("Room Orders")
         room_order.room_number = data.get("room_number")
-        room_order.room_order_date = nowdate()  # ✅ current date
-        room_order.room_order_customer = data.get("guest")  # ✅ guest as customer
+        room_order.room_order_date = nowdate()
+        room_order.room_order_customer = data.get("guest")
         room_order.guest = data.get("guest")
         room_order.delivery_to = data.get("delivery_to")
-        room_order.service_type = data.get("service_type")
+        room_order.service_type = service_type
 
-        # --- Child Table (room_order_booking_items) ---
         items = data.get("items", [])
         for i in items:
+            qty_value = i.get("passengers") or i.get("qty") or 1
             room_order.append("room_order_booking_items", {
                 "item": i.get("item_name"),
-                "qty": i.get("qty") or 1,
+                "qty": qty_value,
                 "rate": i.get("rate") or 0,
                 "custom_remarks": i.get("custom_remarks") or "",
-                "category": data.get("service_type") or "General"
+                "category": service_type or "General"
             })
 
         room_order.insert(ignore_permissions=True)
         frappe.db.commit()
 
+        # --- Create Sales Order linked to this Room Order ---
+        so = frappe.new_doc("Sales Order")
+        so.customer = data.get("guest")
+        so.delivery_date = nowdate()
+
+        for i in items:
+            item_code = get_item_code(i.get("item_name"))
+            if not item_code:
+                continue
+
+            so.append("items", {
+                "item_code": item_code,
+                "item_name": i.get("item_name"),
+                "qty": i.get("quantity") or i.get("qty") or 1,
+                "rate": i.get("rate") or 0,
+                "description": f"{service_type} - {i.get('custom_remarks') or ''}"
+            })
+
+        so.insert(ignore_permissions=True)
+        frappe.db.commit()
+
         return {
             "status": "success",
-            "message": f"Room Order {room_order.name} created successfully.",
-            "name": room_order.name
+            "message": f"Room Order {room_order.name} and Sales Order {so.name} created successfully.",
+            "name": room_order.name,
+            "sales_order": so.name
         }
 
     except Exception as e:

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "autoname": "format:HS-{#####}",
  "creation": "2025-11-12 16:19:45.055106",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,6 +12,8 @@
   "from_template",
   "supervisor",
   "status",
+  "section_break_mkiw",
+  "task_schedule",
   "section_break_oxbk",
   "assigned_staff",
   "room_list"
@@ -70,13 +73,24 @@
    "fieldtype": "Link",
    "label": "Department",
    "options": "Department"
+  },
+  {
+   "fieldname": "section_break_mkiw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "task_schedule",
+   "fieldtype": "Table",
+   "label": "Task Schedule",
+   "options": "Task Schedule"
   }
  ],
  "links": [],
- "modified": "2025-11-12 18:46:45.437482",
+ "modified": "2025-11-13 10:25:21.218958",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Housekeeping Schedule",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

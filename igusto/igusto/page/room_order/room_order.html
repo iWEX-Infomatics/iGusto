@@ -5,17 +5,17 @@
     <!-- Two Column Grid -->
     <div class="form-grid">
       <div class="form-group">
-        <label>Room Number</label>
+        <!-- <label>Room Number</label> -->
         <input type="text" id="room_number" class="form-control" placeholder="Enter Room Number">
       </div>
 
       <div class="form-group">
-        <label>Guest</label>
+        <!-- <label>Guest</label> -->
         <input type="text" id="guest_name" class="form-control" placeholder="Guest will auto-fill" readonly>
       </div>
 
       <div class="form-group">
-        <label>Service Type</label>
+        <!-- <label>Service Type</label> -->
         <select id="service_type" class="form-control">
           <option value="">Select Service Type</option>
           <option value="Restaurant">Restaurant</option>
@@ -28,7 +28,7 @@
       </div>
 
       <div class="form-group">
-        <label>Delivery To</label>
+        <!-- <label>Delivery To</label> -->
         <input type="text" id="delivery_to" class="form-control" placeholder="Room">
       </div>
     </div>
@@ -129,9 +129,10 @@
 
   .item-row {
     display: grid;
-    grid-template-columns: 1fr 80px 1fr;
+    grid-template-columns:1fr 78px 72px 2fr;
     gap: 8px;
     align-items: center;
+    margin-bottom: 4px;
   }
 
   /* --- Restaurant child table --- */
@@ -172,4 +173,55 @@
     cursor: pointer;
     font-weight: bold;
   }
+  .company-header-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.company-header {
+  width: 672px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* border-bottom: 2px solid #eee; */
+  padding-bottom: 10px;
+}
+
+.company-row1,
+.company-row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.company-logo {
+  max-height: 50px;
+  width: auto;
+  border-radius: 8px;
+}
+
+.company-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.company-address,
+.company-contact {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.company-address-box,
+.company-contact-box {
+  flex: 1;
+  font-size: 13px;
+}
+
+.company-contact-box {
+  text-align: right;
+}
+
 </style>

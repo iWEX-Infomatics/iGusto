@@ -7,8 +7,7 @@
  "field_order": [
   "employee",
   "employee_name",
-  "shift_time",
-  "remarks"
+  "department"
  ],
  "fields": [
   {
@@ -26,19 +25,15 @@
    "label": "Employee Name"
   },
   {
-   "fieldname": "shift_time",
-   "fieldtype": "Time",
-   "label": "Shift Time"
-  },
-  {
-   "fieldname": "remarks",
-   "fieldtype": "Small Text",
-   "label": "Remarks"
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2025-11-12 15:37:06.711448",
+ "modified": "2025-11-13 10:07:06.916968",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Housekeeping Assigned Staff",
