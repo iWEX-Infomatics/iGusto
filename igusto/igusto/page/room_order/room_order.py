@@ -23,7 +23,7 @@ def get_service_items():
 @frappe.whitelist()
 def get_spa_items():
     """Static spa service options (checkbox style)."""
-    return ["Full Body Massage", "Head Massage", "Foot Spa", "Sauna", "Facial Therapy"]
+    return ["Body Massage", "Head Massage", "Foot Spa", "Sauna", "Facial Therapy"]
 
 
 @frappe.whitelist()

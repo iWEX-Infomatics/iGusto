@@ -28,41 +28,33 @@ load_company_details() {
       if (data.address) {
         const addr = data.address;
         address_html = `
-          <div class="company-address">
-            ${addr.address_line1 || ""}<br>
-            ${addr.address_line2 || ""}<br>
-            ${addr.city || ""}, ${addr.state || ""} - ${addr.pincode || ""}<br>
-            ${addr.country || ""}
-          </div>
+          ${addr.address_line1 || ""}${addr.address_line2 ? ", " + addr.address_line2 : ""}, 
+          ${addr.city || ""}, ${addr.state || ""}, ${addr.country || ""}
         `;
       }
 
       const contact_html = `
-        <div class="company-contact">
-          ${data.phone_no ? `<b>Phone:</b> ${data.phone_no}` : ""}
-          ${data.email ? ` | <b>Email:</b> ${data.email}` : ""}
+        ${data.phone_no ? `${data.phone_no}` : ""}
+        ${data.email ? `, ${data.email}` : ""}
+      `;
+
+      const header_html = `
+        <div class="company-header-inner">
+          <div class="company-left">
+            ${logo_html}
+          </div>
+          <div class="company-right">
+            <h2 class="company-name">${data.company_name}</h2>
+            <div class="company-details">
+              ${address_html ? `<div>${address_html}</div>` : ""}
+              ${contact_html ? `<div>${contact_html}</div>` : ""}
+            </div>
+          </div>
         </div>
       `;
 
-    const header_html = `
-      <div class="company-header-wrapper">
-        <div class="company-header">
-          <div class="company-row1">
-            <div class="company-logo-box">${logo_html}</div>
-            <div class="company-info">
-              <h2 class="company-name">${data.company_name}</h2>
-            </div>
-          </div>
-          <div class="company-row2">
-            <div class="company-address-box">${address_html}</div>
-            <div class="company-contact-box">${contact_html}</div>
-          </div>
-        </div>
-      </div>
-    `;
-    $(".company-header-wrapper").remove();
-
-    $(".page-content").prepend(header_html);
+      $(".company-header-wrapper").remove();
+      $(".combined-card .company-header").html(header_html);
     }
   });
 }

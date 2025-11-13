@@ -1,82 +1,247 @@
 <div class="room-order-container">
-  <div class="order-card">
-    <h3 class="page-title">Room Order</h3>
-
-    <!-- Two Column Grid -->
-    <div class="form-grid">
-      <div class="form-group">
-        <!-- <label>Room Number</label> -->
-        <input type="text" id="room_number" class="form-control" placeholder="Enter Room Number">
-      </div>
-
-      <div class="form-group">
-        <!-- <label>Guest</label> -->
-        <input type="text" id="guest_name" class="form-control" placeholder="Guest will auto-fill" readonly>
-      </div>
-
-      <div class="form-group">
-        <!-- <label>Service Type</label> -->
-        <select id="service_type" class="form-control">
-          <option value="">Select Service Type</option>
-          <option value="Restaurant">Restaurant</option>
-          <option value="Room Service">Room Service</option>
-          <option value="Spa">Spa</option>
-          <option value="Transport">Transport</option>
-          <option value="Laundry">Laundry</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <!-- <label>Delivery To</label> -->
-        <input type="text" id="delivery_to" class="form-control" placeholder="Room">
-      </div>
+  <div class="combined-card">
+    <div class="company-header">
+      <!-- company details -->
     </div>
+    <div class="order-card">
+      <h3 class="page-title">Room Service Order</h3>
 
-    <div id="dynamic_input" class="form-section"></div>
+      <!-- Two Column Grid -->
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Order From</label>
+          <input type="text" id="room_number" class="form-control-col" placeholder="Enter Room Number">
+        </div>
 
-    <div class="form-actions">
-      <button id="submit_order" class="btn-primary">Save Order</button>
+        <div class="form-group">
+          <label>Bill To</label>
+          <input type="text" id="guest_name" class="form-control-col" placeholder="Guest" readonly>
+        </div>
+        <div class="form-group">
+          <label>Delivery To</label>
+          <input type="text" id="delivery_to" class="form-control-col" placeholder="Room">
+        </div>
+        <div class="form-group">
+          <label>Service Item</label>
+          <select id="service_type" class="form-control-col">
+            <option value="">Select Service Type</option>
+            <option value="Restaurant">Restaurant</option>
+            <option value="Room Service">Room Service</option>
+            <option value="Spa">Spa</option>
+            <option value="Transport">Transport</option>
+            <option value="Laundry">Laundry</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+
+      </div>
+
+      <div id="dynamic_input" class="form-section"></div>
+
+      <div class="form-actions">
+        <button id="submit_order" class="btn-primary">Save Order</button>
+      </div>
+      <footer> <i>Not just a place to stay. A place to remember</i></footer>
     </div>
   </div>
-</div>
 
-<style>
+  <style>
+    /* ===== Elegant Room Service Order Page ===== */
+
+    #page-room-order {
+      background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
+      background-size: cover !important;
+      font-family: "Poppins", sans-serif;
+      color: #2f2f2f;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 16px;
+      font-family: cursive;
+      color: #444;
+    }
+
+    .room-order-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 15px;
+      min-height: 100vh;
+    }
+
+    /* ===== Main Card ===== */
+    .combined-card {
+      background: #ffffffbf;
+      backdrop-filter: blur(14px);
+      padding: 45px 50px;
+      border-radius: 20px;
+      border: 6px solid #bfaa47cc;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+      transition: all 0.3s ease;
+      max-width: 700px;
+      width: 700px;
+    }
+
+    .combined-card:hover {
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+      transform: translateY(-4px);
+    }
+
+    /* ===== Header Section ===== */
+    .company-header-inner {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .company-logo {
+      max-height: 90px;
+      border-radius: 45px;
+    }
+
+    .company-name {
+      font-size: 30px;
+      font-weight: 700;
+      color: #2f2f2f;
+      margin-bottom: 0px;
+      letter-spacing: 0.4px;
+    }
+
+    .item-row {
+      display: grid;
+      grid-template-columns: 1fr 78px 72px 2fr;
+      gap: 17px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .company-details {
+      font-size: 18px;
+      color: #2d2b2b;
+      line-height: 1.4;
+    }
+
+    /* ===== Form Card ===== */
+    /* .order-card {
+  padding: 30px 0;
+} */
+
+    .page-title {
+      height: 33px;
+      margin: auto;
+      width: 65%;
+      text-align: center;
+      font-size: 24px;
+      font-weight: normal;
+      color: #2f2f2f;
+      margin-bottom: 32px;
+      letter-spacing: 0.5px;
+      position: relative;
+      border-radius: 10px;
+      justify-content: center;
+      background: linear-gradient(135deg, #b5b35c, #c7c56e);
+    }
+
+    label {
+      display: inline-block;
+      margin-bottom: 0px;
+    }
+
+    .page-head {
+      display: none;
+    }
+
+    /* .page-title::after {
+  content: "";
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #b5b35c, #d1cf77);
+  margin: 10px auto 0;
+  border-radius: 2px;
+} */
+
+    /* ===== Form Layout ===== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border: none;
+      gap: 15px 28px;
+    }
+
+    /* ===== MOBILE VIEW ONLY ===== */
+@media (max-width: 600px) {
+
+  body {
+    background: #fafafa;
+  }
+
   .room-order-container {
+    padding: 20px 10px;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
   }
 
-  .order-card {
-    background: #ffffff;
-    padding: 35px 40px;
-    border-radius: 16px;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  .combined-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid #b5b35c;
+    border-radius: 14px;
+    padding: 25px 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 700px;
-    transition: 0.3s ease;
+    max-width: 420px;
   }
 
-  .order-card:hover { transform: translateY(-3px); }
-
-  .page-title {
+  .company-header {
     text-align: center;
-    font-size: 24px;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
+
+  .company-header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .company-logo {
+    max-height: 75px;
+    border-radius: 50%;
+  }
+
+  .company-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .company-details {
+    font-size: 12px;
+    color: #444;
+    line-height: 1.4;
+  }
+
+    .page-title {
+        background: linear-gradient(135deg, #b5b35c, #c7c56e);
+        font-size: 15px;
+        font-weight: normal;
+        text-align: center;
+        padding: 4px 3px;
+        border-radius: 6px;
+        margin-bottom: 18px;
+        display: flex;
+        justify-content: center;
+    }
 
   .form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px 24px;
-    border: none !important;
-  }
-
-  @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .form-group {
@@ -84,144 +249,199 @@
     flex-direction: column;
   }
 
-  label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 6px;
-  }
-
-  .form-control {
+  .form-control-col {
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px 14px;
     border-radius: 8px;
-    border: 1px solid #d1d5db;
+    border: 1px solid #ccc;
     background-color: #fff;
-    font-size: 15px;
+    font-size: 14px;
   }
 
-  .form-control:focus {
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  .form-control-col:focus {
+    border-color: #b5b35c;
+    box-shadow: 0 0 0 3px rgba(181, 179, 92, 0.25);
     outline: none;
   }
 
-  .form-section { margin-top: 25px; margin-bottom: 15px; }
-
   .form-actions {
     text-align: center;
-    margin-top: 25px;
+    margin-top: 15px;
   }
 
   .btn-primary {
-    background-color: #2563eb;
-    color: #ffffff;
+    width: 100%;
+    background-color: #4b7b2b;
+    color: #fff;
     border: none;
-    padding: 10px 28px;
+    padding: 10px 25px;
     border-radius: 8px;
-    font-weight: 500;
     font-size: 15px;
+    letter-spacing: 0.3px;
   }
 
   .btn-primary:hover {
-    background-color: #1d4ed8;
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    background-color: #3e6825;
   }
 
-  .item-row {
-    display: grid;
-    grid-template-columns:1fr 78px 72px 2fr;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 4px;
+  footer {
+    text-align: center;
+    font-size: 13px;
+    color: #555;
+    font-family: cursive;
+    margin-top: 18px;
   }
+  .company-right {
+        text-align: center;
+      }
 
-  /* --- Restaurant child table --- */
-  .child-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
+      .item-row {
+        grid-template-columns: 1fr 1fr ;
+        gap: 10px;
+        border: 1px solid #e0e0e0;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #ffffffb3;
+        margin-bottom: 10px;
+      }
 
-  .child-table th, .child-table td {
-    border: 1px solid #e5e7eb;
-    padding: 8px;
-    text-align: left;
-    font-size: 14px;
-  }
+      .item-row label {
+        font-weight: 500;
+        font-size: 15px;
+      }
 
-  .child-table th {
-    background: #f9fafb;
-    font-weight: 600;
-  }
+      .item-row input[type="checkbox"] {
+        transform: scale(1.1);
+        margin-right: 6px;
+      }
 
-  .add-row-btn {
-    background-color: #16a34a;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: none;
-    margin-top: 10px;
-    font-size: 14px;
-  }
+      .item-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
 
-  .add-row-btn:hover {
-    background-color: #15803d;
-  }
+      .item-controls input.form-control-col {
+        width: 100% !important;
+      }
 
-  .remove-row {
-    color: #dc2626;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .company-header-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+      .item-row input.form-control-col {
+        font-size: 14px;
+        padding: 8px 10px;
+      }
 }
 
-.company-header {
-  width: 672px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  /* border-bottom: 2px solid #eee; */
-  padding-bottom: 10px;
-}
 
-.company-row1,
-.company-row2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    /* ===== Inputs ===== */
+    .form-control-col {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background-color: #fff;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
 
-.company-logo {
-  max-height: 50px;
-  width: auto;
-  border-radius: 8px;
-}
+    .form-control-col:focus {
+      border-color: #b5b35c;
+      box-shadow: 0 0 0 4px rgba(181, 179, 92, 0.25);
+      outline: none;
+    }
 
-.company-name {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
-}
+    select.form-control-col {
+      background-color: #fafafa;
+    }
 
-.company-address,
-.company-contact {
-  font-size: 13px;
-  color: #555;
-  line-height: 1.4;
-}
+    /* ===== Buttons ===== */
+    .form-actions {
+      text-align: center;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
 
-.company-address-box,
-.company-contact-box {
-  flex: 1;
-  font-size: 13px;
-}
+    .btn-primary,
+    .btn-secondary {
+      border: none;
+      padding: 12px 35px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 0.3px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
 
-.company-contact-box {
-  text-align: right;
-}
+    /* Primary (Gold) Button */
+    .btn-primary {
+      background: linear-gradient(135deg, #b5b35c, #c7c56e);
+      color: #fff;
+      box-shadow: 0 6px 14px rgba(181, 179, 92, 0.35);
+    }
 
-</style>
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #a6a45a, #c3c17a);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(181, 179, 92, 0.45);
+    }
+
+    /* Secondary (Cancel) Button */
+    .btn-secondary {
+      background: #f3f3f3;
+      color: #444;
+      border: 1px solid #ccc;
+    }
+
+    .btn-secondary:hover {
+      background: #e8e8e8;
+      transform: translateY(-2px);
+    }
+
+    /* ===== Sub Tables / Add Rows ===== */
+    .child-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .child-table th,
+    .child-table td {
+      border: 1px solid #e5e7eb;
+      padding: 9px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .child-table th {
+      background: #f9f9f3;
+      font-weight: 600;
+    }
+
+    .add-row-btn {
+      background: #4b7b2b;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      margin-top: 12px;
+      font-size: 14px;
+      transition: 0.3s ease;
+    }
+
+    .add-row-btn:hover {
+      background: #3e6825;
+    }
+
+    .remove-row {
+      color: #dc2626;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>

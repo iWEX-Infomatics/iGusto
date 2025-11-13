@@ -1,118 +1,215 @@
 <div class="onboarding-container">
-  <div class="form-layout">
-    
-    <div class="form-section">
-      <h4>Guest Details</h4>
-      <div class="form-grid-col">
-        <div class="form-group">
-          <label>Guest Name</label>
-          <input type="text" class="form-control-col" id="guest" readonly>
-        </div>
-        <div class="form-group">
-          <label>Guest Photo</label>
-          <input type="file" id="guest_photo" class="form-control-col" accept="image/*">
-        </div>
-        <div class="form-group">
-          <label>From Date</label>
-          <input type="date" class="form-control-col" id="from_date">
-        </div>
-        <div class="form-group">
-          <label>To Date</label>
-          <input type="date" class="form-control-col" id="to_date">
-        </div>
-        <div class="form-group">
-          <label>No. of Guests</label>
-          <input type="number" class="form-control-col" id="no_of_guests">
-        </div>
-        <div class="form-group">
-          <label>Nationality</label>
-          <input type="text" class="form-control-col" id="nationality" placeholder="e.g. Indian">
-        </div>
-
-      </div>
+  <div class="combined-card">
+    <div class="company-header">
+      <!-- company details -->
     </div>
+    <div class="form-layout-col">
 
-    <div class="form-section">
-      <h4>ID Proof Details</h4>
-      <div class="form-grid-col">
-        <div class="form-group">
-          <label>ID Proof Type</label>
-          <select class="form-control-col" id="id_proof_type">
-            <option value="">Select</option>
-            <option>Aadhar Card</option>
-            <option>Driving License</option>
-            <option>Passport</option>
-            <option>Voter ID</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>ID Proof Number</label>
-          <input type="text" class="form-control-col" id="id_proof_number">
-        </div>
-          <div class="form-group passport-fields">
-          <label>Passport Number</label>
-          <input type="text" class="form-control-col" id="passport_number">
-        </div>
-        <div class="form-group visa-fields">
-          <label>Visa Number</label>
-          <input type="text" class="form-control-col" id="visa_number">
+      <div class="form-section-col">
+        <h1>Guest Details</h1>
+        <div class="form-grid-col">
+          <div class="form-group-col">
+            <label>Guest Name</label>
+            <input type="text" class="form-control-col" id="guest" readonly>
+          </div>
+          <div class="form-group-col">
+            <label>Guest Photo</label>
+            <input type="file" id="guest_photo" class="form-control-col" accept="image/*">
+          </div>
+          <div class="form-group-col">
+            <label>From Date</label>
+            <input type="date" class="form-control-col" id="from_date">
+          </div>
+          <div class="form-group-col">
+            <label>To Date</label>
+            <input type="date" class="form-control-col" id="to_date">
+          </div>
+          <div class="form-group-col">
+            <label>No. of Guests</label>
+            <input type="number" class="form-control-col" id="no_of_guests">
+          </div>
+          <div class="form-group-col">
+            <label>Nationality</label>
+            <input type="text" class="form-control-col" id="nationality" placeholder="e.g. Indian">
+          </div>
+
         </div>
       </div>
-    </div>
 
-    <div class="form-section">
-      <h4>Room Details</h4>
-      <div class="form-grid-col">
-        <div class="form-group">
-          <label>Room Type</label>
-          <select id="room_type" class="form-control-col"></select>
-        </div>
-        <div class="form-group">
-          <label>Room Number</label>
-          <select id="room_number" class="form-control-col"></select>
-        </div>
-        <div class="form-group">
-          <label>RFID Card No</label>
-          <input type="text" class="form-control-col" id="rfid_card_no">
-        </div>
-        <div class="form-group">
-          <label>Check-in Time</label>
-          <input type="time" class="form-control-col" id="check_in_time" value="14:00">
-        </div>
-        <div class="form-group">
-          <label>Check-out Time</label>
-          <input type="time" class="form-control-col" id="check_out_time" value="11:00">
+      <div class="form-section-col">
+        <h4  style="margin-top:1rem;color:#757332;" >ID Proof Details</h4>
+        <div class="form-grid-col">
+          <div class="form-group-col">
+            <label>ID Proof Type</label>
+            <select class="form-control-col" id="id_proof_type">
+              <option value="">Select</option>
+              <option>Aadhar Card</option>
+              <option>Driving License</option>
+              <option>Passport</option>
+              <option>Voter ID</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group-col">
+            <label>ID Proof Number</label>
+            <input type="text" class="form-control-col" id="id_proof_number">
+          </div>
+          <div class="form-group-col passport-fields">
+            <label>Passport Number</label>
+            <input type="text" class="form-control-col" id="passport_number">
+          </div>
+          <div class="form-group-col visa-fields">
+            <label>Visa Number</label>
+            <input type="text" class="form-control-col" id="visa_number">
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="form-footer text-center mt-4">
-      <button class="btn-primary" id="btn_submit_onboard" style="background-color:#1a73e8; border:none; border-radius:8px; padding:10px 20px; font-weight:600;">Save</button>
+      <div class="form-section-col">
+        <h4 style="margin-top:1rem;color:#757332;">Room Details</h4>
+        <div class="form-grid-col">
+          <div class="form-group-col">
+            <label>Room Type</label>
+            <select id="room_type" class="form-control-col"></select>
+          </div>
+          <div class="form-group-col">
+            <label>Room Number</label>
+            <select id="room_number" class="form-control-col"></select>
+          </div>
+          <div class="form-group-col">
+            <label>RFID Card No</label>
+            <input type="text" class="form-control-col" id="rfid_card_no">
+          </div>
+          <div class="form-group-col">
+            <label>Check-in Time</label>
+            <input type="time" class="form-control-col" id="check_in_time" value="14:00">
+          </div>
+          <div class="form-group-col">
+            <label>Check-out Time</label>
+            <input type="time" class="form-control-col" id="check_out_time" value="11:00">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-footer text-center mt-4">
+        <button class="btn-primary" id="btn_submit_onboard"
+          style="    background: linear-gradient(135deg, #b5b35c, #c7c56e);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(181, 179, 92, 0.35);border:#b5b35c; border-radius:8px; padding:10px 20px; font-weight:600;">Save</button>
+      </div>
+      <footer> <i>Not just a place to stay. A place to remember</i></footer>
     </div>
   </div>
 </div>
 
 <style>
-  .onboarding-container {
+  #page-guest-onboard {
+    background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
+    background-size: cover !important;
+    font-family: "Poppins", sans-serif;
+    color: #2f2f2f;
+  }
+
+  
+.onboarding-container {
     max-width: 750px;
     margin: auto;
-    background: #fff;
+    /* background: #fff; */
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
+  .page-head {
+    display: none;
+  }
+.btn_submit_onboard{
+    background: linear-gradient(135deg, #a6a45a, #c3c17a);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(181, 179, 92, 0.45);
+}
+  .combined-card {
+    background: #ffffffbf;
+    backdrop-filter: blur(14px);
+    padding: 45px 50px;
+    border-radius: 20px;
+    border: 6px solid #bfaa47cc;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+    max-width: 720px;
+    width: 720px;
+  }
 
-  .form-section {
+  .combined-card:hover {
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+    transform: translateY(-4px);
+  }
+
+  /* ===== Header (Same as Room Service Card) ===== */
+  .company-header-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 25px;
+  }
+
+  .company-logo {
+    max-height: 90px;
+    border-radius: 45px;
+  }
+
+  .company-name {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2f2f2f;
+    margin-bottom: 0px;
+    letter-spacing: 0.4px;
+  }
+
+  .item-row {
+    display: grid;
+    grid-template-columns: 1fr 78px 72px 2fr;
+    gap: 17px;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  .company-details {
+    font-size: 18px;
+    color: #2d2b2b;
+    line-height: 1.4;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    font-family: cursive;
+    color: #444;
+  }
+
+  .form-section-col {
     /* margin-bottom: 25px; */
     padding-bottom: 5px;
     border: none !important;
   }
 
-  .form-section h4 {
-    color: #444;
-    margin-bottom: 10px;
-    font-weight: 600;
+  h1 {
+ height: 33px;
+      margin: auto;
+      width: 65%;
+      text-align: center;
+      font-size: 22px;
+      font-weight: normal;
+      color: #2f2f2f;
+      margin-bottom: 32px;
+      letter-spacing: 0.5px;
+      position: relative;
+      border-radius: 10px;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #b5b35c, #c7c56e);
   }
 
   .form-grid-col {
@@ -123,10 +220,11 @@
   }
 
   label {
-    font-weight: 600;
+    font-weight: normal;
+    margin-bottom: 1px;
   }
 
-  .form-group {
+  .form-group-col {
     display: flex;
     flex-direction: column;
   }
@@ -138,7 +236,7 @@
     width: 100%;
     padding: 12px 14px;
     border-radius: 10px;
-        height: 50px;
+    height: 50px;
     border: 1px solid #d1d5db;
     font-size: 0.95rem;
     background-color: #f9fafb;
@@ -151,8 +249,8 @@
     outline: none;
   }
 
-  select.form-control-col{
-        height: 50px;
+  select.form-control-col {
+    height: 50px;
   }
 
   hr {
@@ -163,55 +261,104 @@
     .form-grid-col {
       grid-template-columns: 1fr;
     }
+     h1 {
+      font-size: 20px;
+      font-weight: normal;
+      color: #222;
+    }
+
+    .onboarding-container {
+        padding: 25px 10px;
+      }
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #555;
+      font-family: cursive;
+      margin-top: 18px;
+    }
+
+    .combined-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid #b5b35c;
+      border-radius: 14px;
+      padding: 25px 22px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h3 {
+      font-size: 16px;
+      color: #2f2f2f;
+    }
+
+    .company-header {
+      text-align: center;
+      margin-bottom: 15px;
+      width: auto;
+    }
+
+
+
+    .company-logo {
+      max-height: 75px;
+      border-radius: 50%;
+    }
+
+    .company-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .company-details {
+      font-size: 12px;
+      color: #444;
+      line-height: 1.4;
+    }
+    
+  .company-header-inner {
+    flex-direction: column;
+
   }
-   .company-header-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+  }
 
-.company-header {
-  width: 730px; 
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  /* border-bottom: 2px solid #eee; */
-  padding-bottom: 10px;
-}
+  .company-header-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
 
-.company-row1,
-.company-row2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
-.company-logo {
-  max-height: 50px;
-  width: auto;
-  border-radius: 8px;
-}
+  .company-row1,
+  .company-row2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-.company-name {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
-}
+  .company-name {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
 
-.company-address,
-.company-contact {
-  font-size: 13px;
-  color: #555;
-  line-height: 1.4;
-}
+  .company-address,
+  .company-contact {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.4;
+  }
 
-.company-address-box,
-.company-contact-box {
-  flex: 1;
-  font-size: 13px;
-}
+  .company-address-box,
+  .company-contact-box {
+    flex: 1;
+    font-size: 13px;
+  }
 
-.company-contact-box {
-  text-align: right;
-}
+  .company-contact-box {
+    text-align: right;
+  }
 </style>

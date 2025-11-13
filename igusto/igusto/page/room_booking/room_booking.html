@@ -1,27 +1,31 @@
 <div class="booking-wrapper">
+  <div class="combined-card">
+    <div class="company-header">
+      <!-- company details -->
+    </div>
   <div class="booking-card">
     <h1 class="booking-title">Room Booking</h1>
-    <p class="booking-subtitle">Enter details to confirm your booking</p>
+    <!-- <p class="booking-subtitle">Enter details to confirm your booking</p> -->
 
     <form id="booking-form">
       <div class="booking-grid">
         <div>
-          <label class="booking-label">Guest Name</label>
-          <input type="text" id="guest_name" class="booking-input" readonly>
+          <!-- <label class="booking-label">Guest Name</label> -->
+          <input type="text" id="guest_name" placeholder="Guest Name" class="booking-input" readonly>
         </div>
         <div>
-          <label class="booking-label">Mobile *</label>
+          <!-- <label class="booking-label">Mobile *</label> -->
           <input type="text" id="mobile" placeholder="Mobile Number *" class="booking-input" required>
         </div>
       </div>
 
       <div class="booking-grid">
         <div>
-          <label class="booking-label">Email *</label>
+          <!-- <label class="booking-label">Email *</label> -->
           <input type="email" id="email" placeholder="Email Address *" class="booking-input" required>
         </div>
         <div>
-          <label class="booking-label">Nationality *</label>
+          <!-- <label class="booking-label">Nationality *</label> -->
           <select id="nationality" class="booking-input" required>
             <option value="">Select Nationality</option>
             <option value="Indian">Indian</option>
@@ -32,33 +36,33 @@
 
       <div class="booking-grid">
         <div>
-          <label class="booking-label">From Date *</label>
+          <!-- <label class="booking-label">From Date *</label> -->
           <input type="date" id="check_in" class="booking-input" required>
         </div>
         <div>
-          <label class="booking-label">To Date *</label>
+          <!-- <label class="booking-label">To Date *</label> -->
           <input type="date" id="check_out" class="booking-input" required>
         </div>
       </div>
 
       <div class="booking-grid">
         <div>
-          <label class="booking-label">Number of Guests *</label>
-          <input type="number" id="no_of_guests" class="booking-input" min="1" required>
+          <!-- <label class="booking-label">Number of Guests *</label> -->
+          <input type="number" id="no_of_guests" placeholder="Number of Guests" class="booking-input" min="1" required>
         </div>
         <div>
-          <label class="booking-label">Room Type *</label>
+          <!-- <label class="booking-label">Room Type *</label> -->
           <div id="room_type_wrapper"></div>
         </div>
       </div>
 
       <div class="booking-grid">
         <div>
-          <label class="booking-label">Rate Plan *</label>
+          <!-- <label class="booking-label">Rate Plan *</label> -->
           <input type="number" id="rate_plan" class="booking-input" placeholder="Enter Rate" required>
         </div>
         <div id="currency-section" style="display:none;">
-          <label class="booking-label">Currency *</label>
+          <!-- <label class="booking-label">Currency *</label> -->
           <input type="text" id="currency" class="booking-input" placeholder="Currency" readonly required>
         </div>
       </div>
@@ -70,175 +74,296 @@
     </form>
   </div>
 </div>
+</div>
 
 <!-- ✅ STYLES -->
 <style>
-  body {
-    background: #f9fafb;
-  }
+ /* ===== Elegant Room Booking Page (Gold Theme) ===== */
 
-  .booking-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding-top: 3rem;
-    min-height: 90vh;
-  }
-
-  .booking-card {
-    width: 100%;
-    max-width: 700px;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-    padding: 2.5rem;
-    transition: 0.3s all ease-in-out;
-  }
-
-  .booking-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #1d4ed8;
-    text-align: center;
-    margin-bottom: 0.25rem;
-  }
-
-  .booking-subtitle {
-    text-align: center;
-    color: #6b7280;
-    margin-bottom: 1.5rem;
-  }
-
-  .booking-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .booking-input {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid #d1d5db;
-    background: #f9fafb;
-    transition: all 0.2s;
-  }
-
-  .booking-input:focus {
-    border-color: #2563eb;
-    background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    outline: none;
-  }
-
-  .booking-label {
-    display: block;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.25rem;
-  }
-
-  .booking-btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    width: 48%;
-    transition: 0.25s;
-  }
-
-  .booking-btn-primary {
-    background-color: #2563eb;
-    color: #fff;
-  }
-
-  .booking-btn-primary:hover {
-    background-color: #1d4ed8;
-  }
-
-  .booking-btn-secondary {
-    background-color: #e5e7eb;
-    color: #111827;
-  }
-
-  .booking-btn-secondary:hover {
-    background-color: #d1d5db;
-  }
-
-  .booking-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1.5rem;
-  }
-.company-header-wrapper {
+#page-room-booking {
+  background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
+  background-size: cover !important;
+  font-family: "Poppins", sans-serif;
+  color: #2f2f2f;
+}
+.page-head{
+  display: none;
+}
+/* ===== Main Container ===== */
+.booking-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  padding: 60px 15px;
+  min-height: 100vh;
 }
 
-.company-header {
-  width: 672px; 
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  /* border-bottom: 2px solid #eee; */
-  padding-bottom: 10px;
+/* ===== Combined Card ===== */
+.combined-card {
+  background: #ffffffbf;
+  backdrop-filter: blur(14px);
+  padding: 45px 50px;
+  border-radius: 20px;
+  border: 6px solid #bfaa47cc;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  max-width: 700px;
+  width: 700px;
 }
 
-.company-row1,
-.company-row2 {
+.combined-card:hover {
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+  transform: translateY(-4px);
+}
+
+/* ===== Company Header ===== */
+.company-header-inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 18px;
+  margin-bottom: 25px;
 }
 
 .company-logo {
-  max-height: 50px;
-  width: auto;
-  border-radius: 8px;
+  max-height: 90px;
+  border-radius: 45px;
 }
 
 .company-name {
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: #2f2f2f;
+  margin-bottom: 0px;
+  letter-spacing: 0.4px;
 }
 
-.company-address,
-.company-contact {
-  font-size: 13px;
-  color: #555;
+.company-details {
+  font-size: 18px;
+  color: #2d2b2b;
   line-height: 1.4;
 }
 
-.company-address-box,
-.company-contact-box {
-  flex: 1;
-  font-size: 13px;
+/* ===== Booking Card ===== */
+.booking-card {
+  padding: 20px 0;
 }
 
-.company-contact-box {
-  text-align: right;
+.booking-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: normal;
+  color: #2f2f2f;
+  background: linear-gradient(135deg, #b5b35c, #c7c56e);
+  margin: auto;
+  width: 65%;
+  margin-bottom: 32px;
+  padding: 6px 0;
+  border-radius: 10px;
+  letter-spacing: 0.5px;
 }
 
-  @media (max-width: 640px) {
-    .booking-card {
-      padding: 1.5rem;
-      margin: 1rem;
-    }
-    .booking-grid {
-      grid-template-columns: 1fr;
-    }
-    .booking-btn {
-      width: 100%;
-    }
-    .booking-actions {
-      flex-direction: column;
-      gap: 0.75rem;
-    }
+.booking-subtitle {
+  text-align: center;
+  color: #444;
+  font-style: italic;
+  margin-top: 8px;
+  margin-bottom: 25px;
+}
+
+/* ===== Form Layout ===== */
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px 28px;
+  margin-bottom: 15px;
+}
+
+.booking-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.booking-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.booking-input:focus {
+  border-color: #b5b35c;
+  box-shadow: 0 0 0 4px rgba(181, 179, 92, 0.25);
+  outline: none;
+}
+
+/* ===== Buttons ===== */
+.booking-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.booking-btn {
+  border: none;
+  padding: 12px 35px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+/* Gold Gradient Button */
+.booking-btn-primary {
+  background: linear-gradient(135deg, #b5b35c, #c7c56e);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(181, 179, 92, 0.35);
+}
+
+.booking-btn-primary:hover {
+  background: linear-gradient(135deg, #a6a45a, #c3c17a);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(181, 179, 92, 0.45);
+}
+
+/* Secondary (Cancel) Button */
+.booking-btn-secondary {
+  background: #f3f3f3;
+  color: #444;
+  border: 1px solid #ccc;
+}
+
+.booking-btn-secondary:hover {
+  background: #e8e8e8;
+  transform: translateY(-2px);
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-family: cursive;
+  color: #444;
+}
+
+/* ===== MOBILE VIEW ONLY ===== */
+@media (max-width: 600px) {
+  body {
+    background: #fafafa;
   }
+
+  .booking-wrapper {
+    padding: 20px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .combined-card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1.5px solid #b5b35c;
+    border-radius: 14px;
+    padding: 25px 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .company-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .company-header-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .company-logo {
+    max-height: 75px;
+    border-radius: 50%;
+  }
+
+  .company-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  .company-details {
+    font-size: 12px;
+    color: #444;
+    line-height: 1.4;
+  }
+
+  .booking-title {
+    background: linear-gradient(135deg, #b5b35c, #c7c56e);    font-size: 15px;
+    text-align: center;
+    padding: 4px 3px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+  }
+
+    .booking-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 👈 2 columns, equal width */
+    gap: 10px 12px; /* row-gap, column-gap */
+    margin-bottom: 15px;
+  }
+
+  .booking-grid input,
+  .booking-grid select {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+  .booking-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 14px;
+  }
+
+  .booking-btn {
+    width: 100%;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+
+  .booking-btn-primary {
+    background-color: #4b7b2b;
+  }
+
+  .booking-btn-primary:hover {
+    background-color: #3e6825;
+  }
+
+  .booking-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  footer {
+    font-size: 13px;
+    color: #555;
+    font-family: cursive;
+    margin-top: 18px;
+  }
+}
+
 </style>
 
 <!-- ✅ JS -->
