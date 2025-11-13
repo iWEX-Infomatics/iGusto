@@ -14,11 +14,14 @@
   "housekeeping_status",
   "occupancy_section",
   "current_guest",
+  "column_break_eewd",
   "current_booking",
+  "column_break_haua",
   "rfid_key",
   "maintenance_section",
   "last_cleaned_on",
   "next_cleaning_due",
+  "column_break_wlvr",
   "notes",
   "is_active"
  ],
@@ -115,10 +118,22 @@
   {
    "fieldname": "column_break_esiv",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_eewd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_haua",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wlvr",
+   "fieldtype": "Column Break"
   }
  ],
  "links": [],
- "modified": "2025-11-13 18:44:31.757357",
+ "modified": "2025-11-13 19:29:43.330223",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Room",
