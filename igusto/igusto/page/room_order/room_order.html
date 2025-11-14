@@ -399,6 +399,19 @@
       background: #e8e8e8;
       transform: translateY(-2px);
     }
+/* Scrollable container */
+.child-table-wrapper {
+  max-height: 220px;          /* visible height */
+  overflow-y: auto;           /* vertical scroll */
+  overflow-x: auto;           /* horizontal scroll */
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  margin-top: 10px;
+  background: #fff;
+}
+
+
 
     /* ===== Sub Tables / Add Rows ===== */
     .child-table {
@@ -409,12 +422,16 @@
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      min-width: 650px;           /* force scroll on small screens */
+      border-collapse: collapse;
     }
 
     .child-table th,
     .child-table td {
       border: 1px solid #e5e7eb;
       padding: 9px;
+        white-space: nowrap;
+  /* padding: 6px; */
       text-align: left;
       font-size: 14px;
     }

@@ -161,7 +161,8 @@ if (service_type === "Restaurant") {
     method: "igusto.igusto.page.room_order.room_order.get_menu_items",
     callback: (r) => {
       if (r.message) {
-        let html = `
+      let html = `
+        <div class="child-table-wrapper">
           <table class="child-table" id="restaurant_table">
             <thead>
               <tr>
@@ -175,8 +176,11 @@ if (service_type === "Restaurant") {
             </thead>
             <tbody></tbody>
           </table>
-          <button type="button" class="add-row-btn" id="add_row_btn">+ Add Row</button>
-        `;
+        </div>
+
+        <button type="button" class="add-row-btn" id="add_row_btn">+ Add Row</button>
+      `;
+
         container.html(html);
 
         const addRow = () => {
@@ -185,11 +189,11 @@ if (service_type === "Restaurant") {
             .join("");
           const row = `
             <tr>
-              <td><select class="form-control item_name"><option value="">Select</option>${options}</select></td>
-              <td><input type="number" class="form-control rate" min="0" value="0" readonly></td>
-              <td><input type="number" class="form-control qty" min="1" value="1"></td>
-              <td><input type="number" class="form-control amount" min="0" value="0" readonly></td>
-              <td><input type="text" class="form-control remarks" placeholder="Remarks"></td>
+              <td><select class="form-control-col item_name"><option value="">Select</option>${options}</select></td>
+              <td><input type="number" class="form-control-col rate" min="0" value="0" readonly></td>
+              <td><input type="number" class="form-control-col qty" min="1" value="1"></td>
+              <td><input type="number" class="form-control-col amount" min="0" value="0" readonly></td>
+              <td><input type="text" class="form-control-col remarks" placeholder="Remarks"></td>
               <td><span class="remove-row">✕</span></td>
             </tr>`;
           $("#restaurant_table tbody").append(row);
@@ -255,13 +259,13 @@ if (service_type === "Restaurant") {
               <label for="rs_chk_${idx}">${item}</label>
             </div>
             <div class="item-controls">
-              <input type="number" id="rs_rate_${idx}" class="form-control" readonly style="width:80px;" placeholder="Rate">
+              <input type="number" id="rs_rate_${idx}" class="form-control-col" readonly style="width:80px;" placeholder="Rate">
             </div>
             <div class="item-controls">
-              <input type="number" id="rs_qty_${idx}" class="form-control" min="1" value="1" style="width:70px;" disabled>
+              <input type="number" id="rs_qty_${idx}" class="form-control-col" min="1" value="1" style="width:70px;" disabled>
             </div>
             <div>
-              <input type="text" id="rs_remark_${idx}" class="form-control" placeholder="Remarks" disabled>
+              <input type="text" id="rs_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
         });
@@ -310,13 +314,13 @@ if (service_type === "Restaurant") {
               <label for="spa_chk_${idx}">${item}</label>
             </div>
             <div class="item-controls">
-              <input type="number" id="spa_rate_${idx}" class="form-control" readonly style="width:80px;" placeholder="Rate">
+              <input type="number" id="spa_rate_${idx}" class="form-control-col" readonly style="width:80px;" placeholder="Rate">
             </div>
             <div class="item-controls">
-              <input type="number" id="spa_qty_${idx}" class="form-control" min="1" value="1" style="width:70px;" disabled>
+              <input type="number" id="spa_qty_${idx}" class="form-control-col" min="1" value="1" style="width:70px;" disabled>
             </div>
             <div>
-              <input type="text" id="spa_remark_${idx}" class="form-control" placeholder="Remarks" disabled>
+              <input type="text" id="spa_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
         });
@@ -364,13 +368,13 @@ if (service_type === "Restaurant") {
               <label for="laundry_chk_${idx}">${item}</label>
             </div>
             <div class="item-controls">
-              <input type="number" id="laundry_rate_${idx}" class="form-control" readonly style="width:80px;" placeholder="Rate">
+              <input type="number" id="laundry_rate_${idx}" class="form-control-col" readonly style="width:80px;" placeholder="Rate">
             </div>
             <div class="item-controls">
-              <input type="number" id="laundry_qty_${idx}" class="form-control" min="1" value="1" style="width:70px;" disabled>
+              <input type="number" id="laundry_qty_${idx}" class="form-control-col" min="1" value="1" style="width:70px;" disabled>
             </div>
             <div>
-              <input type="text" id="laundry_remark_${idx}" class="form-control" placeholder="Remarks" disabled>
+              <input type="text" id="laundry_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
         });
@@ -413,13 +417,13 @@ if (service_type === "Restaurant") {
               <label for="trans_chk_${idx}">${item}</label>
             </div>
             <div class="item-controls">
-              <input type="number" id="trans_rate_${idx}" class="form-control" readonly style="width:80px;" placeholder="Rate">
+              <input type="number" id="trans_rate_${idx}" class="form-control-col" readonly style="width:80px;" placeholder="Rate">
             </div>
             <div class="item-controls">
-              <input type="number" id="trans_pass_${idx}" class="form-control" min="1" value="1" placeholder="Passengers" style="width:80px;" disabled>
+              <input type="number" id="trans_pass_${idx}" class="form-control-col" min="1" value="1" placeholder="Passengers" style="width:80px;" disabled>
             </div>
             <div>
-              <input type="text" id="trans_remark_${idx}" class="form-control" placeholder="Remarks" disabled>
+              <input type="text" id="trans_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
         });
@@ -452,7 +456,7 @@ if (service_type === "Restaurant") {
       let html = `
         <div class="form-group">
           <label>Describe Service</label>
-          <input type="text" id="service_item_other" class="form-control" placeholder="Enter service details">
+          <input type="text" id="service_item_other" class="form-control-col" placeholder="Enter service details">
         </div>
       `;
       container.html(html);
