@@ -25,37 +25,29 @@ class RoomOrder {
           ? `<img src="${data.logo}" class="company-logo">`
           : `<div class="company-logo-placeholder">No Logo</div>`;
 
-        let address_html = "";
-        if (data.address) {
-          const addr = data.address;
-          address_html = `
-          ${addr.address_line1 || ""}${addr.address_line2 ? ", " + addr.address_line2 : ""}, 
-          ${addr.city || ""}, ${addr.state || ""}, ${addr.country || ""}
-        `;
-        }
+        let address_html = data.address ? data.address : "";
 
         const contact_html = `
-        ${data.phone_no ? `${data.phone_no}` : ""}
-        ${data.email ? `, ${data.email}` : ""}
-      `;
+  ${data.phone ? `${data.phone}` : ""}
+  ${data.email ? `, ${data.email}` : ""}
+`;
 
         const header_html = `
-        <div class="company-header-inner">
-          <div class="company-left">
-            ${logo_html}
-          </div>
-          <div class="company-right">
-            <h2 class="company-name">${data.company_name}</h2>
-            <div class="company-details">
-              ${address_html ? `<div>${address_html}</div>` : ""}
-              ${contact_html ? `<div>${contact_html}</div>` : ""}
-            </div>
-          </div>
-        </div>
-      `;
+  <div class="company-header-inner">
+    <div class="company-left">${logo_html}</div>
+    <div class="company-right">
+      <h2 class="company-name">${data.company_name}</h2>
+      <div class="company-details">
+        ${address_html ? `<div>${address_html}</div>` : ""}
+        ${contact_html ? `<div>${contact_html}</div>` : ""}
+      </div>
+    </div>
+  </div>
+`;
 
         $(".company-header-wrapper").remove();
         $(".combined-card .company-header").html(header_html);
+
       }
     });
   }

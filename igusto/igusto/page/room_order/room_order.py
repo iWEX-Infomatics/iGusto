@@ -86,42 +86,89 @@ def get_item_rate(item_name):
 
 @frappe.whitelist(allow_guest=True)
 def get_company_details():
-    company = frappe.get_all("Company", fields=["name", "company_name", "phone_no", "email"], limit=1)
+    company = frappe.get_all(
+        "Company",
+        fields=["name", "company_name", "phone_no", "email", "custom_address"],
+        limit=1
+    )
     if not company:
         return {}
 
     company = company[0]
 
-    # ✅ Get address where is_your_company_address == 1
-    address = frappe.get_all(
+    # ----------------------------------------
+    #  PRIORITY: CUSTOM ADDRESS ONLY
+    # ----------------------------------------
+    if company.custom_address:
+        return {
+            "company_name": company.company_name or company.name,
+            "address": company.custom_address,
+            "phone": "",
+            "email": "",
+            "logo": _get_company_logo(company.name)
+        }
+
+    # ----------------------------------------
+    # FALLBACK: Address Doctype
+    # ----------------------------------------
+    addr = frappe.get_all(
         "Address",
         filters={"is_your_company_address": 1},
-        fields=["name", "address_line1", "address_line2", "city", "state", "pincode", "country"],
+        fields=[
+            "address_line1",
+            "address_line2",
+            "city",
+            "state",
+            "pincode",
+            "country",
+            "phone",
+            "email_id"
+        ],
         limit=1
     )
-    address = address[0] if address else {}
 
-    # ✅ Get logo from File (attachment to Company)
+    if addr:
+        ad = addr[0]
+
+        address_text = ", ".join(filter(None, [
+            ad.get("address_line1"),
+            ad.get("address_line2"),
+            ad.get("city"),
+            ad.get("state"),
+            ad.get("pincode"),
+            ad.get("country")
+        ]))
+
+        phone = ad.get("phone") or company.phone_no or ""
+        email = ad.get("email_id") or company.email or ""
+
+    else:
+        # FINAL FALLBACK
+        address_text = ""
+        phone = company.phone_no or ""
+        email = company.email or ""
+
+    return {
+        "company_name": company.company_name or company.name,
+        "address": address_text,
+        "phone": phone,
+        "email": email,
+        "logo": _get_company_logo(company.name)
+    }
+
+
+def _get_company_logo(company_name):
     file = frappe.get_all(
         "File",
         filters={
             "attached_to_doctype": "Company",
-            "attached_to_name": company.name,
+            "attached_to_name": company_name,
             "is_private": 0
         },
         fields=["file_url"],
         limit=1
     )
-    logo_url = file[0].file_url if file else ""
-
-    return {
-        "company_name": company.company_name,
-        "email": company.email,
-        "phone_no": company.phone_no,
-        "address": address,
-        "logo": logo_url
-    }
-
+    return file[0].file_url if file else ""
 
 @frappe.whitelist()
 def create_room_order(data):
