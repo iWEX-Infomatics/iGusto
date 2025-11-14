@@ -23,14 +23,16 @@
   "id_proof_number",
   "section_company",
   "company",
+  "column_break_cqfr",
   "designation",
   "section_extra",
   "guest_photo",
-  "notes",
   "is_foreign_national",
   "passport_no",
   "visa_type",
-  "visa_valid_till"
+  "visa_valid_till",
+  "column_break_iwsd",
+  "notes"
  ],
  "fields": [
   {
@@ -174,10 +176,18 @@
   {
    "fieldname": "column_break_uqra",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_cqfr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_iwsd",
+   "fieldtype": "Column Break"
   }
  ],
  "links": [],
- "modified": "2025-11-11 16:51:14.937350",
+ "modified": "2025-11-14 11:01:57.874130",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Guest",
