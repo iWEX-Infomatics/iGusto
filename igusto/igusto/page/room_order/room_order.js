@@ -9,37 +9,37 @@ class RoomOrder {
       title: '',
       single_column: true
     });
-  this.make();
-  this.load_company_details();
-  this.load_room_numbers();
+    this.make();
+    this.load_company_details();
+    this.load_room_numbers();
 
   }
-load_company_details() {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_company_details",
-    callback: (r) => {
-      const data = r.message;
-      if (!data) return;
+  load_company_details() {
+    frappe.call({
+      method: "igusto.igusto.page.room_order.room_order.get_company_details",
+      callback: (r) => {
+        const data = r.message;
+        if (!data) return;
 
-      const logo_html = data.logo
-        ? `<img src="${data.logo}" class="company-logo">`
-        : `<div class="company-logo-placeholder">No Logo</div>`;
+        const logo_html = data.logo
+          ? `<img src="${data.logo}" class="company-logo">`
+          : `<div class="company-logo-placeholder">No Logo</div>`;
 
-      let address_html = "";
-      if (data.address) {
-        const addr = data.address;
-        address_html = `
+        let address_html = "";
+        if (data.address) {
+          const addr = data.address;
+          address_html = `
           ${addr.address_line1 || ""}${addr.address_line2 ? ", " + addr.address_line2 : ""}, 
           ${addr.city || ""}, ${addr.state || ""}, ${addr.country || ""}
         `;
-      }
+        }
 
-      const contact_html = `
+        const contact_html = `
         ${data.phone_no ? `${data.phone_no}` : ""}
         ${data.email ? `, ${data.email}` : ""}
       `;
 
-      const header_html = `
+        const header_html = `
         <div class="company-header-inner">
           <div class="company-left">
             ${logo_html}
@@ -54,50 +54,50 @@ load_company_details() {
         </div>
       `;
 
-      $(".company-header-wrapper").remove();
-      $(".combined-card .company-header").html(header_html);
-    }
-  });
-}
+        $(".company-header-wrapper").remove();
+        $(".combined-card .company-header").html(header_html);
+      }
+    });
+  }
 
 
   make() {
     $(frappe.render_template("room_order", {})).appendTo(this.page.body);
 
-const urlParams = new URLSearchParams(window.location.search);
-const qr_room_number = urlParams.get("room_number");
+    const urlParams = new URLSearchParams(window.location.search);
+    const qr_room_number = urlParams.get("room_number");
 
-if (qr_room_number) {
-  // Fill "Order From" field
-  const $orderFrom = $("input[placeholder='Enter Room Number']");
-  $orderFrom
-    .val(qr_room_number)
-    .prop("readonly", true)
-    .css({
-      background: "#f5f5f5",
-      fontWeight: "600",
-      color: "#333",
-    });
+    if (qr_room_number) {
+      // Fill "Order From" field
+      const $orderFrom = $("input[placeholder='Enter Room Number']");
+      $orderFrom
+        .val(qr_room_number)
+        .prop("readonly", true)
+        .css({
+          background: "#f5f5f5",
+          fontWeight: "600",
+          color: "#333",
+        });
 
-  frappe.show_alert({
-    message: `Room ${qr_room_number} detected from QR!`,
-    indicator: "green",
-  });
+      // frappe.show_alert({
+      //   message: `Room ${qr_room_number} detected from QR!`,
+      //   indicator: "green",
+      // });
 
-  // Fetch and fill guest name
-    frappe.call({
-      method: "igusto.igusto.page.room_order.room_order.get_guest_by_room",
-      args: { room_number: qr_room_number },
-      callback: function (r) {
-        console.log("Guest Response:", r);
-        if (r.message) {
-          $("#guest_name").val(r.message);
-        } else {
-          frappe.msgprint("No guest found for this room.");
+      // Fetch and fill guest name
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_guest_by_room",
+        args: { room_number: qr_room_number },
+        callback: function (r) {
+          console.log("Guest Response:", r);
+          if (r.message) {
+            $("#guest_name").val(r.message);
+          } else {
+            frappe.msgprint("No guest found for this room.");
+          }
         }
-      }
-    });
-}
+      });
+    }
 
     // listeners
     $("#service_type").on("change", (e) => {
@@ -156,12 +156,12 @@ if (qr_room_number) {
     if (!service_type) return;
 
     // RESTAURANT
-if (service_type === "Restaurant") {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_menu_items",
-    callback: (r) => {
-      if (r.message) {
-      let html = `
+    if (service_type === "Restaurant") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_menu_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `
         <div class="child-table-wrapper">
           <table class="child-table" id="restaurant_table">
             <thead>
@@ -181,13 +181,13 @@ if (service_type === "Restaurant") {
         <button type="button" class="add-row-btn" id="add_row_btn">+ Add Row</button>
       `;
 
-        container.html(html);
+            container.html(html);
 
-        const addRow = () => {
-          const options = r.message
-            .map(i => `<option value="${i.item_name}">${i.item_name}</option>`)
-            .join("");
-          const row = `
+            const addRow = () => {
+              const options = r.message
+                .map(i => `<option value="${i.item_name}">${i.item_name}</option>`)
+                .join("");
+              const row = `
             <tr>
               <td><select class="form-control-col item_name"><option value="">Select</option>${options}</select></td>
               <td><input type="number" class="form-control-col rate" min="0" value="0" readonly></td>
@@ -196,63 +196,63 @@ if (service_type === "Restaurant") {
               <td><input type="text" class="form-control-col remarks" placeholder="Remarks"></td>
               <td><span class="remove-row">✕</span></td>
             </tr>`;
-          $("#restaurant_table tbody").append(row);
-        };
+              $("#restaurant_table tbody").append(row);
+            };
 
-        $("#add_row_btn").on("click", addRow);
-        addRow();
+            $("#add_row_btn").on("click", addRow);
+            addRow();
 
-        // remove row
-        container.on("click", ".remove-row", function () {
-          $(this).closest("tr").remove();
-        });
+            // remove row
+            container.on("click", ".remove-row", function () {
+              $(this).closest("tr").remove();
+            });
 
-        // auto-calc amount whenever qty changes (rate is fixed)
-        container.on("input", ".qty", function () {
-          const row = $(this).closest("tr");
-          const rate = parseFloat(row.find(".rate").val() || 0);
-          const qty = parseFloat(row.find(".qty").val() || 0);
-          row.find(".amount").val((rate * qty).toFixed(2));
-        });
+            // auto-calc amount whenever qty changes (rate is fixed)
+            container.on("input", ".qty", function () {
+              const row = $(this).closest("tr");
+              const rate = parseFloat(row.find(".rate").val() || 0);
+              const qty = parseFloat(row.find(".qty").val() || 0);
+              row.find(".amount").val((rate * qty).toFixed(2));
+            });
 
-        // fetch rate from Item Price (price_list_rate)
-        container.on("change", ".item_name", function () {
-          const item_name = $(this).val();
-          const row = $(this).closest("tr");
-          const rateInput = row.find(".rate");
+            // fetch rate from Item Price (price_list_rate)
+            container.on("change", ".item_name", function () {
+              const item_name = $(this).val();
+              const row = $(this).closest("tr");
+              const rateInput = row.find(".rate");
 
-          if (item_name) {
-            frappe.call({
-              method: "frappe.client.get_value",
-              args: {
-                doctype: "Item Price",
-                filters: { item_code: item_name },
-                fieldname: ["price_list_rate"]
-              },
-              callback: (res) => {
-                const rate = res.message?.price_list_rate || 0;
-                rateInput.val(rate);
-                const qty = parseFloat(row.find(".qty").val() || 1);
-                row.find(".amount").val((rate * qty).toFixed(2));
+              if (item_name) {
+                frappe.call({
+                  method: "frappe.client.get_value",
+                  args: {
+                    doctype: "Item Price",
+                    filters: { item_code: item_name },
+                    fieldname: ["price_list_rate"]
+                  },
+                  callback: (res) => {
+                    const rate = res.message?.price_list_rate || 0;
+                    rateInput.val(rate);
+                    const qty = parseFloat(row.find(".qty").val() || 1);
+                    row.find(".amount").val((rate * qty).toFixed(2));
+                  }
+                });
+              } else {
+                rateInput.val("0");
+                row.find(".amount").val("0");
               }
             });
-          } else {
-            rateInput.val("0");
-            row.find(".amount").val("0");
           }
-        });
-      }
+        }
+      });
     }
-  });
-}
- else if (service_type === "Room Service") {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_service_items",
-    callback: (r) => {
-      if (r.message) {
-        let html = `<label>Room Service Items</label>`;
-        r.message.forEach((item, idx) => {
-          html += `
+    else if (service_type === "Room Service") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_service_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Room Service Items</label>`;
+            r.message.forEach((item, idx) => {
+              html += `
           <div class="item-row" data-item-index="${idx}">
             <div>
               <input type="checkbox" id="rs_chk_${idx}" name="service_item" value="${item}">
@@ -268,46 +268,46 @@ if (service_type === "Restaurant") {
               <input type="text" id="rs_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
-        });
-        container.html(html);
+            });
+            container.html(html);
 
-        r.message.forEach((item, idx) => {
-          // fetch price once when rendering
-          frappe.call({
-            method: "frappe.client.get_value",
-            args: {
-              doctype: "Item Price",
-              filters: { item_code: item },
-              fieldname: "price_list_rate"
-            },
-            callback: (res) => {
-              if (res.message && res.message.price_list_rate) {
-                $(`#rs_rate_${idx}`).val(res.message.price_list_rate);
-              } else {
-                $(`#rs_rate_${idx}`).val("0");
-              }
-            }
-          });
+            r.message.forEach((item, idx) => {
+              // fetch price once when rendering
+              frappe.call({
+                method: "frappe.client.get_value",
+                args: {
+                  doctype: "Item Price",
+                  filters: { item_code: item },
+                  fieldname: "price_list_rate"
+                },
+                callback: (res) => {
+                  if (res.message && res.message.price_list_rate) {
+                    $(`#rs_rate_${idx}`).val(res.message.price_list_rate);
+                  } else {
+                    $(`#rs_rate_${idx}`).val("0");
+                  }
+                }
+              });
 
-          // enable/disable controls
-          $(`#rs_chk_${idx}`).on("change", function () {
-            const checked = $(this).is(":checked");
-            $(`#rs_qty_${idx}, #rs_remark_${idx}`).prop("disabled", !checked);
-          });
-        });
-      }
-    }
-  });
+              // enable/disable controls
+              $(`#rs_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#rs_qty_${idx}, #rs_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
-    // SPA
-   } else if (service_type === "Spa") {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_spa_items",
-    callback: (r) => {
-      if (r.message) {
-        let html = `<label>Spa Services</label>`;
-        r.message.forEach((item, idx) => {
-          html += `
+      // SPA
+    } else if (service_type === "Spa") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_spa_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Spa Services</label>`;
+            r.message.forEach((item, idx) => {
+              html += `
           <div class="item-row" data-item-index="${idx}">
             <div>
               <input type="checkbox" id="spa_chk_${idx}" name="service_item" value="${item}">
@@ -323,45 +323,45 @@ if (service_type === "Restaurant") {
               <input type="text" id="spa_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
-        });
-        container.html(html);
+            });
+            container.html(html);
 
-        r.message.forEach((item, idx) => {
-          // fetch price from Item Price
-          frappe.call({
-            method: "frappe.client.get_value",
-            args: {
-              doctype: "Item Price",
-              filters: { item_code: item },
-              fieldname: "price_list_rate"
-            },
-            callback: (res) => {
-              if (res.message && res.message.price_list_rate) {
-                $(`#spa_rate_${idx}`).val(res.message.price_list_rate);
-              } else {
-                $(`#spa_rate_${idx}`).val("0");
-              }
-            }
-          });
+            r.message.forEach((item, idx) => {
+              // fetch price from Item Price
+              frappe.call({
+                method: "frappe.client.get_value",
+                args: {
+                  doctype: "Item Price",
+                  filters: { item_code: item },
+                  fieldname: "price_list_rate"
+                },
+                callback: (res) => {
+                  if (res.message && res.message.price_list_rate) {
+                    $(`#spa_rate_${idx}`).val(res.message.price_list_rate);
+                  } else {
+                    $(`#spa_rate_${idx}`).val("0");
+                  }
+                }
+              });
 
-          $(`#spa_chk_${idx}`).on("change", function () {
-            const checked = $(this).is(":checked");
-            $(`#spa_qty_${idx}, #spa_remark_${idx}`).prop("disabled", !checked);
-          });
-        });
-      }
-    }
-  });
+              $(`#spa_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#spa_qty_${idx}, #spa_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
-    // LAUNDRY
+      // LAUNDRY
     } else if (service_type === "Laundry") {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_laundry_items",
-    callback: (r) => {
-      if (r.message) {
-        let html = `<label>Laundry Services</label>`;
-        r.message.forEach((item, idx) => {
-          html += `
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_laundry_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Laundry Services</label>`;
+            r.message.forEach((item, idx) => {
+              html += `
           <div class="item-row" data-item-index="${idx}">
             <div>
               <input type="checkbox" id="laundry_chk_${idx}" name="service_item" value="${item}">
@@ -377,40 +377,40 @@ if (service_type === "Restaurant") {
               <input type="text" id="laundry_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
-        });
-        container.html(html);
+            });
+            container.html(html);
 
-        r.message.forEach((item, idx) => {
-          frappe.call({
-            method: "frappe.client.get_value",
-            args: {
-              doctype: "Item Price",
-              filters: { item_code: item },
-              fieldname: "price_list_rate"
-            },
-            callback: (res) => {
-              $(`#laundry_rate_${idx}`).val(res.message?.price_list_rate || "0");
-            }
-          });
+            r.message.forEach((item, idx) => {
+              frappe.call({
+                method: "frappe.client.get_value",
+                args: {
+                  doctype: "Item Price",
+                  filters: { item_code: item },
+                  fieldname: "price_list_rate"
+                },
+                callback: (res) => {
+                  $(`#laundry_rate_${idx}`).val(res.message?.price_list_rate || "0");
+                }
+              });
 
-          $(`#laundry_chk_${idx}`).on("change", function () {
-            const checked = $(this).is(":checked");
-            $(`#laundry_qty_${idx}, #laundry_remark_${idx}`).prop("disabled", !checked);
-          });
-        });
-      }
-    }
-  });
+              $(`#laundry_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#laundry_qty_${idx}, #laundry_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
-    // TRANSPORT
-   } else if (service_type === "Transport") {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_transport_items",
-    callback: (r) => {
-      if (r.message) {
-        let html = `<label>Transport Options</label>`;
-        r.message.forEach((item, idx) => {
-          html += `
+      // TRANSPORT
+    } else if (service_type === "Transport") {
+      frappe.call({
+        method: "igusto.igusto.page.room_order.room_order.get_transport_items",
+        callback: (r) => {
+          if (r.message) {
+            let html = `<label>Transport Options</label>`;
+            r.message.forEach((item, idx) => {
+              html += `
           <div class="item-row" data-item-index="${idx}">
             <div>
               <input type="checkbox" id="trans_chk_${idx}" name="service_item" value="${item}">
@@ -426,30 +426,30 @@ if (service_type === "Restaurant") {
               <input type="text" id="trans_remark_${idx}" class="form-control-col" placeholder="Remarks" disabled>
             </div>
           </div>`;
-        });
-        container.html(html);
+            });
+            container.html(html);
 
-        r.message.forEach((item, idx) => {
-          frappe.call({
-            method: "frappe.client.get_value",
-            args: {
-              doctype: "Item Price",
-              filters: { item_code: item },
-              fieldname: "price_list_rate"
-            },
-            callback: (res) => {
-              $(`#trans_rate_${idx}`).val(res.message?.price_list_rate || "0");
-            }
-          });
+            r.message.forEach((item, idx) => {
+              frappe.call({
+                method: "frappe.client.get_value",
+                args: {
+                  doctype: "Item Price",
+                  filters: { item_code: item },
+                  fieldname: "price_list_rate"
+                },
+                callback: (res) => {
+                  $(`#trans_rate_${idx}`).val(res.message?.price_list_rate || "0");
+                }
+              });
 
-          $(`#trans_chk_${idx}`).on("change", function () {
-            const checked = $(this).is(":checked");
-            $(`#trans_pass_${idx}, #trans_remark_${idx}`).prop("disabled", !checked);
-          });
-        });
-      }
-    }
-  });
+              $(`#trans_chk_${idx}`).on("change", function () {
+                const checked = $(this).is(":checked");
+                $(`#trans_pass_${idx}, #trans_remark_${idx}`).prop("disabled", !checked);
+              });
+            });
+          }
+        }
+      });
 
 
     } else if (service_type === "Other") {
