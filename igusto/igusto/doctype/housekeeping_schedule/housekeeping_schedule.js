@@ -42,7 +42,7 @@ frappe.ui.form.on('Housekeeping Schedule', {
                             project_template.tasks.forEach((t) => {
                                 const row = frm.add_child("task_schedule");
                                 row.task = t.task || "";
-                                row.subject = t.subject || t.title || ""; // agar tumhare childtable me subject field hai
+                                row.subject = t.subject || t.title || ""; 
                             });
                         }
 

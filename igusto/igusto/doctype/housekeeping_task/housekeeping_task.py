@@ -10,7 +10,7 @@ class HousekeepingTask(Document):
     def before_save(self):
         """Set assigned_to from ToDo allocated_to for child table tasks"""
         for row in self.housekeeping_task_detail:
-            if row.task:  # Agar task field mein value hai
+            if row.task:  
                 allocated_user = self.get_allocated_user_from_task(row.task)
                 if allocated_user:
                     row.assigned_to = allocated_user
@@ -34,14 +34,14 @@ class HousekeepingTask(Document):
         Task ID (reference_name) se ToDo find karo
         aur allocated_to (User ID) return karo
         """
-        # ToDo table mein query - jahan reference_name = task_name
+        # ToDo table  reference_name = task_name
         todo = frappe.db.get_value(
             'ToDo',
             {
                 'reference_type': 'Task',
-                'reference_name': task_name  # Yeh Task ID hai
+                'reference_name': task_name  
             },
-            'allocated_to'  # Yeh User ID return hogi
+            'allocated_to'  
         )
         
         return todo if todo else None
