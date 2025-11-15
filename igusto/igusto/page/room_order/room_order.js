@@ -27,10 +27,21 @@ class RoomOrder {
 
         let address_html = data.address ? data.address : "";
 
-      const contact_html = `
-        ${typeof data.phone === "string" ? data.phone : ""}
-        ${typeof data.email === "string" ? ", " + data.email : ""}
-      `;
+const hasCustomAddress = data.custom_address && data.custom_address.trim() !== "";
+
+let contact_html = "";
+
+// Show phone + email only when custom_address is NOT present
+if (!hasCustomAddress) {
+  if (typeof data.phone === "string" && data.phone.trim() !== "") {
+    contact_html += data.phone;
+  }
+
+  if (typeof data.email === "string" && data.email.trim() !== "") {
+    // Add comma only if phone also exists
+    contact_html += (contact_html ? ", " : "") + data.email;
+  }
+}
 
         const header_html = `
   <div class="company-header-inner">
