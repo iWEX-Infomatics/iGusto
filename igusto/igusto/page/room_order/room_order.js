@@ -10,8 +10,12 @@ class RoomOrder {
       single_column: true
     });
     this.make();
-    this.load_company_details();
-    this.load_room_numbers();
+
+    setTimeout(() => {
+      this.load_company_details();
+      this.load_room_numbers();
+    }, 300);
+
 
   }
 load_company_details() {
@@ -25,14 +29,11 @@ load_company_details() {
         ? `<img src="${data.logo}" class="company-logo">`
         : `<div class="company-logo-placeholder">No Logo</div>`;
 
-      const address = data.address || "";
-      const email = data.email || "";
-      const phone = data.phone_no || "";
+      // HARD CODED ADDRESS ONLY
+      const address_line = "Munnar";
 
-      // ⭐ Final Single Line: address | email | phone
-      const single_line = [address, phone, email]
-        .filter(v => v && v.trim() !== "")
-        .join(" | ");
+      // Dynamic phone + email
+      const contact_line = ` ${data.phone_no || ""} |${data.email || ""}`;
 
       const header_html = `
         <div class="company-header-inner">
@@ -40,14 +41,13 @@ load_company_details() {
           <div class="company-right">
             <h2 class="company-name">${data.company_name}</h2>
             <div class="company-details">
-              <div>${single_line}</div>
+              <div>${address_line} | ${contact_line}</div>
             </div>
           </div>
         </div>
       `;
 
-      $(".company-header-wrapper").remove();
-      $(".combined-card .company-header").html(header_html);
+      $(".company-header").html(header_html);
     }
   });
 }
