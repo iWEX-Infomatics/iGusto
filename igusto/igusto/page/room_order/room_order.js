@@ -25,15 +25,8 @@ load_company_details() {
           ? `<img src="${data.logo}" class="company-logo">`
           : `<div class="company-logo-placeholder">No Logo</div>`;
 
-        // Ensure address is a string
-        let address_html = "";
-        if (data.address) {
-          if (typeof data.address === "object") {
-            address_html = JSON.stringify(data.address); // Fallback for objects
-          } else {
-            address_html = String(data.address);
-          }
-        }
+        // Simply get address as string - NO JSON.stringify
+        let address_html = data.address || "";
 
         const hasCustomAddress = data.custom_address && 
                                  typeof data.custom_address === "string" && 
@@ -70,7 +63,6 @@ load_company_details() {
       }
     });
   }
-
 
   make() {
     $(frappe.render_template("room_order", {})).appendTo(this.page.body);
