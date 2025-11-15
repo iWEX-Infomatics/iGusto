@@ -99,11 +99,7 @@ def get_company_details():
     # Clean and convert custom_address to string
     custom_address = company.get("custom_address") or ""
     if custom_address:
-        # Convert to string and strip HTML if needed
         custom_address = str(custom_address).strip()
-        # Remove HTML tags if present
-        import re
-        custom_address = re.sub('<[^<]+?>', '', custom_address)
 
     # ----------------------------------------
     #  PRIORITY: CUSTOM ADDRESS ONLY
@@ -137,6 +133,10 @@ def get_company_details():
         limit=1
     )
 
+    address_text = ""
+    phone = ""
+    email = ""
+
     if addr:
         ad = addr[0]
 
@@ -154,7 +154,6 @@ def get_company_details():
 
     else:
         # FINAL FALLBACK
-        address_text = ""
         phone = str(company.phone_no or "")
         email = str(company.email or "")
 
@@ -166,7 +165,6 @@ def get_company_details():
         "email": email,
         "logo": _get_company_logo(company.name)
     }
-
 
 def _get_company_logo(company_name):
     file = frappe.get_all(
