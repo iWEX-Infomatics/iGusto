@@ -25,7 +25,6 @@ load_company_details() {
           ? `<img src="${data.logo}" class="company-logo">`
           : `<div class="company-logo-placeholder">No Logo</div>`;
 
-        // Simply get address as string - NO JSON.stringify
         let address_html = data.address || "";
 
         const hasCustomAddress = data.custom_address && 
@@ -34,7 +33,6 @@ load_company_details() {
 
         let contact_html = "";
 
-        // Show phone + email only when custom_address is NOT present
         if (!hasCustomAddress) {
           if (typeof data.phone === "string" && data.phone.trim() !== "") {
             contact_html += data.phone;
