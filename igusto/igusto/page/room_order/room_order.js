@@ -14,7 +14,7 @@ class RoomOrder {
     this.load_room_numbers();
 
   }
-  load_company_details() {
+load_company_details() {
     frappe.call({
       method: "igusto.igusto.page.room_order.room_order.get_company_details",
       callback: (r) => {
@@ -25,40 +25,48 @@ class RoomOrder {
           ? `<img src="${data.logo}" class="company-logo">`
           : `<div class="company-logo-placeholder">No Logo</div>`;
 
-        let address_html = data.address ? data.address : "";
+        // Ensure address is a string
+        let address_html = "";
+        if (data.address) {
+          if (typeof data.address === "object") {
+            address_html = JSON.stringify(data.address); // Fallback for objects
+          } else {
+            address_html = String(data.address);
+          }
+        }
 
-const hasCustomAddress = data.custom_address && data.custom_address.trim() !== "";
+        const hasCustomAddress = data.custom_address && 
+                                 typeof data.custom_address === "string" && 
+                                 data.custom_address.trim() !== "";
 
-let contact_html = "";
+        let contact_html = "";
 
-// Show phone + email only when custom_address is NOT present
-if (!hasCustomAddress) {
-  if (typeof data.phone === "string" && data.phone.trim() !== "") {
-    contact_html += data.phone;
-  }
+        // Show phone + email only when custom_address is NOT present
+        if (!hasCustomAddress) {
+          if (typeof data.phone === "string" && data.phone.trim() !== "") {
+            contact_html += data.phone;
+          }
 
-  if (typeof data.email === "string" && data.email.trim() !== "") {
-    // Add comma only if phone also exists
-    contact_html += (contact_html ? ", " : "") + data.email;
-  }
-}
+          if (typeof data.email === "string" && data.email.trim() !== "") {
+            contact_html += (contact_html ? ", " : "") + data.email;
+          }
+        }
 
         const header_html = `
-  <div class="company-header-inner">
-    <div class="company-left">${logo_html}</div>
-    <div class="company-right">
-      <h2 class="company-name">${data.company_name}</h2>
-      <div class="company-details">
-        ${address_html ? `<div>${address_html}</div>` : ""}
-        ${contact_html ? `<div>${contact_html}</div>` : ""}
-      </div>
-    </div>
-  </div>
-`;
+          <div class="company-header-inner">
+            <div class="company-left">${logo_html}</div>
+            <div class="company-right">
+              <h2 class="company-name">${data.company_name}</h2>
+              <div class="company-details">
+                ${address_html ? `<div>${address_html}</div>` : ""}
+                ${contact_html ? `<div>${contact_html}</div>` : ""}
+              </div>
+            </div>
+          </div>
+        `;
 
         $(".company-header-wrapper").remove();
         $(".combined-card .company-header").html(header_html);
-
       }
     });
   }

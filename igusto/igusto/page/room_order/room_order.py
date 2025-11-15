@@ -95,14 +95,26 @@ def get_company_details():
         return {}
 
     company = company[0]
+    
+    # Clean custom_address and convert to string
+    custom_address = company.get("custom_address") or ""
+    if custom_address:
+        custom_address = str(custom_address).strip()
+        # Remove only HTML tags, but keep <br> temporarily
+        import re
+        # Remove all HTML tags except <br>
+        custom_address = re.sub(r'<(?!br\s*/?>)[^>]+>', '', custom_address)
+        # Normalize <br> tags to <br>
+        custom_address = re.sub(r'<br\s*/?>', '<br>', custom_address, flags=re.IGNORECASE)
 
     # ----------------------------------------
     #  PRIORITY: CUSTOM ADDRESS ONLY
     # ----------------------------------------
-    if company.custom_address:
+    if custom_address:
         return {
             "company_name": company.company_name or company.name,
-            "address": company.custom_address,
+            "address": custom_address,
+            "custom_address": custom_address,
             "phone": "",
             "email": "",
             "logo": _get_company_logo(company.name)
@@ -130,32 +142,33 @@ def get_company_details():
     if addr:
         ad = addr[0]
 
-        address_text = ", ".join(filter(None, [
-            ad.get("address_line1"),
-            ad.get("address_line2"),
-            ad.get("city"),
-            ad.get("state"),
-            ad.get("pincode"),
-            ad.get("country")
-        ]))
+        address_parts = []
+        for part in [ad.get("address_line1"), ad.get("address_line2"), 
+                     ad.get("city"), ad.get("state"), ad.get("pincode"), 
+                     ad.get("country")]:
+            if part:
+                address_parts.append(str(part))
+        
+        # Join with <br> for line breaks in HTML
+        address_text = "<br>".join(address_parts)
 
-        phone = ad.get("phone") or company.phone_no or ""
-        email = ad.get("email_id") or company.email or ""
+        phone = str(ad.get("phone") or company.phone_no or "")
+        email = str(ad.get("email_id") or company.email or "")
 
     else:
         # FINAL FALLBACK
         address_text = ""
-        phone = company.phone_no or ""
-        email = company.email or ""
+        phone = str(company.phone_no or "")
+        email = str(company.email or "")
 
     return {
         "company_name": company.company_name or company.name,
         "address": address_text,
+        "custom_address": None,
         "phone": phone,
         "email": email,
         "logo": _get_company_logo(company.name)
     }
-
 
 def _get_company_logo(company_name):
     file = frappe.get_all(
