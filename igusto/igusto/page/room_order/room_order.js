@@ -33,7 +33,7 @@ load_company_details() {
       const address_line = "Munnar";
 
       // Dynamic phone + email
-      const contact_line = ` ${data.phone_no || ""} |${data.email || ""}`;
+      const contact_line = ` ${data.phone_no || ""} | ${data.email || ""}`;
 
       const header_html = `
         <div class="company-header-inner">

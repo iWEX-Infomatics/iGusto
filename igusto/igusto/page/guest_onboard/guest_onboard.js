@@ -16,60 +16,61 @@ class GuestOnboarding {
 		this.load_company_details();
 	}
   
-  load_company_details() {
-    frappe.call({
-      method: "igusto.igusto.page.room_order.room_order.get_company_details",
-      callback: (r) => {
-        const data = r.message;
-        if (!data) return;
+load_company_details() {
+  frappe.call({
+    method: "igusto.igusto.page.room_order.room_order.get_company_details",
+    callback: (r) => {
+      const data = r.message;
+      if (!data) return;
 
-        const logo_html = data.logo
-          ? `<img src="${data.logo}" class="company-logo">`
-          : `<div class="company-logo-placeholder">No Logo</div>`;
+      const logo_html = data.logo
+        ? `<img src="${data.logo}" class="company-logo">`
+        : `<div class="company-logo-placeholder">No Logo</div>`;
 
-        let address_html = data.address ? data.address : "";
+      // HARD CODED ADDRESS ONLY
+      const address_line = "Munnar";
 
-        const contact_html = `
-  ${data.phone ? `${data.phone}` : ""}
-  ${data.email ? `, ${data.email}` : ""}
-`;
+      // Dynamic phone + email
+      const contact_line = ` ${data.phone_no || ""} | ${data.email || ""}`;
 
-        const header_html = `
-  <div class="company-header-inner">
-    <div class="company-left">${logo_html}</div>
-    <div class="company-right">
-      <h2 class="company-name">${data.company_name}</h2>
-      <div class="company-details">
-        ${address_html ? `<div>${address_html}</div>` : ""}
-        ${contact_html ? `<div>${contact_html}</div>` : ""}
-      </div>
-    </div>
-  </div>
-`;
+      const header_html = `
+        <div class="company-header-inner">
+          <div class="company-left">${logo_html}</div>
+          <div class="company-right">
+            <h2 class="company-name">${data.company_name}</h2>
+            <div class="company-details">
+              <div>${address_line} | ${contact_line}</div>
+            </div>
+          </div>
+        </div>
+      `;
 
-        $(".company-header-wrapper").remove();
-        $(".combined-card .company-header").html(header_html);
+      $(".company-header").html(header_html);
+    }
+  });
+}
 
-      }
+
+make() {
+    let me = this;
+
+    let html = frappe.render_template("guest_onboard", {});
+    $(html).appendTo(this.page.body);
+
+    // Load company header AFTER HTML loads
+    setTimeout(() => {
+        me.load_company_details();
+    }, 300);
+
+    setTimeout(() => {
+        me.prefill_guest_and_fields();
+    }, 300);
+
+    this.page.body.find("#btn_submit_onboard").on("click", function () {
+        me.submit_onboarding();
     });
-  }
-	make() {
-		let me = this;
+}
 
-		// Render HTML template
-		let html = frappe.render_template("guest_onboard", {});
-		$(html).appendTo(this.page.body);
-
-		// Prefill guest & fields
-		setTimeout(() => {
-			me.prefill_guest_and_fields();
-		}, 300);
-
-		// Submit button
-		this.page.body.find("#btn_submit_onboard").on("click", function () {
-			me.submit_onboarding();
-		});
-	}
 
 	async prefill_guest_and_fields() {
 		let guestName = "";
