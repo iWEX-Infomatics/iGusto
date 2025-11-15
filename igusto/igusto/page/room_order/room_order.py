@@ -96,16 +96,14 @@ def get_company_details():
 
     company = company[0]
     
-    # Clean custom_address and convert to string
+    # Clean and convert custom_address to string
     custom_address = company.get("custom_address") or ""
     if custom_address:
+        # Convert to string and strip HTML if needed
         custom_address = str(custom_address).strip()
-        # Remove only HTML tags, but keep <br> temporarily
+        # Remove HTML tags if present
         import re
-        # Remove all HTML tags except <br>
-        custom_address = re.sub(r'<(?!br\s*/?>)[^>]+>', '', custom_address)
-        # Normalize <br> tags to <br>
-        custom_address = re.sub(r'<br\s*/?>', '<br>', custom_address, flags=re.IGNORECASE)
+        custom_address = re.sub('<[^<]+?>', '', custom_address)
 
     # ----------------------------------------
     #  PRIORITY: CUSTOM ADDRESS ONLY
@@ -142,15 +140,14 @@ def get_company_details():
     if addr:
         ad = addr[0]
 
-        address_parts = []
-        for part in [ad.get("address_line1"), ad.get("address_line2"), 
-                     ad.get("city"), ad.get("state"), ad.get("pincode"), 
-                     ad.get("country")]:
-            if part:
-                address_parts.append(str(part))
-        
-        # Join with <br> for line breaks in HTML
-        address_text = "<br>".join(address_parts)
+        address_text = ", ".join(filter(None, [
+            str(ad.get("address_line1") or ""),
+            str(ad.get("address_line2") or ""),
+            str(ad.get("city") or ""),
+            str(ad.get("state") or ""),
+            str(ad.get("pincode") or ""),
+            str(ad.get("country") or "")
+        ]))
 
         phone = str(ad.get("phone") or company.phone_no or "")
         email = str(ad.get("email_id") or company.email or "")
@@ -169,6 +166,7 @@ def get_company_details():
         "email": email,
         "logo": _get_company_logo(company.name)
     }
+
 
 def _get_company_logo(company_name):
     file = frappe.get_all(
