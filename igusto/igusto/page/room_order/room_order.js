@@ -15,52 +15,35 @@ class RoomOrder {
 
   }
 load_company_details() {
-    frappe.call({
-      method: "igusto.igusto.page.room_order.room_order.get_company_details",
-      callback: (r) => {
-        const data = r.message;
-        if (!data) return;
+  frappe.call({
+    method: "igusto.igusto.page.room_order.room_order.get_company_details",
+    callback: (r) => {
+      const data = r.message;
+      if (!data) return;
 
-        const logo_html = data.logo
-          ? `<img src="${data.logo}" class="company-logo">`
-          : `<div class="company-logo-placeholder">No Logo</div>`;
+      const logo_html = data.logo
+        ? `<img src="${data.logo}" class="company-logo">`
+        : `<div class="company-logo-placeholder">No Logo</div>`;
 
-        let address_html = data.address || "";
+      const address_html = data.address || "";
 
-        const hasCustomAddress = data.custom_address && 
-                                 typeof data.custom_address === "string" && 
-                                 data.custom_address.trim() !== "";
-
-        let contact_html = "";
-
-        if (!hasCustomAddress) {
-          if (typeof data.phone === "string" && data.phone.trim() !== "") {
-            contact_html += data.phone;
-          }
-
-          if (typeof data.email === "string" && data.email.trim() !== "") {
-            contact_html += (contact_html ? ", " : "") + data.email;
-          }
-        }
-
-        const header_html = `
-          <div class="company-header-inner">
-            <div class="company-left">${logo_html}</div>
-            <div class="company-right">
-              <h2 class="company-name">${data.company_name}</h2>
-              <div class="company-details">
-                ${address_html ? `<div>${address_html}</div>` : ""}
-                ${contact_html ? `<div>${contact_html}</div>` : ""}
-              </div>
+      const header_html = `
+        <div class="company-header-inner">
+          <div class="company-left">${logo_html}</div>
+          <div class="company-right">
+            <h2 class="company-name">${data.company_name}</h2>
+            <div class="company-details">
+              ${address_html ? `<div>${address_html}</div>` : ""}
             </div>
           </div>
-        `;
+        </div>
+      `;
 
-        $(".company-header-wrapper").remove();
-        $(".combined-card .company-header").html(header_html);
-      }
-    });
-  }
+      $(".company-header-wrapper").remove();
+      $(".combined-card .company-header").html(header_html);
+    }
+  });
+}
 
   make() {
     $(frappe.render_template("room_order", {})).appendTo(this.page.body);

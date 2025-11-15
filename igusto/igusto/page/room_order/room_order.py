@@ -88,81 +88,20 @@ def get_item_rate(item_name):
 def get_company_details():
     company = frappe.get_all(
         "Company",
-        fields=["name", "company_name", "phone_no", "email", "custom_address"],
+        fields=["name", "company_description"],
         limit=1
     )
     if not company:
         return {}
 
     company = company[0]
-    
-    # Clean and convert custom_address to string
-    custom_address = company.get("custom_address") or ""
-    if custom_address:
-        custom_address = str(custom_address).strip()
 
-    # ----------------------------------------
-    #  PRIORITY: CUSTOM ADDRESS ONLY
-    # ----------------------------------------
-    if custom_address:
-        return {
-            "company_name": company.company_name or company.name,
-            "address": custom_address,
-            "custom_address": custom_address,
-            "phone": "",
-            "email": "",
-            "logo": _get_company_logo(company.name)
-        }
-
-    # ----------------------------------------
-    # FALLBACK: Address Doctype
-    # ----------------------------------------
-    addr = frappe.get_all(
-        "Address",
-        filters={"is_your_company_address": 1},
-        fields=[
-            "address_line1",
-            "address_line2",
-            "city",
-            "state",
-            "pincode",
-            "country",
-            "phone",
-            "email_id"
-        ],
-        limit=1
-    )
-
-    address_text = ""
-    phone = ""
-    email = ""
-
-    if addr:
-        ad = addr[0]
-
-        address_text = ", ".join(filter(None, [
-            str(ad.get("address_line1") or ""),
-            str(ad.get("address_line2") or ""),
-            str(ad.get("city") or ""),
-            str(ad.get("state") or ""),
-            str(ad.get("pincode") or ""),
-            str(ad.get("country") or "")
-        ]))
-
-        phone = str(ad.get("phone") or company.phone_no or "")
-        email = str(ad.get("email_id") or company.email or "")
-
-    else:
-        # FINAL FALLBACK
-        phone = str(company.phone_no or "")
-        email = str(company.email or "")
+    # Always use company_description as address
+    address_text = (company.get("company_description") or "").strip()
 
     return {
-        "company_name": company.company_name or company.name,
-        "address": address_text,
-        "custom_address": None,
-        "phone": phone,
-        "email": email,
+        "company_name": company.name,  
+        "address": address_text, 
         "logo": _get_company_logo(company.name)
     }
 
