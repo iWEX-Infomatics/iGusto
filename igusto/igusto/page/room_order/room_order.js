@@ -27,10 +27,10 @@ class RoomOrder {
 
         let address_html = data.address ? data.address : "";
 
-        const contact_html = `
-  ${data.phone ? `${data.phone}` : ""}
-  ${data.email ? `, ${data.email}` : ""}
-`;
+      const contact_html = `
+        ${typeof data.phone === "string" ? data.phone : ""}
+        ${typeof data.email === "string" ? ", " + data.email : ""}
+      `;
 
         const header_html = `
   <div class="company-header-inner">
