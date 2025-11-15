@@ -25,7 +25,14 @@ load_company_details() {
         ? `<img src="${data.logo}" class="company-logo">`
         : `<div class="company-logo-placeholder">No Logo</div>`;
 
-      const address_html = data.address || "";
+      const address = data.address || "";
+      const email = data.email || "";
+      const phone = data.phone_no || "";
+
+      // ⭐ Final Single Line: address | email | phone
+      const single_line = [address, phone, email]
+        .filter(v => v && v.trim() !== "")
+        .join(" | ");
 
       const header_html = `
         <div class="company-header-inner">
@@ -33,7 +40,7 @@ load_company_details() {
           <div class="company-right">
             <h2 class="company-name">${data.company_name}</h2>
             <div class="company-details">
-              ${address_html ? `<div>${address_html}</div>` : ""}
+              <div>${single_line}</div>
             </div>
           </div>
         </div>
@@ -44,6 +51,7 @@ load_company_details() {
     }
   });
 }
+
 
   make() {
     $(frappe.render_template("room_order", {})).appendTo(this.page.body);

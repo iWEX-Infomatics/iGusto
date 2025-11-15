@@ -88,7 +88,7 @@ def get_item_rate(item_name):
 def get_company_details():
     company = frappe.get_all(
         "Company",
-        fields=["name", "company_description"],
+        fields=["name", "phone_no", "email"],
         limit=1
     )
     if not company:
@@ -96,14 +96,14 @@ def get_company_details():
 
     company = company[0]
 
-    # Always use company_description as address
-    address_text = (company.get("company_description") or "").strip()
-
     return {
-        "company_name": company.name,  
-        "address": address_text, 
+        "company_name": company.name,
+        "address": "Munnar",
+        "phone_no": company.phone_no or "",   # ← correct key
+        "email": company.email or "",
         "logo": _get_company_logo(company.name)
     }
+
 
 def _get_company_logo(company_name):
     file = frappe.get_all(
