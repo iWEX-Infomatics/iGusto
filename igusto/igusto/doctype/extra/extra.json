@@ -9,6 +9,7 @@
   "extras_description",
   "extras_quantity",
   "extras_price",
+  "column_break_npep",
   "extras_status",
   "extras_notes",
   "amended_from"
@@ -25,10 +26,11 @@
   },
   {
    "fieldname": "extras_name",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_global_search": 1,
    "in_list_view": 1,
    "label": "Extra",
+   "options": "Item",
    "unique": 1
   },
   {
@@ -59,13 +61,17 @@
    "fieldname": "extras_notes",
    "fieldtype": "Small Text",
    "label": "Notes"
+  },
+  {
+   "fieldname": "column_break_npep",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-07 10:25:15.885329",
+ "modified": "2025-11-25 09:43:39.860015",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Extra",
