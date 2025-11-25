@@ -62,6 +62,11 @@ make() {
         me.load_company_details();
     }, 300);
 
+    // Create Nationality Link field
+    setTimeout(() => {
+        me.create_nationality_field();
+    }, 200);
+
     setTimeout(() => {
         me.prefill_guest_and_fields();
     }, 300);
@@ -69,6 +74,74 @@ make() {
     this.page.body.find("#btn_submit_onboard").on("click", function () {
         me.submit_onboarding();
     });
+
+    // Setup visibility logic for passport and visa fields
+    this.setup_passport_visa_visibility();
+}
+
+create_nationality_field() {
+    let me = this;
+    setTimeout(() => {
+        me.nationality_field = frappe.ui.form.make_control({
+            df: {
+                fieldtype: "Link",
+                fieldname: "nationality",
+                options: "Country",
+                // label: "Nationality",
+                placeholder: "Nationality"
+            },
+            parent: $("#nationality"),
+            render_input: true
+        });
+        if (me.nationality_field) {
+            me.nationality_field.refresh();
+        }
+    }, 100);
+}
+
+setup_passport_visa_visibility() {
+    let me = this;
+    
+    const updatePassportVisaVisibility = () => {
+        const nationality = (me.nationality_field && me.nationality_field.get_value()) || "";
+        const idProofType = $("#id_proof_type").val() || "";
+        
+        // Check if country is not India (case-insensitive)
+        const isNotIndia = nationality && nationality.toLowerCase() !== "india" && nationality.toLowerCase() !== "indian";
+        
+        // Show fields only if country is not India AND ID Proof Type is Passport
+        const shouldShow = isNotIndia && idProofType === "Passport";
+        
+        if (shouldShow) {
+            $("#passport_number_group").show();
+            $("#visa_number_group").show();
+        } else {
+            $("#passport_number_group").hide();
+            $("#visa_number_group").hide();
+            // Clear values when hidden
+            $("#passport_number").val("");
+            $("#visa_number").val("");
+        }
+    };
+
+    // Listen to changes in nationality field
+    setTimeout(() => {
+        if (me.nationality_field && me.nationality_field.$input) {
+            $(me.nationality_field.$input).on("change", function () {
+                updatePassportVisaVisibility();
+            });
+        }
+    }, 300);
+
+    // Listen to changes in ID Proof Type
+    $(this.page.body).on("change", "#id_proof_type", function () {
+        updatePassportVisaVisibility();
+    });
+
+    // Initial check after fields are loaded
+    setTimeout(() => {
+        updatePassportVisaVisibility();
+    }, 500);
 }
 
 
@@ -113,8 +186,24 @@ make() {
 		$("#from_date").val(booking.from_date || "");
 		$("#to_date").val(booking.to_date || "");
 		$("#no_of_guests").val(booking.no_of_guests || "");
-		$("#nationality").val(booking.nationality || "");
 		$("#room_type").val(booking.room_type || "");
+		
+		// Set nationality using Link field
+		if (booking.nationality && me.nationality_field) {
+			let normalizedNat = booking.nationality;
+			// Convert "Indian" or "india" to "India" for Country link
+			if (normalizedNat.toLowerCase() === 'indian' || normalizedNat.toLowerCase() === 'india') {
+				normalizedNat = 'India';
+			}
+			setTimeout(() => {
+				if (me.nationality_field && me.nationality_field.set_value) {
+					me.nationality_field.set_value(normalizedNat);
+					if (me.nationality_field.$input) {
+						me.nationality_field.$input.trigger("change");
+					}
+				}
+			}, 300);
+		}
 
 		// Step 5: Fetch guest info
 		if (guestName) {
@@ -124,7 +213,22 @@ make() {
 				callback: function (r) {
 					if (r.message) {
 						let g = r.message;
-						$("#nationality").val(g.nationality || "");
+						// Set nationality using Link field
+						if (g.nationality && me.nationality_field) {
+							let normalizedNat = g.nationality;
+							// Convert "Indian" or "india" to "India" for Country link
+							if (normalizedNat.toLowerCase() === 'indian' || normalizedNat.toLowerCase() === 'india') {
+								normalizedNat = 'India';
+							}
+							setTimeout(() => {
+								if (me.nationality_field && me.nationality_field.set_value) {
+									me.nationality_field.set_value(normalizedNat);
+									if (me.nationality_field.$input) {
+										me.nationality_field.$input.trigger("change");
+									}
+								}
+							}, 200);
+						}
 					}
 				}
 			});
@@ -168,7 +272,7 @@ make() {
 			from_date: $("#from_date").val(),
 			to_date: $("#to_date").val(),
 			no_of_guests: $("#no_of_guests").val(),
-			nationality: $("#nationality").val(),
+			nationality: (this.nationality_field && this.nationality_field.get_value()) || "",
 			passport_number: $("#passport_number").val(),
 			visa_number: $("#visa_number").val(),
 			id_proof_type: $("#id_proof_type").val(),

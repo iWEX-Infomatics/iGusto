@@ -9,7 +9,7 @@
 
       <!-- Name & Nationality Section -->
       <div class="guest-grid">
-        <input type="text" id="nationality" placeholder="Nationality *" class="guest-input">
+        <div id="nationality" class="guest-input-link"></div>
         <input type="text" id="first_name" placeholder="First Name *" class="guest-input">
       </div>
 
@@ -40,25 +40,24 @@
       <h3 style="margin-top:1rem;color:#757332;">Address Details</h3>
 
       <div class="guest-grid">
-        <input type="text" id="country" placeholder="Country *" class="guest-input">
-        <input type="text" id="pincode" placeholder="Pincode / Zip Code *" class="guest-input">
-      </div>
+        <input type="text" id="pincode" placeholder="Pincode / Zip Code *" class="guest-input" style="grid-column: span 1;">
+      <!-- </div>
 
-      <div class="guest-grid">
+      <div class="guest-grid"> -->
         <input type="text" id="address_line1" placeholder="Door / Building / Street *" class="guest-input">
-        <!-- </div>
+        </div>
 
-    <div class="guest-grid"> -->
+    <div class="guest-grid">
         <input type="text" id="city" placeholder="City *" class="guest-input">
-      </div>
-
-      <div class="guest-grid">
         <input type="text" id="post_office" placeholder="Post Office" class="guest-input">
-        <input type="text" id="district" placeholder="District / County" class="guest-input">
       </div>
 
       <div class="guest-grid">
+        <input type="text" id="district" placeholder="District / County" class="guest-input">
         <input type="text" id="state" placeholder="State / Province *" class="guest-input">
+      </div>
+
+      <!-- <div class="guest-grid"> -->
         <!-- </div>
 
     <div class="guest-actions"> -->
@@ -88,7 +87,9 @@
   .page-head {
     display: none;
   }
-
+  #signup_btn, #book_now_btn{
+   width: 100%;
+  }
   /* ===== Layout Wrapper ===== */
   .guest-form-wrapper {
     display: flex;
@@ -219,6 +220,81 @@
     background-color: #fff;
   }
 
+  /* Link field styling - match regular input fields exactly */
+  .guest-input-link {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    min-height: 45px;
+  }
+
+  .guest-input-link > div,
+  .guest-input-link .control-input-wrapper,
+  .guest-input-link .form-group {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    margin: 0;
+  }
+
+  .guest-input-link .control-input {
+    width: 100%;
+    padding: 0;
+    /* display: flex; */
+    align-items: stretch;
+    margin: 0;
+  }
+
+  .guest-input-link .control-input input[type="text"],
+  .guest-input-link input.form-control,
+  .guest-input-link .form-control {
+    width: 100% !important;
+    padding: 12px 14px !important;
+    border-radius: 10px !important;
+    border: 1px solid #d1d5db !important;
+    background-color: #fff !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+    flex: 1;
+    height: 45px !important;
+    min-height: 45px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    line-height: 1.5 !important;
+  }
+
+  .guest-input-link .control-input input[type="text"]:focus,
+  .guest-input-link input.form-control:focus,
+  .guest-input-link .form-control:focus {
+    border-color: #b5b35c !important;
+    box-shadow: 0 0 0 4px rgba(181, 179, 92, 0.25) !important;
+    outline: none !important;
+    background-color: #fff !important;
+  }
+
+  .guest-input-link .control-input .link-btn,
+  .guest-input-link .btn-link {
+    padding: 12px 14px !important;
+    border-radius: 0 10px 10px 0 !important;
+    border: 1px solid #d1d5db !important;
+    border-left: none !important;
+    border-right: none !important;
+    background-color: #fff !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+    height: 45px !important;
+    min-height: 45px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+  }
+
+  .guest-input-link .control-input .link-btn:hover,
+  .guest-input-link .btn-link:hover {
+    background-color: #f9fafb !important;
+  }
+
   /* ===== Buttons (Same Gold Gradient Style) ===== */
   .guest-btn {
     border: none;
@@ -325,6 +401,27 @@
     .guest-input {
       font-size: 14px;
       padding: 10px 12px;
+    }
+
+    .guest-input-link .control-input input[type="text"],
+    .guest-input-link input.form-control,
+    .guest-input-link .form-control {
+      font-size: 14px !important;
+      padding: 10px 12px !important;
+      height: 42px !important;
+      min-height: 42px !important;
+    }
+
+    .guest-input-link .control-input .link-btn,
+    .guest-input-link .btn-link {
+      font-size: 14px !important;
+      padding: 10px 12px !important;
+      height: 42px !important;
+      min-height: 42px !important;
+    }
+
+    .guest-input-link {
+      min-height: 42px;
     }
 
     .guest-btn {

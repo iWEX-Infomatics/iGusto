@@ -54,6 +54,23 @@ load_company_details() {
 		this.$body = $(frappe.render_template("guest_signup")).appendTo(this.page.main);
 		let guest_name = "";
 
+		// Create Nationality Link field
+		setTimeout(() => {
+			me.nationality_field = frappe.ui.form.make_control({
+				df: {
+					fieldtype: "Link",
+					fieldname: "nationality",
+					options: "Country",
+					// label: "Nationality",
+					// reqd: 1,
+					placeholder: "Nationality *"
+				},
+				parent: me.$body.find("#nationality"),
+				render_input: true
+			});
+			me.nationality_field.refresh();
+		}, 100);
+
 		// Auto-fill Full Name
 		const updateFullName = function() {
 			const first = $('#first_name').val()?.trim() || '';
@@ -77,22 +94,24 @@ load_company_details() {
 			$(this).val(val);
 		});
 
-		// Nationality logic
-		$('#nationality').on('input', function () {
-			const val = $(this).val()?.toLowerCase() || '';
-			if (val === 'indian' || val === 'india') {
-				$('#country').val('India').prop('readonly', true);
-				$('#pincode').attr('placeholder', 'Pincode *');
-				$('#country_code').val('+91');
-			} else {
-				$('#country').val('').prop('readonly', false);
-				$('#pincode').attr('placeholder', 'Zip / Postal Code *');
+		// Nationality logic - set up after field is created
+		setTimeout(() => {
+			if (me.nationality_field && me.nationality_field.$input) {
+				$(me.nationality_field.$input).on('change', function () {
+					const val = me.nationality_field.get_value()?.toLowerCase() || '';
+					if (val === 'indian' || val === 'india') {
+						$('#pincode').attr('placeholder', 'Pincode *');
+						$('#country_code').val('+91');
+					} else {
+						$('#pincode').attr('placeholder', 'Zip / Postal Code *');
+					}
+				});
 			}
-		});
+		}, 200);
 
 		// 🟢 Pincode auto-fill (Indian only)
 		$('#pincode').on('change', function () {
-			const nationality = $('#nationality').val()?.toLowerCase();
+			const nationality = (me.nationality_field && me.nationality_field.get_value())?.toLowerCase() || '';
 			if (nationality !== 'indian' && nationality !== 'india') return;
 
 			const pincode = $(this).val();
@@ -149,10 +168,10 @@ load_company_details() {
 			const full_name = $('#full_name').val();
 			const mobile = $('#mobile_no').val()?.replace(/\s/g, ''); // remove space before saving
 			const email = $('#email').val();
-			const nationality = $('#nationality').val();
+			const nationality = (me.nationality_field && me.nationality_field.get_value()) || '';
 
-			if (!first || !last || !mobile || !email) {
-				frappe.msgprint('Please fill mandatory fields: First Name, Last Name, Mobile No, and Email.');
+			if (!first || !last || !mobile || !email || !nationality) {
+				frappe.msgprint('Please fill mandatory fields: First Name, Last Name, Mobile No, Email, and Nationality.');
 				return;
 			}
 
@@ -160,7 +179,7 @@ load_company_details() {
 				address_line1: $('#address_line1').val(),
 				city: $('#city').val(),
 				state: $('#state').val(),
-				country: $('#country').val(),
+				country: nationality, // Use nationality (Country) as the address country
 				pincode: $('#pincode').val(),
 				post_office: $('#post_office').val(),
 				district: $('#district').val(),
@@ -183,16 +202,11 @@ load_company_details() {
 					if (r.message) {
 						guest_name = r.message.guest;
 
-						let normalizedNationality = nationality;
-						if (nationality && (nationality.toLowerCase() === 'indian' || nationality.toLowerCase() === 'india')) {
-							normalizedNationality = 'Indian';
-						}
-
 						const guestData = {
 							guest: guest_name,
 							mobile: mobile,
 							email: email,
-							nationality: normalizedNationality
+							nationality: nationality
 						};
 						localStorage.setItem("guest_data", JSON.stringify(guestData));
 

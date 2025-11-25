@@ -16,11 +16,33 @@ class RoomBooking {
 		$(frappe.render_template("room_booking")).appendTo(this.page.main);
 
 		frappe.after_ajax(() => {
+			this.create_nationality_field();
 			this.load_guest_data();
 			this.load_room_types();
 			this.setup_events();
 			this.load_company_details();
 		});
+	}
+
+	create_nationality_field() {
+		let me = this;
+		setTimeout(() => {
+			me.nationality_field = frappe.ui.form.make_control({
+				df: {
+					fieldtype: "Link",
+					fieldname: "nationality",
+					options: "Country",
+					// label: "Nationality",
+					// reqd: 1,
+					placeholder: "Nationality *"
+				},
+				parent: $("#nationality"),
+				render_input: true
+			});
+			if (me.nationality_field) {
+				me.nationality_field.refresh();
+			}
+		}, 100);
 	}
 
   
@@ -71,6 +93,7 @@ load_company_details() {
 
 			//  CRITICAL FIX: Use .booking-card context to target only visible form fields
 			const $form = $(".booking-card");
+			let me = this;
 
 			setTimeout(() => {
 				if (guestData.guest) {
@@ -95,21 +118,36 @@ load_company_details() {
 					}, 100);
 				}
 
-				//  FIX: Target visible nationality field only
+				//  FIX: Target visible nationality field only - wait for field to be ready
 				if (guestData.nationality) {
 					let normalizedNat = guestData.nationality;
+					// Convert "Indian" or "india" to "India" for Country link
 					if (normalizedNat.toLowerCase() === 'indian' || normalizedNat.toLowerCase() === 'india') {
-						normalizedNat = 'Indian';
+						normalizedNat = 'India';
 					}
 					
-					$form.find("#nationality").val(normalizedNat).trigger("change");
-					//console.log(" Nationality set:", normalizedNat);
+					// Function to set nationality value - retries if field not ready
+					const setNationalityValue = () => {
+						if (me.nationality_field && me.nationality_field.set_value) {
+							try {
+								me.nationality_field.set_value(normalizedNat);
+								if (me.nationality_field.$input) {
+									me.nationality_field.$input.trigger("change");
+								}
+								//console.log(" Nationality set:", normalizedNat);
+							} catch (err) {
+								//console.error(" Error setting nationality:", err);
+								// Retry after delay
+								setTimeout(setNationalityValue, 200);
+							}
+						} else {
+							// Field not ready yet, retry after delay
+							setTimeout(setNationalityValue, 100);
+						}
+					};
 					
-					// Verify it worked
-					setTimeout(() => {
-						const currentVal = $form.find("#nationality").val();
-						//console.log(" Nationality verification:", currentVal);
-					}, 100);
+					// Start trying to set the value after a short delay
+					setTimeout(setNationalityValue, 300);
 				}
 			}, 300);
 
@@ -120,32 +158,40 @@ load_company_details() {
 
 	setup_events() {
 		const $form = $(".booking-card");
+		let me = this;
 
 		//  Nationality change event - scoped to booking form
-		$form.on("change", "#nationality", function () {
-			const nationality = $(this).val();
-			//console.log(" Nationality changed to:", nationality);
-			
-			if (nationality === "Foreigner") {
-				$("#currency-section").show();
-				$("#currency_wrapper").empty();
-				
-				frappe.ui.form.make_control({
-					df: {
-						fieldtype: "Link",
-						label: "Currency",
-						fieldname: "currency",
-						options: "Currency",
-						reqd: 1
-					},
-					parent: $("#currency_wrapper"),
-					render_input: true
+		setTimeout(() => {
+			if (me.nationality_field && me.nationality_field.$input) {
+				$(me.nationality_field.$input).on("change", function () {
+					const nationality = me.nationality_field.get_value() || "";
+					//console.log(" Nationality changed to:", nationality);
+					
+					// Check if country is not India (foreigner)
+					if (nationality && nationality.toLowerCase() !== "india") {
+						$("#currency-section").show();
+						$("#currency_wrapper").empty();
+						
+						me.currency_field = frappe.ui.form.make_control({
+							df: {
+								fieldtype: "Link",
+								label: "Currency",
+								fieldname: "currency",
+								options: "Currency",
+								reqd: 1
+							},
+							parent: $("#currency_wrapper"),
+							render_input: true
+						});
+						me.currency_field.refresh();
+					} else {
+						$("#currency-section").hide();
+						$("#currency_wrapper").empty();
+						me.currency_field = null;
+					}
 				});
-			} else {
-				$("#currency-section").hide();
-				$("#currency_wrapper").empty();
 			}
-		});
+		}, 200);
 
 		//  Save Booking - scoped to booking form
 		$form.on("click", "#create_booking_btn", function (e) {
@@ -161,8 +207,8 @@ load_company_details() {
 		no_of_guests: $form.find("#no_of_guests").val() || "",
 		room_type: $form.find("#room_type").val() || "",
 		rate_plan: $form.find("#rate_plan").val() || "",   //  Added line here
-		nationality: $form.find("#nationality").val() || "",
-		currency: $("#currency_wrapper input").val() || ""
+		nationality: (me.nationality_field && me.nationality_field.get_value()) || "",
+		currency: (me.currency_field && me.currency_field.get_value()) || ""
 		};
 
 
@@ -210,7 +256,7 @@ load_company_details() {
 				$form.find("#nationality").focus();
 				return;
 			}
-			if (bookingData.nationality === "Foreigner" && !bookingData.currency) {
+			if (bookingData.nationality && bookingData.nationality.toLowerCase() !== "india" && !bookingData.currency) {
 				frappe.msgprint(" Currency is required for foreign guests.");
 				return;
 			}
@@ -223,41 +269,6 @@ load_company_details() {
 						frappe.msgprint(" Room Booking Done Successfully!");
 						localStorage.removeItem("guest_data");
 						// //console.log("🗑️ Cleared guest_data from localStorage");
-
-						const $onboardBtn = $(`
-							<button class="booking-btn booking-btn-success" id="guest_onboard_btn" style="
-								background-color: #16a34a;
-								color: white;
-								border: none;
-								padding: 12px 20px;
-								border-radius: 10px;
-								font-weight: 600;
-								cursor: pointer;
-							">
-								Guest Onboard →
-							</button>
-						`);
-
-						$form.find("#create_booking_btn").fadeOut(200, function () {
-							$(this).replaceWith($onboardBtn);
-							$onboardBtn.fadeIn(300);
-						});
-
-						$onboardBtn.on("click", function () {
-							localStorage.setItem("last_booking", JSON.stringify({
-								guest: bookingData.guest,
-								from_date: bookingData.check_in,
-								to_date: bookingData.check_out,
-								no_of_guests: bookingData.no_of_guests,
-								nationality: bookingData.nationality,
-								room_type: bookingData.room_type
-							}));
-
-							frappe.set_route("guest-onboard", {
-								guest: bookingData.guest,
-								room_type: bookingData.room_type
-							});
-						});
 					}
 				},
 				error: function (err) {

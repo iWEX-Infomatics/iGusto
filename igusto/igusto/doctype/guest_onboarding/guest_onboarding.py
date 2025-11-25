@@ -20,10 +20,12 @@ class GuestOnboarding(Document):
             if check_out > late_checkout:
                 frappe.msgprint("Checkout after 11 AM — 1 extra day will be charged.")
         
-        # Validate nationality requirement
-        if self.nationality and self.nationality.lower() != "indian":
-            if not self.passport_number or not self.visa_number:
-                frappe.throw("For Non-Indian Guests, Passport and Visa details are mandatory.")
+        # Validate passport and visa requirement for non-Indian guests with Passport as ID proof
+        # Only require passport/visa if nationality is not India AND ID Proof Type is Passport
+        if self.nationality and self.nationality.lower() != "india" and self.nationality.lower() != "indian":
+            if self.id_proof_type == "Passport":
+                if not self.passport_number or not self.visa_number:
+                    frappe.throw("For Non-Indian Guests, Passport and Visa details are mandatory when ID Proof Type is Passport.")
 
     # def on_submit(self):
     #     self.create_room_key()

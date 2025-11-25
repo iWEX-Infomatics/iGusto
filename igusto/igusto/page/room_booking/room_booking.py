@@ -55,7 +55,7 @@ def create_booking(guest, mobile, email, check_in, check_out,
         "customer": customer.name,
         "transaction_date": check_in,   # ✅ check-in → transaction_date
         "delivery_date": check_out,     # ✅ check-out → delivery_date
-        "currency": currency if guest_nationality != "Indian" else "INR",
+        "currency": currency if guest_nationality and guest_nationality.lower() != "india" else "INR",
         "items": [
             {
                 "item_code": room_type,

@@ -60,8 +60,10 @@ def create_guest_with_address(first_name, middle_name=None, last_name=None, full
             address.address_line1 = address_data.get("address_line1")
             address.city = address_data.get("city")
             address.state = address_data.get("state")
+            # Use nationality (Country link) as the address country
             address.country = (
                 address_data.get("country")
+                or nationality
                 or detect_country_from_district(address_data.get("district"))
                 or "India"
             )
