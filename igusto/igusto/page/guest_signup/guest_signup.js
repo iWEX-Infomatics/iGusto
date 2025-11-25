@@ -81,7 +81,7 @@ load_company_details() {
 		};
 		$('#first_name, #middle_name, #last_name').on('input', updateFullName);
 
-		// 🟢 Auto-format Mobile for +91 (space after 5 digits)
+		//  Auto-format Mobile for +91 (space after 5 digits)
 		$('#mobile_no').on('input', function () {
 			const countryCode = $('#country_code').val().trim();
 			let val = $(this).val().replace(/\s/g, '');
@@ -148,7 +148,6 @@ load_company_details() {
 			$('#post_office').val(po.post_office);
 			$('#district').val(po.district);
 			$('#state').val(po.state);
-			// 🔴 Removed city autofill intentionally as per requirement
 		};
 
 		// Handle post office dropdown change (mobile only)

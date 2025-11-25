@@ -86,7 +86,7 @@
   }
  ],
  "links": [],
- "modified": "2025-11-13 10:25:21.218958",
+ "modified": "2025-11-25 17:36:49.661005",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Housekeeping Schedule",
@@ -114,8 +114,10 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
+ "title_field": "schedule_name",
  "track_changes": 1
 }
