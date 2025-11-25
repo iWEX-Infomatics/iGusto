@@ -97,7 +97,10 @@ load_company_details() {
 		const $postOfficeContainer = $('#post_office_dropdown_container');
 		const $postOfficeDropdown = $('#post_office_dropdown');
 		const $postOfficeLoader = $('#post_office_loader');
-
+		const $pincodeField = $('#pincode');
+		if ($pincodeField.length && $postOfficeContainer.length) {
+			$postOfficeContainer.insertAfter($pincodeField);
+		}
 		const hidePostOfficeSection = function(clear = true) {
 			$postOfficeContainer.hide();
 			$postOfficeLoader.addClass('hidden');
