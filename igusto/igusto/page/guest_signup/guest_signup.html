@@ -47,6 +47,19 @@
         <input type="text" id="address_line1" placeholder="Door / Building / Street *" class="guest-input">
         </div>
 
+      <!-- Post Office Dropdown for Mobile -->
+      <div id="post_office_dropdown_container" class="post-office-dropdown-mobile" style="display: none; margin-top: 0.5rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: #757332; font-weight: 500;">Post Offices</label>
+        <div style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Click to select:</div>
+        <div id="post_office_loader" class="post-office-loader hidden">
+          <div class="loader-spinner"></div>
+          <span>Fetching post offices…</span>
+        </div>
+        <select id="post_office_dropdown" class="guest-input" style="width: 100%; padding: 0.75rem;">
+          <option value="">Select Post Office</option>
+        </select>
+      </div>
+
     <div class="guest-grid">
         <input type="text" id="city" placeholder="City *" class="guest-input">
         <input type="text" id="post_office" placeholder="Post Office" class="guest-input">
@@ -470,4 +483,72 @@
     }
 
   }
+
+  /* ===== Post Office Dropdown for Mobile ===== */
+  .post-office-dropdown-mobile {
+    margin-bottom: 1rem;
+  }
+
+  .post-office-dropdown-mobile label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #757332;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+
+  .post-office-dropdown-mobile select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+
+  .post-office-dropdown-mobile select:hover {
+    border-color: #bfaa47;
+  }
+
+  .post-office-dropdown-mobile select:focus {
+    outline: none;
+    border-color: #bfaa47;
+    box-shadow: 0 0 0 2px rgba(191, 170, 71, 0.2);
+  }
+
+  .post-office-loader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #757332;
+    margin-bottom: 0.75rem;
+  }
+
+  .post-office-loader .loader-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(191, 170, 71, 0.3);
+    border-top-color: #bfaa47;
+    border-radius: 50%;
+    animation: post-office-spin 0.8s linear infinite;
+  }
+
+  @keyframes post-office-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Hide dropdown on desktop */
+  @media (min-width: 769px) {
+    .post-office-dropdown-mobile {
+      display: none !important;
+    }
+  }
+
+  /* On mobile, visibility is controlled by JavaScript based on pincode validation */
 </style>

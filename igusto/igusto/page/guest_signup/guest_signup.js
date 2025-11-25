@@ -84,7 +84,7 @@ load_company_details() {
 		// 🟢 Auto-format Mobile for +91 (space after 5 digits)
 		$('#mobile_no').on('input', function () {
 			const countryCode = $('#country_code').val().trim();
-			let val = $(this).val().replace(/\s/g, ''); // remove all spaces
+			let val = $(this).val().replace(/\s/g, '');
 
 			if (countryCode === '+91') {
 				if (val.length > 5) {
@@ -93,6 +93,33 @@ load_company_details() {
 			}
 			$(this).val(val);
 		});
+
+		const $postOfficeContainer = $('#post_office_dropdown_container');
+		const $postOfficeDropdown = $('#post_office_dropdown');
+		const $postOfficeLoader = $('#post_office_loader');
+
+		const hidePostOfficeSection = function(clear = true) {
+			$postOfficeContainer.hide();
+			$postOfficeLoader.addClass('hidden');
+			$postOfficeDropdown.show().prop('disabled', false);
+			if (clear) {
+				$postOfficeDropdown.val('').data('offices', null);
+			}
+		};
+
+		const showPostOfficeLoader = function() {
+			$postOfficeContainer.show();
+			$postOfficeLoader.removeClass('hidden');
+			$postOfficeDropdown.hide().prop('disabled', true);
+		};
+
+		const showPostOfficeDropdown = function() {
+			$postOfficeLoader.addClass('hidden');
+			$postOfficeDropdown.show().prop('disabled', false);
+		};
+
+		// Ensure dropdown is hidden initially
+		hidePostOfficeSection();
 
 		// Nationality logic - set up after field is created
 		setTimeout(() => {
@@ -104,20 +131,76 @@ load_company_details() {
 						$('#country_code').val('+91');
 					} else {
 						$('#pincode').attr('placeholder', 'Zip / Postal Code *');
+					// Hide post office dropdown when nationality is not Indian
+					hidePostOfficeSection();
 					}
 				});
 			}
 		}, 200);
 
+		// Helper function to detect mobile screen
+		const isMobileScreen = function() {
+			return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		};
+
+		// Helper function to set address fields
+		const set_address_fields = function(po) {
+			$('#post_office').val(po.post_office);
+			$('#district').val(po.district);
+			$('#state').val(po.state);
+			// 🔴 Removed city autofill intentionally as per requirement
+		};
+
+		// Handle post office dropdown change (mobile only)
+		$postOfficeDropdown.on('change', function() {
+			const selectedIndex = $(this).val();
+			if (selectedIndex === '' || selectedIndex === null) return;
+			
+			const offices = $(this).data('offices');
+			if (offices && offices[selectedIndex]) {
+				set_address_fields(offices[selectedIndex]);
+			}
+		});
+
+		// Helper function to validate pincode
+		const isValidPincode = function(pincode) {
+			return pincode && pincode.length === 6 && /^\d{6}$/.test(pincode);
+		};
+
+		// Hide dropdown when pincode is cleared or being edited
+		$('#pincode').on('input', function() {
+			const pincode = $(this).val().trim();
+			if (!isValidPincode(pincode)) {
+				hidePostOfficeSection();
+			}
+		});
+
+		// Hide dropdown when pincode field loses focus if not valid
+		$('#pincode').on('blur', function() {
+			const pincode = $(this).val().trim();
+			if (!isValidPincode(pincode)) {
+				hidePostOfficeSection();
+			}
+		});
+
 		// 🟢 Pincode auto-fill (Indian only)
 		$('#pincode').on('change', function () {
 			const nationality = (me.nationality_field && me.nationality_field.get_value())?.toLowerCase() || '';
-			if (nationality !== 'indian' && nationality !== 'india') return;
-
-			const pincode = $(this).val();
-			if (!pincode || pincode.length !== 6) {
-				frappe.msgprint("Please enter a valid 6-digit Pincode.");
+			if (nationality !== 'indian' && nationality !== 'india') {
+				hidePostOfficeSection();
 				return;
+			}
+
+			const pincode = $(this).val().trim();
+			if (!isValidPincode(pincode)) {
+				frappe.msgprint("Please enter a valid 6-digit Pincode.");
+				// Hide dropdown on invalid pincode
+				hidePostOfficeSection();
+				return;
+			}
+
+			if (isMobileScreen()) {
+				showPostOfficeLoader();
 			}
 
 			frappe.call({
@@ -127,35 +210,55 @@ load_company_details() {
 					const offices = r.message;
 					if (!Array.isArray(offices) || offices.length === 0) {
 						frappe.msgprint("No Post Office found for this Pincode.");
+						hidePostOfficeSection();
 						return;
 					}
 
 					if (offices.length === 1) {
 						set_address_fields(offices[0]);
+						hidePostOfficeSection();
 					} else {
-						const options = offices.map((o, i) => ({ label: o.post_office, value: i }));
-						const d = new frappe.ui.Dialog({
-							title: 'Select Post Office',
-							fields: [{ label: 'Post Office', fieldname: 'selected_po', fieldtype: 'Select', options }],
-							primary_action_label: 'Insert',
-							primary_action({ selected_po }) {
-								if (!selected_po) {
-									frappe.msgprint('Please select a Post Office.');
-									return;
+						// Check if mobile screen
+						if (isMobileScreen()) {
+							// Mobile: Show dropdown
+							const $dropdown = $postOfficeDropdown;
+							$dropdown.empty().append('<option value="">Select Post Office</option>');
+							
+							offices.forEach((office, index) => {
+								const optionText = `${office.post_office} - ${office.district}, ${office.state}`;
+								$dropdown.append(`<option value="${index}">${optionText}</option>`);
+							});
+							
+							// Store offices data for later use
+							$dropdown.data('offices', offices);
+							
+							// Show dropdown container with options
+							showPostOfficeDropdown();
+							$postOfficeContainer.show();
+						} else {
+							// Desktop: Show dialog (existing behavior)
+							const options = offices.map((o, i) => ({ label: o.post_office, value: i }));
+							const d = new frappe.ui.Dialog({
+								title: 'Select Post Office',
+								fields: [{ label: 'Post Office', fieldname: 'selected_po', fieldtype: 'Select', options }],
+								primary_action_label: 'Insert',
+								primary_action({ selected_po }) {
+									if (!selected_po) {
+										frappe.msgprint('Please select a Post Office.');
+										return;
+									}
+									set_address_fields(offices[+selected_po]);
+									d.hide();
 								}
-								set_address_fields(offices[+selected_po]);
-								d.hide();
-							}
-						});
-						d.show();
+							});
+							d.show();
+							// Hide dropdown on desktop
+							hidePostOfficeSection();
+						}
 					}
-
-					function set_address_fields(po) {
-						$('#post_office').val(po.post_office);
-						$('#district').val(po.district);
-						$('#state').val(po.state);
-						// 🔴 Removed city autofill intentionally as per requirement
-					}
+				},
+				error: function() {
+					hidePostOfficeSection();
 				}
 			});
 		});
