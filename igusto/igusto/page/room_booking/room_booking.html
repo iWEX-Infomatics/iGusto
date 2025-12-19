@@ -1,90 +1,109 @@
 <div class="booking-wrapper">
   <div class="combined-card">
-    <div class="company-header">
+        <div class="company-header">
       <!-- company details -->
     </div>
-  <div class="booking-card">
-    <h1 class="booking-title">Room Booking</h1>
-    <!-- <p class="booking-subtitle">Enter details to confirm your booking</p> -->
+    <div class="booking-card">
+      <h1 class="booking-title">Room Booking</h1>
 
-    <form id="booking-form">
-      <div class="booking-grid">
-        <div>
-          <!-- <label class="booking-label">Guest Name</label> -->
-          <input type="text" id="guest_name" placeholder="Guest Name" class="booking-input" readonly>
+      <form id="booking-form">
+        <!-- Row 1: Guest ID: Fullname, Country (Full Width) -->
+        <div class="booking-row-full">
+          <div class="guest-info-display">
+            <span id="guest_full_info" class="guest-full-text">-</span>
+          </div>
         </div>
-        <div>
-          <!-- <label class="booking-label">Mobile *</label> -->
-          <input type="text" id="mobile" placeholder="Mobile Number *" class="booking-input" required>
-        </div>
-      </div>
 
-      <div class="booking-grid">
-        <div>
-          <!-- <label class="booking-label">Email *</label> -->
-          <input type="email" id="email" placeholder="Email Address *" class="booking-input" required>
+        <!-- Row 2: Start Date | End Date -->
+        <div class="booking-grid">
+          <div>
+            <input type="date" id="check_in" placeholder="Start Date" class="booking-input" required>
+          </div>
+          <div>
+            <input type="date" id="check_out" placeholder="End Date" class="booking-input" required>
+          </div>
         </div>
-        <div>
-          <!-- <label class="booking-label">Nationality *</label> -->
-          <div id="nationality" class="booking-input-link"></div>
+<div class="booking-row-full">
+          <div class="guest-count-display">
+            <div class="count-item">
+              <span class="count-label">Total Adults:</span>
+              <input type="number" id="total_adults_input" class="count-input" min="1" value="1" required>
+            </div>
+            <div class="count-item">
+              <span class="count-label">Total Children:</span>
+              <input type="number" id="total_children_input" class="count-input" min="0" value="0">
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div class="booking-grid">
-        <div>
-          <!-- <label class="booking-label">From Date *</label> -->
-          <input type="date" id="check_in" class="booking-input" required>
-        </div>
-        <div>
-          <!-- <label class="booking-label">To Date *</label> -->
-          <input type="date" id="check_out" class="booking-input" required>
-        </div>
-      </div>
-
-      <div class="booking-grid">
-        <div>
-          <!-- <label class="booking-label">Number of Guests *</label> -->
-          <input type="number" id="no_of_guests" placeholder="Number of Guests" class="booking-input" min="1" required>
-        </div>
-        <div>
-          <!-- <label class="booking-label">Room Type *</label> -->
+        <!-- Row 3: Room Type | Room Rate -->
+        <div class="booking-grid">
           <div id="room_type_wrapper"></div>
+          <div>
+            <input type="number" id="rate_plan" class="booking-input" placeholder="Room Rate" readonly>
+          </div>
         </div>
-      </div>
 
-      <div class="booking-grid">
-        <div>
-          <!-- <label class="booking-label">Rate Plan *</label> -->
-          <input type="number" id="rate_plan" class="booking-input" placeholder="Enter Rate" required>
+        <!-- Room Description Row (appears when room type is selected) -->
+        <div id="description_row" class="room-description-row" style="display: none;">
+          <div class="room-description-box">
+            <p id="description_text"></p>
+          </div>
         </div>
-        <div id="currency-section" style="display:none;">
-          <!-- <label class="booking-label">Currency *</label> -->
-          <div id="currency_wrapper"></div>
-        </div>
-      </div>
 
-      <div class="booking-actions">
-        <button id="create_booking_btn" class="booking-btn booking-btn-primary">Save Booking</button>
-        <button id="back_btn" type="button" class="booking-btn booking-btn-secondary">Back</button>
-      </div>
-    </form>
+        <!-- Row 4: Total Adults & Total Children (Display Only) -->
+        
+
+        <!-- Service Items Child Table -->
+        <div class="service-items-section">
+          <div class="section-header">
+            <h3 class="section-title">Service Items</h3>
+            <button type="button" id="add_service_item" class="add-item-btn">+ Add Item</button>
+          </div>
+          
+          <div class="service-items-table">
+            <table id="service_items_table">
+              <thead>
+                <tr>
+                  <th style="width: 5%">#</th>
+                  <th style="width: 30%">Item</th>
+                  <th style="width: 15%">Qty</th>
+                  <th style="width: 15%">UOM</th>
+                  <th style="width: 15%">Rate</th>
+                  <th style="width: 15%">Amount</th>
+                  <th style="width: 5%"></th>
+                </tr>
+              </thead>
+              <tbody id="service_items_body">
+                <!-- Rows will be added dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Row 5: Reserve | Cancel Buttons -->
+        <div class="booking-actions">
+          <button id="create_booking_btn" type="button" class="booking-btn booking-btn-primary">Book Now</button>
+          <button id="back_btn" type="button" class="booking-btn booking-btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 </div>
 
 <!-- ✅ STYLES -->
 <style>
- /* ===== Elegant Room Booking Page (Gold Theme) ===== */
-
+/* ===== Elegant Room Booking Page (Gold Theme) ===== */
 #page-room-booking {
-  background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
+    background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
   background-size: cover !important;
   font-family: "Poppins", sans-serif;
   color: #2f2f2f;
 }
-.page-head{
+
+.page-head {
   display: none;
 }
+
 /* ===== Main Container ===== */
 .booking-wrapper {
   display: flex;
@@ -103,40 +122,13 @@
   border: 6px solid #bfaa47cc;
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
   transition: all 0.3s ease;
-  max-width: 700px;
-  width: 700px;
+  max-width: 900px;
+  width: 780px;
 }
 
 .combined-card:hover {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
   transform: translateY(-4px);
-}
-
-/* ===== Company Header ===== */
-.company-header-inner {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 25px;
-}
-
-.company-logo {
-  max-height: 90px;
-  border-radius: 45px;
-}
-
-.company-name {
-  font-size: 30px;
-  font-weight: 700;
-  color: #2f2f2f;
-  margin-bottom: 0px;
-  letter-spacing: 0.4px;
-}
-
-.company-details {
-  font-size: 18px;
-  color: #2d2b2b;
-  line-height: 1.4;
 }
 
 /* ===== Booking Card ===== */
@@ -158,12 +150,66 @@
   letter-spacing: 0.5px;
 }
 
-.booking-subtitle {
+/* ===== Guest Info Display (Full Width Row) ===== */
+.booking-row-full {
+  margin-bottom: 10px;
+}
+    .company-logo {
+      max-height: 90px;
+      border-radius: 45px;
+    }
+.guest-info-display {
+  background: linear-gradient(135deg, #f8f6f0, #fff9f0);
+  border: 2px solid #bfaa47cc;
+  border-radius: 12px;
+  padding: 8px 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.guest-full-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2f2f2f;
   text-align: center;
-  color: #444;
-  font-style: italic;
-  margin-top: 8px;
-  margin-bottom: 25px;
+}
+
+/* ===== Guest Count Display ===== */
+.guest-count-display {
+  display: flex;
+}
+
+.count-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px;
+}
+
+.count-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2f2f2f;
+}
+
+.count-input {
+  width: 70px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2f2f2f;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.count-input:focus {
+  border-color: #bfaa47cc;
+  box-shadow: 0 0 0 3px rgba(170, 132, 83, 0.25);
+  outline: none;
 }
 
 /* ===== Form Layout ===== */
@@ -172,13 +218,6 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 15px 28px;
   margin-bottom: 15px;
-}
-
-.booking-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #333;
 }
 
 .booking-input {
@@ -192,84 +231,171 @@
 }
 
 .booking-input:focus {
-  border-color: #b5b35c;
-  box-shadow: 0 0 0 4px rgba(181, 179, 92, 0.25);
+  border-color: #bfaa47cc;
+  box-shadow: 0 0 0 4px rgba(170, 132, 83, 0.25);
   outline: none;
 }
 
-/* Link field styling - match regular input fields exactly */
-.booking-input-link {
-  width: 100%;
-  display: flex;
-  align-items: stretch;
-  min-height: 45px;
+.booking-input[readonly] {
+  background-color: #f9fafb;
+  cursor: not-allowed;
 }
 
-.booking-input-link > div,
-.booking-input-link .control-input-wrapper,
-.booking-input-link .form-group {
+.form-control {
+  background-color: #fff !important;
   width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  height: 45px;
+}
+
+.form-control:focus {
+  border-color: #bfaa47cc;
+  box-shadow: 0 0 0 4px rgba(170, 132, 83, 0.25);
+  outline: none;
+}
+
+/* ===== Room Description Row ===== */
+.room-description-row {
+  margin-bottom: 10px;
+  margin-top: -5px;
+}
+
+.room-description-box {
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+
+.room-description-box p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* ===== Service Items Section ===== */
+.service-items-section {
+  margin: 0px 0;
+  background: #f9fafb;
+  border: 2px solid #bfaa47cc;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.section-header {
   display: flex;
-  align-items: stretch;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2f2f2f;
   margin: 0;
 }
 
-.booking-input-link .control-input {
+.add-item-btn {
+  background: linear-gradient(135deg, #b5b35c, #c7c56e);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-item-btn:hover {
+  background: linear-gradient(135deg, #a6a45a, #c3c17a);
+  transform: translateY(-1px);
+}
+
+.service-items-table {
+  overflow-x: auto;
+}
+
+#service_items_table {
   width: 100%;
-  padding: 0;
-  /* display: flex; */
-  align-items: stretch;
-  margin: 0;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.booking-input-link .control-input input[type="text"],
-.booking-input-link input.form-control,
-.booking-input-link .form-control {
-  width: 100% !important;
-  padding: 12px 14px !important;
-  border-radius: 10px !important;
-  border: 1px solid #d1d5db !important;
-  background-color: #fff !important;
-  font-size: 15px !important;
-  transition: all 0.3s ease !important;
-  flex: 1;
-  height: 45px !important;
-  min-height: 45px !important;
-  box-sizing: border-box !important;
-  margin: 0 !important;
-  line-height: 1.5 !important;
+#service_items_table thead {
+  background: linear-gradient(135deg, #b5b35c, #c7c56e);
+  color: #fff;
 }
 
-.booking-input-link .control-input input[type="text"]:focus,
-.booking-input-link input.form-control:focus,
-.booking-input-link .form-control:focus {
-  border-color: #b5b35c !important;
-  box-shadow: 0 0 0 4px rgba(181, 179, 92, 0.25) !important;
-  outline: none !important;
-  background-color: #fff !important;
+#service_items_table th {
+  padding: 12px 8px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
 }
 
-.booking-input-link .control-input .link-btn,
-.booking-input-link .btn-link {
-  padding: 12px 14px !important;
-  border-radius: 0 10px 10px 0 !important;
-  border: 1px solid #d1d5db !important;
-  border-left: none !important;
-  border-right: none !important;
-  background-color: #fff !important;
-  font-size: 15px !important;
-  transition: all 0.3s ease !important;
-  height: 45px !important;
-  min-height: 45px !important;
-  box-sizing: border-box !important;
-  display: flex !important;
-  align-items: center !important;
-  margin: 0 !important;
+#service_items_table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.booking-input-link .control-input .link-btn:hover,
-.booking-input-link .btn-link:hover {
-  background-color: #f9fafb !important;
+#service_items_table tbody tr:last-child {
+  border-bottom: none;
+}
+
+#service_items_table td {
+  padding: 10px 8px;
+  font-size: 13px;
+}
+
+.service-item-input,
+.service-item-select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  background-color: #fff;
+}
+
+.service-item-input:focus,
+.service-item-select:focus {
+  border-color: #bfaa47cc;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(170, 132, 83, 0.2);
+}
+
+.service-item-input[readonly] {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.remove-item-btn {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.remove-item-btn:hover {
+  background: #dc2626;
+}
+
+.sr-no {
+  text-align: center;
+  font-weight: 600;
+  color: #6b7280;
 }
 
 /* ===== Buttons ===== */
@@ -277,12 +403,12 @@
   display: flex;
   justify-content: center;
   gap: 15px;
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 .booking-btn {
   border: none;
-  padding: 12px 35px;
+  padding: 12px 40px;
   border-radius: 10px;
   font-weight: 600;
   font-size: 16px;
@@ -291,20 +417,18 @@
   cursor: pointer;
 }
 
-/* Gold Gradient Button */
 .booking-btn-primary {
   background: linear-gradient(135deg, #b5b35c, #c7c56e);
   color: #fff;
-  box-shadow: 0 6px 14px rgba(181, 179, 92, 0.35);
+  box-shadow: 0 6px 14px rgba(170, 132, 83, 0.35);
 }
 
 .booking-btn-primary:hover {
   background: linear-gradient(135deg, #a6a45a, #c3c17a);
   transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(181, 179, 92, 0.45);
+  box-shadow: 0 8px 18px rgba(170, 132, 83, 0.45);
 }
 
-/* Secondary (Cancel) Button */
 .booking-btn-secondary {
   background: #f3f3f3;
   color: #444;
@@ -315,134 +439,98 @@
   background: #e8e8e8;
   transform: translateY(-2px);
 }
+    .company-header-inner {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 25px;
+    }
 
-/* ===== Footer ===== */
-footer {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 16px;
-  font-family: cursive;
-  color: #444;
-}
-
-/* ===== MOBILE VIEW ONLY ===== */
+/* ===== MOBILE VIEW ===== */
 @media (max-width: 600px) {
-  body {
-    background: #fafafa;
-  }
-
   .booking-wrapper {
     padding: 20px 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
-
-  .combined-card {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border: 1.5px solid #b5b35c;
-    border-radius: 14px;
-    padding: 25px 22px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 420px;
-  }
-
-  .company-header {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-
   .company-header-inner {
+    display: flex;
     flex-direction: row;
     align-items: center;
     gap: 6px;
-  }
-  .company-right{
-    margin-left:-12px;
   }
   .company-logo {
     max-height: 75px;
     border-radius: 50%;
   }
 
-  .company-name {
-    font-size: 20px;
-    font-weight: 600;
-    color: #222;
-  }
-
-  .company-details {
-    font-size: 12px;
-    color: #444;
-    line-height: 1.4;
+  .combined-card {
+    padding: 25px 22px;
+    width: 100%;
+    max-width: 420px;
+    border: 1.5px solid #bfaa47cc;
   }
 
   .booking-title {
-    background: linear-gradient(135deg, #b5b35c, #c7c56e);    font-size: 15px;
-    text-align: center;
-    padding: 4px 3px;
-    border-radius: 6px;
-    margin-bottom: 18px;
+    font-size: 18px;
+    width: 80%;
+    padding: 8px 0;
   }
 
-  .booking-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Single column layout on mobile */
-    gap: 12px;
-    margin-bottom: 15px;
+  .guest-info-display {
+    padding: 7px 18px;
   }
 
-  .booking-grid input,
-  .booking-grid select {
-    width: 100%;
-    font-size: 12px;
-    padding: 8px 10px;
-  }
-  .booking-input {
-    width: 100%;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #fff;
+  .guest-full-text {
     font-size: 14px;
   }
 
-  .booking-input-link .control-input input[type="text"],
-  .booking-input-link input.form-control,
-  .booking-input-link .form-control {
-    font-size: 14px !important;
-    padding: 10px 12px !important;
-    height: 42px !important;
-    min-height: 42px !important;
+  .guest-count-display {
+    gap: 0px;
+    padding: 8px 10px;
   }
 
-  .booking-input-link .control-input .link-btn,
-  .booking-input-link .btn-link {
-    font-size: 14px !important;
-    padding: 10px 12px !important;
-    height: 42px !important;
-    min-height: 42px !important;
-  }
-
-  .booking-input-link {
-    min-height: 42px;
-  }
-
-  .booking-btn {
+  .count-item {
     width: 100%;
-    padding: 10px 25px;
-    border-radius: 8px;
-    font-size: 15px;
+    gap: 2px;
   }
 
-  .booking-btn-primary {
-    background-color: #4b7b2b;
+  .count-input {
+    width: 40px;
   }
 
-  .booking-btn-primary:hover {
-    background-color: #3e6825;
+  .booking-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .booking-input,
+  .form-control {
+    font-size: 14px;
+    padding: 10px 12px;
+    height: 42px;
+  }
+
+  .service-items-section {
+    padding: 15px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  .add-item-btn {
+    width: 100%;
+  }
+
+  .service-items-table {
+    font-size: 11px;
+  }
+
+  #service_items_table th,
+  #service_items_table td {
+    padding: 8px 4px;
+    font-size: 11px;
   }
 
   .booking-actions {
@@ -450,15 +538,10 @@ footer {
     gap: 10px;
   }
 
-  footer {
-    font-size: 13px;
-    color: #555;
-    font-family: cursive;
-    margin-top: 18px;
+  .booking-btn {
+    width: 100%;
+    padding: 10px 25px;
+    font-size: 15px;
   }
 }
-
 </style>
-
-<!-- ✅ JS -->
-<!-- Nationality change logic is now handled in room_booking.js -->

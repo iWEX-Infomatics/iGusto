@@ -6,6 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "details_section",
   "guest",
   "no_of_guests",
   "nationality",
@@ -16,6 +17,8 @@
   "column_break_bprq",
   "check_in_time",
   "check_out_time",
+  "reference_doctype",
+  "reference_name",
   "section_break_atve",
   "room_type",
   "column_break_gsov",
@@ -32,7 +35,8 @@
   "roommates_section",
   "roommates",
   "key_transaction_id",
-  "amended_from"
+  "amended_from",
+  "connections_tab"
  ],
  "fields": [
   {
@@ -75,20 +79,20 @@
    "fieldname": "passport_number",
    "fieldtype": "Data",
    "label": "Passport Number",
-   "mandatory_depends_on": "eval:doc.nationality && doc.nationality.toLowerCase() !== 'indian'"
+   "mandatory_depends_on": "eval:doc.id_proof_type == \"Passport\";"
   },
   {
    "depends_on": "eval:doc.passport_number",
    "fieldname": "visa_number",
    "fieldtype": "Data",
    "label": "Visa Number",
-   "mandatory_depends_on": "eval:doc.nationality && doc.nationality.toLowerCase() !== 'indian'"
+   "mandatory_depends_on": "eval:doc.passport_number"
   },
   {
    "fieldname": "id_proof_type",
-   "fieldtype": "Select",
+   "fieldtype": "Link",
    "label": "ID Proof Type",
-   "options": "Aadhar Card\nDriving License\nPassport\nVoter ID\nOther"
+   "options": "ID Proof"
   },
   {
    "fieldname": "id_proof_number",
@@ -189,12 +193,35 @@
   {
    "fieldname": "column_break_pyrf",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reference_doctype",
+   "fieldtype": "Link",
+   "label": "Reference Doctype",
+   "options": "DocType"
+  },
+  {
+   "fieldname": "reference_name",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Name",
+   "options": "reference_doctype"
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-11-25 10:17:45.333666",
+ "modified": "2025-12-19 12:50:40.536707",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Guest Onboarding",
