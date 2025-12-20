@@ -537,7 +537,7 @@ setup_camera() {
 							</select>
 						</div>
 						<div class="additional-field-group">
-							<label>RFID Card No</label>
+							<label>Card/Key No</label>
 							<input type="text" class="roommate-rfid" data-index="${index}">
 						</div>
 						<div class="additional-field-group">

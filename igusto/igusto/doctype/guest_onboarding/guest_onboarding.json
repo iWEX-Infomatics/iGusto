@@ -17,6 +17,7 @@
   "column_break_bprq",
   "check_in_time",
   "check_out_time",
+  "column_break_nqey",
   "reference_doctype",
   "reference_name",
   "section_break_atve",
@@ -198,13 +199,15 @@
    "fieldname": "reference_doctype",
    "fieldtype": "Link",
    "label": "Reference Doctype",
-   "options": "DocType"
+   "options": "DocType",
+   "read_only": 1
   },
   {
    "fieldname": "reference_name",
    "fieldtype": "Dynamic Link",
    "label": "Reference Name",
-   "options": "reference_doctype"
+   "options": "reference_doctype",
+   "read_only": 1
   },
   {
    "fieldname": "details_section",
@@ -216,12 +219,16 @@
    "fieldtype": "Tab Break",
    "label": "Connections",
    "show_dashboard": 1
+  },
+  {
+   "fieldname": "column_break_nqey",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-12-19 12:50:40.536707",
+ "modified": "2025-12-20 11:56:41.941718",
  "modified_by": "Administrator",
  "module": "igusto",
  "name": "Guest Onboarding",

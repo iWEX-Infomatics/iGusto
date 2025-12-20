@@ -1,6 +1,6 @@
 <div class="booking-wrapper">
   <div class="combined-card">
-        <div class="company-header">
+    <div class="company-header">
       <!-- company details -->
     </div>
     <div class="booking-card">
@@ -23,7 +23,9 @@
             <input type="date" id="check_out" placeholder="End Date" class="booking-input" required>
           </div>
         </div>
-<div class="booking-row-full">
+
+        <!-- Row 3: Total Adults | Total Children -->
+        <div class="booking-row-full">
           <div class="guest-count-display">
             <div class="count-item">
               <span class="count-label">Total Adults:</span>
@@ -35,29 +37,53 @@
             </div>
           </div>
         </div>
-        <!-- Row 3: Room Type | Room Rate -->
-        <div class="booking-grid">
-          <div id="room_type_wrapper"></div>
-          <div>
-            <input type="number" id="rate_plan" class="booking-input" placeholder="Room Rate" readonly>
+
+        <!-- Row 4: Total Rooms | Total Days -->
+        <div class="booking-row-full">
+          <div class="guest-count-display">
+            <div class="count-item">
+              <span class="count-label">Total Rooms:</span>
+              <input type="number" id="total_rooms" class="count-input" min="1" value="1" required>
+            </div>
+            <div class="count-item">
+              <span class="count-label">Total Days:</span>
+              <input type="number" id="total_days" class="count-input" value="0" readonly>
+            </div>
           </div>
         </div>
 
-        <!-- Room Description Row (appears when room type is selected) -->
-        <div id="description_row" class="room-description-row" style="display: none;">
-          <div class="room-description-box">
-            <p id="description_text"></p>
-          </div>
-        </div>
-
-        <!-- Row 4: Total Adults & Total Children (Display Only) -->
-        
-
-        <!-- Service Items Child Table -->
+        <!-- Room Items Child Table -->
         <div class="service-items-section">
           <div class="section-header">
-            <h3 class="section-title">Service Items</h3>
-            <button type="button" id="add_service_item" class="add-item-btn">+ Add Item</button>
+            <h3 class="section-title">Room Items</h3>
+            <button type="button" id="add_room_item" class="add-item-btn">+ Add Room Item</button>
+          </div>
+          
+          <div class="service-items-table">
+            <table id="room_items_table">
+              <thead>
+                <tr>
+                  <th style="width: 5%">#</th>
+                  <th style="width: 30%">Item</th>
+                  <th style="width: 15%">Qty</th>
+                  <th style="width: 15%">UOM</th>
+                  <th style="width: 15%">Rate</th>
+                  <th style="width: 15%">Amount</th>
+                  <th style="width: 5%"></th>
+                </tr>
+              </thead>
+              <tbody id="room_items_body">
+                <!-- Rows will be added dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Other Service Items Child Table -->
+        <div class="service-items-section">
+          <div class="section-header">
+            <h3 class="section-title">Other Service Items</h3>
+            <button type="button" id="add_service_item" class="add-item-btn">+ Add Service Item</button>
           </div>
           
           <div class="service-items-table">
@@ -82,7 +108,7 @@
 
         <!-- Row 5: Reserve | Cancel Buttons -->
         <div class="booking-actions">
-          <button id="create_booking_btn" type="button" class="booking-btn booking-btn-primary">Book Now</button>
+          <button id="create_booking_btn" type="button" class="booking-btn booking-btn-primary">Reserve</button>
           <button id="back_btn" type="button" class="booking-btn booking-btn-secondary">Cancel</button>
         </div>
       </form>
@@ -94,7 +120,7 @@
 <style>
 /* ===== Elegant Room Booking Page (Gold Theme) ===== */
 #page-room-booking {
-    background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
+  background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
   background-size: cover !important;
   font-family: "Poppins", sans-serif;
   color: #2f2f2f;
@@ -132,9 +158,9 @@
 }
 
 /* ===== Booking Card ===== */
-.booking-card {
+/* .booking-card {
   padding: 20px 0;
-}
+} */
 
 .booking-title {
   text-align: center;
@@ -154,10 +180,12 @@
 .booking-row-full {
   margin-bottom: 10px;
 }
-    .company-logo {
-      max-height: 90px;
-      border-radius: 45px;
-    }
+
+.company-logo {
+  max-height: 90px;
+  border-radius: 45px;
+}
+
 .guest-info-display {
   background: linear-gradient(135deg, #f8f6f0, #fff9f0);
   border: 2px solid #bfaa47cc;
@@ -181,12 +209,12 @@
 }
 
 .count-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 50%;
+    padding-left: 15px;
 }
-
 .count-label {
   font-size: 12px;
   font-weight: 600;
@@ -258,29 +286,9 @@
   outline: none;
 }
 
-/* ===== Room Description Row ===== */
-.room-description-row {
-  margin-bottom: 10px;
-  margin-top: -5px;
-}
-
-.room-description-box {
-  background: #f9fafb;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
-  padding: 12px 16px;
-}
-
-.room-description-box p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
-  line-height: 1.5;
-}
-
 /* ===== Service Items Section ===== */
 .service-items-section {
-  margin: 0px 0;
+  margin: 0px 0 15px 0;
   background: #f9fafb;
   border: 2px solid #bfaa47cc;
   border-radius: 12px;
@@ -322,7 +330,8 @@
   overflow-x: auto;
 }
 
-#service_items_table {
+#service_items_table,
+#room_items_table {
   width: 100%;
   border-collapse: collapse;
   background: #fff;
@@ -330,27 +339,32 @@
   overflow: hidden;
 }
 
-#service_items_table thead {
+#service_items_table thead,
+#room_items_table thead {
   background: linear-gradient(135deg, #b5b35c, #c7c56e);
   color: #fff;
 }
 
-#service_items_table th {
+#service_items_table th,
+#room_items_table th {
   padding: 12px 8px;
   text-align: left;
   font-size: 13px;
   font-weight: 600;
 }
 
-#service_items_table tbody tr {
+#service_items_table tbody tr,
+#room_items_table tbody tr {
   border-bottom: 1px solid #e5e7eb;
 }
 
-#service_items_table tbody tr:last-child {
+#service_items_table tbody tr:last-child,
+#room_items_table tbody tr:last-child {
   border-bottom: none;
 }
 
-#service_items_table td {
+#service_items_table td,
+#room_items_table td {
   padding: 10px 8px;
   font-size: 13px;
 }
@@ -439,24 +453,40 @@
   background: #e8e8e8;
   transform: translateY(-2px);
 }
-    .company-header-inner {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 25px;
-    }
+
+.company-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 15px;
+}
+
+.company-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2f2f2f;
+  margin: 0 0 5px 0;
+}
+
+.company-details {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
 
 /* ===== MOBILE VIEW ===== */
 @media (max-width: 600px) {
   .booking-wrapper {
     padding: 20px 10px;
   }
+  
   .company-header-inner {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 6px;
   }
+  
   .company-logo {
     max-height: 75px;
     border-radius: 50%;
@@ -528,7 +558,9 @@
   }
 
   #service_items_table th,
-  #service_items_table td {
+  #service_items_table td,
+  #room_items_table th,
+  #room_items_table td {
     padding: 8px 4px;
     font-size: 11px;
   }

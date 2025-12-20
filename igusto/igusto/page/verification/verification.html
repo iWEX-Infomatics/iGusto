@@ -1,0 +1,328 @@
+<div class="verification-wrapper">
+  <div class="verification-card">
+    <div class="company-header">
+      <!-- company details -->
+    </div>
+    <h1 class="verification-title">Verify Your Details</h1>
+    <p class="verification-subtitle">Enter OTP from Email and Mobile
+      <!-- (at least one required) -->
+    </p>
+
+    <div class="verification-form">
+      <!-- Row 1: Mobile Number + Email -->
+      <div class="verification-grid">
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="text" id="mobile_display" class="verification-input" readonly>
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email_display" class="verification-input" readonly>
+        </div>
+      </div>
+
+      <!-- Row 2: Mobile OTP + Email OTP -->
+      <div class="verification-grid">
+        <div class="form-group">
+          <label>Mobile OTP</label>
+          <input type="text" id="mobile_otp" class="verification-input" placeholder="6-digit OTP" maxlength="6"
+            disabled>
+          <!-- <small style="color: #6b7280; font-size: 12px; display: block; margin-top: 4px;">
+            (SMS not available)
+          </small> -->
+        </div>
+
+        <div class="form-group">
+          <label>Email OTP</label>
+          <input type="text" id="email_otp" class="verification-input" placeholder="6-digit OTP" maxlength="6">
+        </div>
+      </div>
+
+      <!-- Info message -->
+      <!-- <div style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 12px; margin-bottom: 15px; border-radius: 6px;">
+        <p style="margin: 0; font-size: 14px; color: #1e40af;">
+          <strong>Note:</strong> You only need to verify ONE OTP (either Mobile or Email) to proceed.
+        </p>
+      </div> -->
+
+      <!-- Verify Button -->
+      <button id="verify_btn" class="verification-btn verification-btn-primary">
+        Verify OTP
+      </button>
+
+      <!-- Resend OTP Button (Hidden initially) -->
+      <button id="resend_btn" class="verification-btn verification-btn-secondary hidden">
+        Resend OTP
+      </button>
+
+      <!-- Book Now Button (Hidden initially) -->
+      <button id="book_now_btn" class="verification-btn verification-btn-success hidden">
+        Book Now
+      </button>
+
+      <!-- Messages -->
+      <div id="error-msg" class="error-msg hidden"></div>
+      <div id="success-msg" class="success-msg hidden">Verification Successful!</div>
+    </div>
+
+    <footer>
+      <i>Not just a place to stay. A place to remember</i>
+    </footer>
+  </div>
+</div>
+
+<style>
+  #page-verification {
+    background: url("https://images.pexels.com/photos/6466289/pexels-photo-6466289.jpeg") no-repeat fixed center;
+    background-size: cover !important;
+    font-family: "Poppins", sans-serif;
+    color: #2f2f2f;
+  }
+
+  .page-head {
+    display: none;
+  }
+
+  .verification-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 15px;
+    min-height: 100vh;
+  }
+
+  .verification-card {
+    background: #ffffffbf;
+    backdrop-filter: blur(14px);
+    padding: 45px 50px;
+    border-radius: 20px;
+    border: 6px solid #bfaa47cc;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+    max-width: 550px;
+    width: 100%;
+  }
+
+  .verification-title {
+    height: 33px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: normal;
+    color: #2f2f2f;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #b5b35c, #c7c56e);
+  }
+
+  .verification-subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 30px;
+    font-size: 15px;
+  }
+
+  .verification-form {
+    width: 100%;
+  }
+
+  .verification-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  .company-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 15px;
+  }
+
+  .company-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2f2f2f;
+    margin: 0 0 5px 0;
+  }
+
+  .company-logo {
+    max-height: 90px;
+    border-radius: 45px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #2f2f2f;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  .company-details {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  .verification-input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background-color: #fff;
+    font-size: 15px;
+    transition: all 0.3s ease;
+  }
+
+  .verification-input:read-only {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+  }
+
+  .verification-input:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .verification-input:focus {
+    border-color: #b5b35c;
+    box-shadow: 0 0 0 4px rgba(181, 179, 92, 0.25);
+    outline: none;
+  }
+
+  .verification-btn {
+    width: 100%;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .verification-btn-primary {
+    background: linear-gradient(135deg, #b5b35c, #c7c56e);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(181, 179, 92, 0.35);
+  }
+
+  .verification-btn-primary:hover {
+    background: linear-gradient(135deg, #a6a45a, #c3c17a);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(181, 179, 92, 0.45);
+  }
+
+  .verification-btn-secondary {
+    background-color: #6b7280;
+    color: #fff;
+  }
+
+  .verification-btn-secondary:hover {
+    background-color: #4b5563;
+  }
+
+  .verification-btn-success {
+    background-color: #4b7b2b;
+    color: #fff;
+  }
+
+  .verification-btn-success:hover {
+    background-color: #3e6825;
+  }
+
+  .error-msg {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #fee;
+    color: #c00;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .success-msg {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #dcfce7;
+    color: #166534;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 16px;
+    font-family: cursive;
+    color: #444;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 600px) {
+    .verification-wrapper {
+      padding: 25px 10px;
+    }
+
+    .verification-card {
+      padding: 30px 25px;
+      border: 1.5px solid #b5b35c;
+    }
+
+    .company-header-inner {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .verification-grid {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .company-logo {
+      max-height: 75px;
+      border-radius: 50%;
+    }
+
+    .verification-title {
+      font-size: 20px;
+    }
+
+    .verification-subtitle {
+      font-size: 13px;
+    }
+
+    .verification-input {
+      font-size: 14px;
+      padding: 10px 12px;
+    }
+
+    .verification-btn {
+      font-size: 15px;
+      padding: 10px 25px;
+    }
+
+    footer {
+      font-size: 13px;
+    }
+  }
+</style>

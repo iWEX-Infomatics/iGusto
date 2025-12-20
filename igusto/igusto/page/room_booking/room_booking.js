@@ -9,54 +9,53 @@ class RoomBooking {
             title: '',
             single_column: true
         });
-        this.serviceItems = [];
-        this.itemsList = [];
+        this.roomItemsList = [];
+        this.serviceItemsList = [];
         this.make();
     }
-load_company_details() {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_company_details",
-    callback: (r) => {
-      const data = r.message;
-      if (!data) return;
 
-      const logo_html = data.logo
-        ? `<img src="${data.logo}" class="company-logo">`
-        : `<div class="company-logo-placeholder">No Logo</div>`;
+    load_company_details() {
+        frappe.call({
+            method: "igusto.igusto.page.room_order.room_order.get_company_details",
+            callback: (r) => {
+                const data = r.message;
+                if (!data) return;
 
-      // HARD CODED ADDRESS ONLY
-      const address_line = "Munnar";
+                const logo_html = data.logo
+                    ? `<img src="${data.logo}" class="company-logo">`
+                    : `<div class="company-logo-placeholder">No Logo</div>`;
 
-      // Dynamic phone + email
-      const contact_line = ` ${data.phone_no || ""} | ${data.email || ""}`;
+                const address_line = "Munnar";
+                const contact_line = ` ${data.phone_no || ""} | ${data.email || ""}`;
 
-      const header_html = `
-        <div class="company-header-inner">
-          <div class="company-left">${logo_html}</div>
-          <div class="company-right">
-            <h2 class="company-name">${data.company_name}</h2>
-            <div class="company-details">
-              <div>${address_line} | ${contact_line}</div>
-            </div>
-          </div>
-        </div>
-      `;
+                const header_html = `
+                    <div class="company-header-inner">
+                        <div class="company-left">${logo_html}</div>
+                        <div class="company-right">
+                            <h2 class="company-name">${data.company_name}</h2>
+                            <div class="company-details">
+                                <div>${address_line} | ${contact_line}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
 
-      $(".company-header").html(header_html);
+                $(".company-header").html(header_html);
+            }
+        });
     }
-  });
-}
+
     make() {
         $(frappe.render_template("room_booking")).appendTo(this.page.main);
         frappe.after_ajax(() => {
             this.load_guest_data();
-            this.load_room_types();
             this.load_company_details();
             this.load_items();
             this.setup_events();
             this.setup_date_validation();
-            // Add default service item row
+            // Add default rows after items are loaded
             setTimeout(() => {
+                this.addRoomItemRow();
                 this.addServiceItemRow();
             }, 500);
         });
@@ -116,17 +115,40 @@ load_company_details() {
     }
 
     load_items() {
+        // Load Room items (Item Group = "Room" or parent = "Room")
         frappe.call({
             method: "frappe.client.get_list",
             args: {
                 doctype: "Item",
-                filters: { is_sales_item: 1 },
-                fields: ["name", "item_name", "stock_uom", "standard_rate"]
+                filters: [
+                    ["is_sales_item", "=", 1],
+                    ["item_group", "in", ["Room", "Rooms"]]
+                ],
+                fields: ["name", "item_name", "stock_uom", "standard_rate", "item_group"]
             },
             callback: (r) => {
                 if (r.message) {
-                    this.itemsList = r.message;
-                    console.log("✅ Items loaded:", this.itemsList.length);
+                    this.roomItemsList = r.message;
+                    console.log("✅ Room Items loaded:", this.roomItemsList.length);
+                }
+            }
+        });
+
+        // Load Other Service items (excluding Room items)
+        frappe.call({
+            method: "frappe.client.get_list",
+            args: {
+                doctype: "Item",
+                filters: [
+                    ["is_sales_item", "=", 1],
+                    ["item_group", "not in", ["Room", "Rooms"]]
+                ],
+                fields: ["name", "item_name", "stock_uom", "standard_rate", "item_group"]
+            },
+            callback: (r) => {
+                if (r.message) {
+                    this.serviceItemsList = r.message;
+                    console.log("✅ Service Items loaded:", this.serviceItemsList.length);
                 }
             }
         });
@@ -157,8 +179,7 @@ load_company_details() {
                 }
             }
 
-            // Update qty for all service items
-            me.updateServiceItemsQty();
+            me.calculateTotalDays();
         });
 
         $form.find("#check_out").on("change", function() {
@@ -177,82 +198,75 @@ load_company_details() {
                 return;
             }
 
-            // Update qty for all service items
-            me.updateServiceItemsQty();
+            me.calculateTotalDays();
+        });
+
+        // Total Rooms change event
+        $form.find("#total_rooms").on("input", function() {
+            me.updateAllItemsQty();
         });
     }
 
-    updateServiceItemsQty() {
+    calculateTotalDays() {
         const checkIn = $("#check_in").val();
         const checkOut = $("#check_out").val();
 
-        if (!checkIn || !checkOut) return;
+        if (!checkIn || !checkOut) {
+            $("#total_days").val("");
+            return;
+        }
 
-        const days = this.calculateDays(checkIn, checkOut);
-
-        // Update qty for each service item row
-        $("#service_items_body tr").each(function() {
-            const $row = $(this);
-            const $qtyInput = $row.find(".item-qty");
-            $qtyInput.val(days);
-            
-            // Recalculate amount
-            const rate = parseFloat($row.find(".item-rate").val()) || 0;
-            const amount = days * rate;
-            $row.find(".item-amount").val(amount.toFixed(2));
-        });
-    }
-
-    calculateDays(checkIn, checkOut) {
         const start = new Date(checkIn);
         const end = new Date(checkOut);
         const diffTime = Math.abs(end - start);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays || 1;
+        const totalDays = diffDays || 1;
+
+        $("#total_days").val(totalDays);
+        
+        // Update qty for all items
+        this.updateAllItemsQty();
+    }
+
+    updateAllItemsQty() {
+        const totalRooms = parseInt($("#total_rooms").val()) || 1;
+        const totalDays = parseInt($("#total_days").val()) || 0;
+
+        if (totalDays === 0) return;
+
+        const calculatedQty = totalRooms * totalDays;
+
+        // Update Room Items
+        $("#room_items_body tr").each(function() {
+            const $row = $(this);
+            const $qtyInput = $row.find(".item-qty");
+            $qtyInput.val(calculatedQty);
+            
+            const rate = parseFloat($row.find(".item-rate").val()) || 0;
+            const amount = calculatedQty * rate;
+            $row.find(".item-amount").val(amount.toFixed(2));
+        });
+
+        // Update Service Items
+        $("#service_items_body tr").each(function() {
+            const $row = $(this);
+            const $qtyInput = $row.find(".item-qty");
+            $qtyInput.val(calculatedQty);
+            
+            const rate = parseFloat($row.find(".item-rate").val()) || 0;
+            const amount = calculatedQty * rate;
+            $row.find(".item-amount").val(amount.toFixed(2));
+        });
     }
 
     setup_events() {
         const $form = $(".booking-card");
         let me = this;
 
-        // Room type change - auto-fetch rate plan and description
-        $form.on("change", "#room_type", function() {
-            const roomType = $(this).val();
-            if (!roomType) {
-                $form.find("#rate_plan").val("");
-                $("#description_row").hide();
-                return;
-            }
-
-            frappe.call({
-                method: "frappe.client.get_value",
-                args: {
-                    doctype: "Room Type",
-                    filters: { name: roomType },
-                    fieldname: ["base_rate", "description"]
-                },
-                callback: function(r) {
-                    if (r.message) {
-                        if (r.message.base_rate) {
-                            $form.find("#rate_plan").val(r.message.base_rate);
-                            console.log("✅ Room rate fetched:", r.message.base_rate);
-                        } else {
-                            $form.find("#rate_plan").val("");
-                            frappe.msgprint("⚠️ No base rate found for this room type.");
-                        }
-                        
-                        if (r.message.description) {
-                            $("#description_text").text(r.message.description);
-                            $("#description_row").slideDown(300);
-                        } else {
-                            $("#description_row").hide();
-                        }
-                    } else {
-                        $form.find("#rate_plan").val("");
-                        $("#description_row").hide();
-                    }
-                }
-            });
+        // Add Room Item button
+        $form.on("click", "#add_room_item", function(e) {
+            e.preventDefault();
+            me.addRoomItemRow();
         });
 
         // Add Service Item button
@@ -261,27 +275,26 @@ load_company_details() {
             me.addServiceItemRow();
         });
 
-        // Item selection change
-        $form.on("change", ".item-select", function() {
+        // Room Item selection change
+        $form.on("change", ".room-item-select", function() {
             const $row = $(this).closest("tr");
             const itemCode = $(this).val();
             
             if (!itemCode) return;
 
-            const item = me.itemsList.find(i => i.name === itemCode);
+            const item = me.roomItemsList.find(i => i.name === itemCode);
             if (item) {
                 $row.find(".item-uom").val(item.stock_uom || "");
                 $row.find(".item-rate").val(item.standard_rate || 0);
 
-                // Calculate qty based on dates
-                const checkIn = $("#check_in").val();
-                const checkOut = $("#check_out").val();
+                const totalRooms = parseInt($("#total_rooms").val()) || 1;
+                const totalDays = parseInt($("#total_days").val()) || 0;
                 
-                if (checkIn && checkOut) {
-                    const days = me.calculateDays(checkIn, checkOut);
-                    $row.find(".item-qty").val(days);
+                if (totalDays > 0) {
+                    const qty = totalRooms * totalDays;
+                    $row.find(".item-qty").val(qty);
                     
-                    const amount = days * (item.standard_rate || 0);
+                    const amount = qty * (item.standard_rate || 0);
                     $row.find(".item-amount").val(amount.toFixed(2));
                 } else {
                     $row.find(".item-qty").val(1);
@@ -290,7 +303,35 @@ load_company_details() {
             }
         });
 
-        // Qty change
+        // Service Item selection change
+        $form.on("change", ".service-item-select", function() {
+            const $row = $(this).closest("tr");
+            const itemCode = $(this).val();
+            
+            if (!itemCode) return;
+
+            const item = me.serviceItemsList.find(i => i.name === itemCode);
+            if (item) {
+                $row.find(".item-uom").val(item.stock_uom || "");
+                $row.find(".item-rate").val(item.standard_rate || 0);
+
+                const totalRooms = parseInt($("#total_rooms").val()) || 1;
+                const totalDays = parseInt($("#total_days").val()) || 0;
+                
+                if (totalDays > 0) {
+                    const qty = totalRooms * totalDays;
+                    $row.find(".item-qty").val(qty);
+                    
+                    const amount = qty * (item.standard_rate || 0);
+                    $row.find(".item-amount").val(amount.toFixed(2));
+                } else {
+                    $row.find(".item-qty").val(1);
+                    $row.find(".item-amount").val((item.standard_rate || 0).toFixed(2));
+                }
+            }
+        });
+
+        // Qty change for both tables
         $form.on("input", ".item-qty", function() {
             const $row = $(this).closest("tr");
             const qty = parseFloat($(this).val()) || 0;
@@ -299,13 +340,19 @@ load_company_details() {
             $row.find(".item-amount").val(amount.toFixed(2));
         });
 
-        // Remove item
-        $form.on("click", ".remove-item-btn", function() {
+        // Remove item from Room Items
+        $form.on("click", "#room_items_body .remove-item-btn", function() {
             $(this).closest("tr").remove();
-            me.reindexServiceItems();
+            me.reindexItems("#room_items_body");
         });
 
-        // Reserve Booking Button
+        // Remove item from Service Items
+        $form.on("click", "#service_items_body .remove-item-btn", function() {
+            $(this).closest("tr").remove();
+            me.reindexItems("#service_items_body");
+        });
+
+        // Book Now Button
         $form.on("click", "#create_booking_btn", function (e) {
             e.preventDefault();
 
@@ -323,8 +370,8 @@ load_company_details() {
                 check_out: $form.find("#check_out").val() || "",
                 total_adults: $form.find("#total_adults_input").val() || "1",
                 total_children: $form.find("#total_children_input").val() || "0",
-                room_type: $form.find("#room_type").val() || "",
-                rate_plan: $form.find("#rate_plan").val() || ""
+                total_rooms: $form.find("#total_rooms").val() || "1",
+                total_days: $form.find("#total_days").val() || "0"
             };
 
             // Validation
@@ -337,20 +384,34 @@ load_company_details() {
                 $form.find("#total_adults_input").focus();
                 return;
             }
-            if (!bookingData.room_type) {
-                frappe.msgprint("⚠️ Room type is required.");
-                return;
-            }
-            if (!bookingData.rate_plan) {
-                frappe.msgprint("⚠️ Room rate is required.");
+            if (!bookingData.total_rooms || parseInt(bookingData.total_rooms) < 1) {
+                frappe.msgprint("⚠️ Total rooms must be at least 1.");
+                $form.find("#total_rooms").focus();
                 return;
             }
 
-            // Collect service items
+            // Collect Room Items
+            const roomItems = [];
+            $("#room_items_body tr").each(function() {
+                const $row = $(this);
+                const itemCode = $row.find(".room-item-select").val();
+                
+                if (itemCode) {
+                    roomItems.push({
+                        item_code: itemCode,
+                        qty: parseFloat($row.find(".item-qty").val()) || 0,
+                        uom: $row.find(".item-uom").val() || "",
+                        rate: parseFloat($row.find(".item-rate").val()) || 0,
+                        amount: parseFloat($row.find(".item-amount").val()) || 0
+                    });
+                }
+            });
+
+            // Collect Service Items
             const serviceItems = [];
             $("#service_items_body tr").each(function() {
                 const $row = $(this);
-                const itemCode = $row.find(".item-select").val();
+                const itemCode = $row.find(".service-item-select").val();
                 
                 if (itemCode) {
                     serviceItems.push({
@@ -363,11 +424,17 @@ load_company_details() {
                 }
             });
 
+            if (roomItems.length === 0) {
+                frappe.msgprint("⚠️ Please add at least one room item.");
+                return;
+            }
+
             const no_of_guests = parseInt(bookingData.total_adults) + parseInt(bookingData.total_children);
 
             console.log("📤 Sending booking data:", {
                 ...bookingData,
                 no_of_guests,
+                room_items: roomItems,
                 service_items: serviceItems
             });
 
@@ -383,8 +450,9 @@ load_company_details() {
                     no_of_guests: no_of_guests,
                     total_adults: bookingData.total_adults,
                     total_children: bookingData.total_children,
-                    room_type: bookingData.room_type,
-                    rate_plan: bookingData.rate_plan,
+                    total_rooms: bookingData.total_rooms,
+                    total_days: bookingData.total_days,
+                    room_items: JSON.stringify(roomItems),
                     service_items: JSON.stringify(serviceItems)
                 },
                 callback: function (r) {
@@ -397,10 +465,6 @@ load_company_details() {
                         
                         localStorage.removeItem("guest_data");
                         console.log("🗑️ Cleared guest_data from localStorage");
-                        
-                        // setTimeout(() => {
-                        //     frappe.set_route("guest-signup");
-                        // }, 2000);
                     }
                 },
                 error: function (err) {
@@ -416,11 +480,11 @@ load_company_details() {
         });
     }
 
-    addServiceItemRow() {
-        const rowIndex = $("#service_items_body tr").length + 1;
+    addRoomItemRow() {
+        const rowIndex = $("#room_items_body tr").length + 1;
         
-        let itemOptions = '<option value="">Select Item</option>';
-        this.itemsList.forEach(item => {
+        let itemOptions = '<option value="">Select Room Item</option>';
+        this.roomItemsList.forEach(item => {
             itemOptions += `<option value="${item.name}">${item.item_name || item.name}</option>`;
         });
 
@@ -428,7 +492,44 @@ load_company_details() {
             <tr>
                 <td class="sr-no">${rowIndex}</td>
                 <td>
-                    <select class="service-item-select item-select">
+                    <select class="service-item-select room-item-select">
+                        ${itemOptions}
+                    </select>
+                </td>
+                <td>
+                    <input type="number" class="service-item-input item-qty" value="1" min="0" step="0.01">
+                </td>
+                <td>
+                    <input type="text" class="service-item-input item-uom" readonly>
+                </td>
+                <td>
+                    <input type="number" class="service-item-input item-rate" value="0" min="0" step="0.01" readonly>
+                </td>
+                <td>
+                    <input type="number" class="service-item-input item-amount" value="0" readonly>
+                </td>
+                <td>
+                    <button type="button" class="remove-item-btn">×</button>
+                </td>
+            </tr>
+        `;
+
+        $("#room_items_body").append(row);
+    }
+
+    addServiceItemRow() {
+        const rowIndex = $("#service_items_body tr").length + 1;
+        
+        let itemOptions = '<option value="">Select Service Item</option>';
+        this.serviceItemsList.forEach(item => {
+            itemOptions += `<option value="${item.name}">${item.item_name || item.name}</option>`;
+        });
+
+        const row = `
+            <tr>
+                <td class="sr-no">${rowIndex}</td>
+                <td>
+                    <select class="service-item-select">
                         ${itemOptions}
                     </select>
                 </td>
@@ -453,33 +554,9 @@ load_company_details() {
         $("#service_items_body").append(row);
     }
 
-    reindexServiceItems() {
-        $("#service_items_body tr").each(function(index) {
+    reindexItems(tableBodySelector) {
+        $(tableBodySelector + " tr").each(function(index) {
             $(this).find(".sr-no").text(index + 1);
-        });
-    }
-
-    load_room_types() {
-        frappe.call({
-            method: "frappe.client.get_list",
-            args: {
-                doctype: "Room Type",
-                fields: ["name"]
-            },
-            callback: function (r) {
-                if (r.message && r.message.length > 0) {
-                    let options = `<option value="">Room Type</option>`;
-                    r.message.forEach(function (rt) {
-                        options += `<option value="${rt.name}">${rt.name}</option>`;
-                    });
-                    $("#room_type_wrapper").html(`
-                        <select class="form-control" id="room_type">
-                            ${options}
-                        </select>
-                    `);
-                    console.log("✅ Room types loaded:", r.message.length);
-                }
-            }
         });
     }
 }

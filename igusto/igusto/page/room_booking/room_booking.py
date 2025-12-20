@@ -5,8 +5,9 @@ import json
 
 @frappe.whitelist()
 def create_booking(guest, mobile, email, nationality, check_in, check_out, 
-                   no_of_guests, total_adults, total_children, room_type, rate_plan, service_items=None):
-    """Create Sales Order for room booking with service items"""
+                   no_of_guests, total_adults, total_children, total_rooms, 
+                   total_days, room_items=None, service_items=None):
+    """Create Sales Order for room booking with room items and service items"""
     
     try:
         # ------------------------------- 
@@ -18,6 +19,11 @@ def create_booking(guest, mobile, email, nationality, check_in, check_out,
         # Validate guest counts
         # ------------------------------- 
         validate_guest_counts(total_adults, total_children, no_of_guests)
+        
+        # ------------------------------- 
+        # Validate rooms and days
+        # ------------------------------- 
+        validate_rooms_and_days(total_rooms, total_days)
         
         # ------------------------------- 
         # Fetch Guest
@@ -37,16 +43,6 @@ def create_booking(guest, mobile, email, nationality, check_in, check_out,
         customer = get_or_create_customer(full_name, guest_mobile, guest_email)
         
         # ------------------------------- 
-        # Ensure Item (Room Type) exists
-        # ------------------------------- 
-        ensure_room_type_item(room_type)
-        
-        # ------------------------------- 
-        # Validate and get rate plan
-        # ------------------------------- 
-        validated_rate = validate_rate_plan(room_type, rate_plan)
-        
-        # ------------------------------- 
         # Determine currency
         # ------------------------------- 
         final_currency = "INR" if guest_nationality and guest_nationality.lower() == "india" else "USD"
@@ -54,21 +50,46 @@ def create_booking(guest, mobile, email, nationality, check_in, check_out,
         # ------------------------------- 
         # Prepare items list
         # ------------------------------- 
-        items_list = [
-            {
-                "item_code": room_type,
-                "item_name": room_type,
-                "qty": 1,
-                "rate": validated_rate,
-                "description": f"Room Booking for {full_name}\n"
-                               f"Check-in: {check_in} | Check-out: {check_out}\n"
-                               f"Adults: {total_adults} | Children: {total_children}\n"
-                               f"Total Guests: {no_of_guests}"
-            }
-        ]
+        items_list = []
         
         # ------------------------------- 
-        # Add service items if provided
+        # Add Room Items
+        # ------------------------------- 
+        if room_items:
+            try:
+                room_items_list = json.loads(room_items) if isinstance(room_items, str) else room_items
+                
+                for room_item in room_items_list:
+                    item_code = room_item.get("item_code")
+                    qty = float(room_item.get("qty", 0))
+                    rate = float(room_item.get("rate", 0))
+                    uom = room_item.get("uom", "")
+                    
+                    if item_code and qty > 0:
+                        # Verify item exists
+                        if frappe.db.exists("Item", item_code):
+                            items_list.append({
+                                "item_code": item_code,
+                                "qty": qty,
+                                "rate": rate,
+                                "uom": uom,
+                                "description": f"Room Item for {full_name}\n"
+                                               f"Check-in: {check_in} | Check-out: {check_out}\n"
+                                               f"Total Rooms: {total_rooms} | Total Days: {total_days}\n"
+                                               f"Adults: {total_adults} | Children: {total_children}"
+                            })
+                        else:
+                            frappe.log_error(f"Room Item {item_code} not found", "Room Item Missing")
+                            
+            except Exception as e:
+                frappe.log_error(f"Error parsing room items: {str(e)}", "Room Items Parse Error")
+        
+        # Validation: At least one room item is required
+        if not items_list:
+            frappe.throw(_("At least one room item is required"))
+        
+        # ------------------------------- 
+        # Add Service Items
         # ------------------------------- 
         if service_items:
             try:
@@ -88,10 +109,11 @@ def create_booking(guest, mobile, email, nationality, check_in, check_out,
                                 "qty": qty,
                                 "rate": rate,
                                 "uom": uom,
-                                "description": f"Service Item for {full_name}"
+                                "description": f"Service Item for {full_name}\n"
+                                               f"Total Rooms: {total_rooms} | Total Days: {total_days}"
                             })
                         else:
-                            frappe.log_error(f"Item {item_code} not found", "Service Item Missing")
+                            frappe.log_error(f"Service Item {item_code} not found", "Service Item Missing")
                             
             except Exception as e:
                 frappe.log_error(f"Error parsing service items: {str(e)}", "Service Items Parse Error")
@@ -124,7 +146,9 @@ def create_booking(guest, mobile, email, nationality, check_in, check_out,
             "message": "Booking reserved successfully",
             "customer": customer.name,
             "total_amount": so.grand_total,
-            "items_count": len(items_list)
+            "items_count": len(items_list),
+            "total_rooms": total_rooms,
+            "total_days": total_days
         }
         
     except Exception as e:
@@ -180,6 +204,23 @@ def validate_guest_counts(total_adults, total_children, no_of_guests):
         frappe.throw(_("Invalid guest count values"))
 
 
+def validate_rooms_and_days(total_rooms, total_days):
+    """Validate total rooms and total days"""
+    
+    try:
+        rooms = int(total_rooms)
+        days = int(total_days)
+        
+        if rooms < 1:
+            frappe.throw(_("Total rooms must be at least 1"))
+        
+        if days < 1:
+            frappe.throw(_("Total days must be at least 1"))
+            
+    except ValueError:
+        frappe.throw(_("Invalid rooms or days values"))
+
+
 def get_or_create_customer(full_name, mobile, email):
     """Get existing customer or create new one"""
     
@@ -204,67 +245,35 @@ def get_or_create_customer(full_name, mobile, email):
     return customer
 
 
-def ensure_room_type_item(room_type):
-    """Ensure Room Type exists as an Item"""
-    
-    if not frappe.db.exists("Item", {"item_name": room_type}):
-        item = frappe.get_doc({
-            "doctype": "Item",
-            "item_code": room_type,
-            "item_name": room_type,
-            "item_group": "Services",
-            "stock_uom": "Nos",
-            "is_sales_item": 1
-        })
-        item.insert(ignore_permissions=True)
-        frappe.db.commit()
-        frappe.logger().info(f"✅ Item created for Room Type: {room_type}")
-
-
-def validate_rate_plan(room_type, rate_plan):
-    """Validate rate plan against Room Type base_rate"""
-    
-    if not frappe.db.exists("Room Type", room_type):
-        frappe.throw(_("Room Type {0} does not exist").format(room_type))
-    
-    room_type_doc = frappe.get_doc("Room Type", room_type)
-    base_rate = room_type_doc.get("base_rate", 0)
-    
-    if not base_rate:
-        frappe.throw(_("No base rate defined for Room Type {0}").format(room_type))
-    
-    try:
-        rate_plan_float = float(rate_plan)
-        return rate_plan_float
-        
-    except ValueError:
-        frappe.throw(_("Invalid rate plan value"))
-
-
 @frappe.whitelist()
-def get_room_type_rate(room_type):
-    """Get base rate for a specific room type"""
+def get_room_items():
+    """Get list of room items (Item Group = Room or parent = Room)"""
     
-    if not frappe.db.exists("Room Type", room_type):
-        return {"base_rate": 0, "error": "Room Type not found"}
-    
-    room_type_doc = frappe.get_doc("Room Type", room_type)
-    base_rate = room_type_doc.get("base_rate", 0)
-    
-    return {
-        "base_rate": base_rate,
-        "room_type": room_type
-    }
-
-
-@frappe.whitelist()
-def get_available_room_types(check_in=None, check_out=None):
-    """Get list of available room types"""
-    
-    room_types = frappe.get_all(
-        "Room Type",
-        fields=["name", "base_rate", "description"],
-        order_by="name"
+    room_items = frappe.get_all(
+        "Item",
+        filters={
+            "is_sales_item": 1,
+            "item_group": ["in", ["Room", "Rooms"]]
+        },
+        fields=["name", "item_name", "stock_uom", "standard_rate", "item_group"],
+        order_by="item_name"
     )
     
-    return room_types
+    return room_items
+
+
+@frappe.whitelist()
+def get_service_items():
+    """Get list of service items (excluding Room items)"""
+    
+    service_items = frappe.get_all(
+        "Item",
+        filters={
+            "is_sales_item": 1,
+            "item_group": ["not in", ["Room", "Rooms"]]
+        },
+        fields=["name", "item_name", "stock_uom", "standard_rate", "item_group"],
+        order_by="item_name"
+    )
+    
+    return service_items

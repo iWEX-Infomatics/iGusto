@@ -32,15 +32,21 @@ def get_guest_booking_details(full_name):
 
         so_data = so[0]
 
+        # Fetch first item from Sales Order where item group is "Room"
         room_type = None
         items = frappe.get_all(
             "Sales Order Item",
             filters={"parent": so_data.name},
-            fields=["item_code"],
-            limit=1,
+            fields=["item_code", "item_group"],
+            order_by="idx asc",
+            limit_page_length=10
         )
-        if items:
-            room_type = items[0].item_code
+        
+        # Find first item with item group "Room"
+        for item in items:
+            if item.get("item_group") == "Room":
+                room_type = item.get("item_code")
+                break
 
         nationality = None
         guest_full_name = guest_id

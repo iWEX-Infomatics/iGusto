@@ -13,46 +13,40 @@ class GuestSignupPage {
 		this.load_company_details();
 	}
   
-load_company_details() {
-  frappe.call({
-    method: "igusto.igusto.page.room_order.room_order.get_company_details",
-    callback: (r) => {
-      const data = r.message;
-      if (!data) return;
+	load_company_details() {
+		frappe.call({
+			method: "igusto.igusto.page.room_order.room_order.get_company_details",
+			callback: (r) => {
+				const data = r.message;
+				if (!data) return;
 
-      const logo_html = data.logo
-        ? `<img src="${data.logo}" class="company-logo">`
-        : `<div class="company-logo-placeholder">No Logo</div>`;
+				const logo_html = data.logo
+					? `<img src="${data.logo}" class="company-logo">`
+					: `<div class="company-logo-placeholder">No Logo</div>`;
 
-      // HARD CODED ADDRESS ONLY
-      const address_line = "Munnar";
+				const address_line = "Munnar";
+				const contact_line = ` ${data.phone_no || ""} | ${data.email || ""}`;
 
-      // Dynamic phone + email
-      const contact_line = ` ${data.phone_no || ""} | ${data.email || ""}`;
+				const header_html = `
+					<div class="company-header-inner">
+						<div class="company-left">${logo_html}</div>
+						<div class="company-right">
+							<h2 class="company-name">${data.company_name}</h2>
+							<div class="company-details">
+								<div>${address_line} | ${contact_line}</div>
+							</div>
+						</div>
+					</div>
+				`;
 
-      const header_html = `
-        <div class="company-header-inner">
-          <div class="company-left">${logo_html}</div>
-          <div class="company-right">
-            <h2 class="company-name">${data.company_name}</h2>
-            <div class="company-details">
-              <div>${address_line} | ${contact_line}</div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      $(".company-header").html(header_html);
-    }
-  });
-}
-
-
+				$(".company-header").html(header_html);
+			}
+		});
+	}
 
 	make() {
 		let me = this;
 		this.$body = $(frappe.render_template("guest_signup")).appendTo(this.page.main);
-		let guest_name = "";
 
 		// Create Nationality Link field
 		setTimeout(() => {
@@ -61,8 +55,6 @@ load_company_details() {
 					fieldtype: "Link",
 					fieldname: "nationality",
 					options: "Country",
-					// label: "Nationality",
-					// reqd: 1,
 					placeholder: "Nationality *"
 				},
 				parent: me.$body.find("#nationality"),
@@ -81,7 +73,7 @@ load_company_details() {
 		};
 		$('#first_name, #middle_name, #last_name').on('input', updateFullName);
 
-		//  Auto-format Mobile for +91 (space after 5 digits)
+		// Auto-format Mobile for +91
 		$('#mobile_no').on('input', function () {
 			const countryCode = $('#country_code').val().trim();
 			let val = $(this).val().replace(/\s/g, '');
@@ -94,13 +86,16 @@ load_company_details() {
 			$(this).val(val);
 		});
 
+		// Post office dropdown setup
 		const $postOfficeContainer = $('#post_office_dropdown_container');
 		const $postOfficeDropdown = $('#post_office_dropdown');
 		const $postOfficeLoader = $('#post_office_loader');
 		const $pincodeField = $('#pincode');
+		
 		if ($pincodeField.length && $postOfficeContainer.length) {
 			$postOfficeContainer.insertAfter($pincodeField);
 		}
+
 		const hidePostOfficeSection = function(clear = true) {
 			$postOfficeContainer.hide();
 			$postOfficeLoader.addClass('hidden');
@@ -121,10 +116,9 @@ load_company_details() {
 			$postOfficeDropdown.show().prop('disabled', false);
 		};
 
-		// Ensure dropdown is hidden initially
 		hidePostOfficeSection();
 
-		// Nationality logic - set up after field is created
+		// Nationality logic
 		setTimeout(() => {
 			if (me.nationality_field && me.nationality_field.$input) {
 				$(me.nationality_field.$input).on('change', function () {
@@ -134,26 +128,22 @@ load_company_details() {
 						$('#country_code').val('+91');
 					} else {
 						$('#pincode').attr('placeholder', 'Zip / Postal Code *');
-					// Hide post office dropdown when nationality is not Indian
-					hidePostOfficeSection();
+						hidePostOfficeSection();
 					}
 				});
 			}
 		}, 200);
 
-		// Helper function to detect mobile screen
 		const isMobileScreen = function() {
 			return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 		};
 
-		// Helper function to set address fields
 		const set_address_fields = function(po) {
 			$('#post_office').val(po.post_office);
 			$('#district').val(po.district);
 			$('#state').val(po.state);
 		};
 
-		// Handle post office dropdown change (mobile only)
 		$postOfficeDropdown.on('change', function() {
 			const selectedIndex = $(this).val();
 			if (selectedIndex === '' || selectedIndex === null) return;
@@ -164,12 +154,10 @@ load_company_details() {
 			}
 		});
 
-		// Helper function to validate pincode
 		const isValidPincode = function(pincode) {
 			return pincode && pincode.length === 6 && /^\d{6}$/.test(pincode);
 		};
 
-		// Hide dropdown when pincode is cleared or being edited
 		$('#pincode').on('input', function() {
 			const pincode = $(this).val().trim();
 			if (!isValidPincode(pincode)) {
@@ -177,7 +165,6 @@ load_company_details() {
 			}
 		});
 
-		// Hide dropdown when pincode field loses focus if not valid
 		$('#pincode').on('blur', function() {
 			const pincode = $(this).val().trim();
 			if (!isValidPincode(pincode)) {
@@ -185,7 +172,7 @@ load_company_details() {
 			}
 		});
 
-		// 🟢 Pincode auto-fill (Indian only)
+		// Pincode auto-fill
 		$('#pincode').on('change', function () {
 			const nationality = (me.nationality_field && me.nationality_field.get_value())?.toLowerCase() || '';
 			if (nationality !== 'indian' && nationality !== 'india') {
@@ -196,7 +183,6 @@ load_company_details() {
 			const pincode = $(this).val().trim();
 			if (!isValidPincode(pincode)) {
 				frappe.msgprint("Please enter a valid 6-digit Pincode.");
-				// Hide dropdown on invalid pincode
 				hidePostOfficeSection();
 				return;
 			}
@@ -220,9 +206,7 @@ load_company_details() {
 						set_address_fields(offices[0]);
 						hidePostOfficeSection();
 					} else {
-						// Check if mobile screen
 						if (isMobileScreen()) {
-							// Mobile: Show dropdown
 							const $dropdown = $postOfficeDropdown;
 							$dropdown.empty().append('<option value="">Select Post Office</option>');
 							
@@ -231,14 +215,10 @@ load_company_details() {
 								$dropdown.append(`<option value="${index}">${optionText}</option>`);
 							});
 							
-							// Store offices data for later use
 							$dropdown.data('offices', offices);
-							
-							// Show dropdown container with options
 							showPostOfficeDropdown();
 							$postOfficeContainer.show();
 						} else {
-							// Desktop: Show dialog (existing behavior)
 							const options = offices.map((o, i) => ({ label: o.post_office, value: i }));
 							const d = new frappe.ui.Dialog({
 								title: 'Select Post Office',
@@ -254,7 +234,6 @@ load_company_details() {
 								}
 							});
 							d.show();
-							// Hide dropdown on desktop
 							hidePostOfficeSection();
 						}
 					}
@@ -265,13 +244,13 @@ load_company_details() {
 			});
 		});
 
-		// Save Guest + Auto Create Address
+		// 🔥 UPDATED: Save button - Store data and redirect to verification
 		this.$body.find('#signup_btn').on('click', function () {
 			const first = $('#first_name').val()?.trim();
 			const middle = $('#middle_name').val()?.trim();
 			const last = $('#last_name').val()?.trim();
 			const full_name = $('#full_name').val();
-			const mobile = $('#mobile_no').val()?.replace(/\s/g, ''); // remove space before saving
+			const mobile = $('#mobile_no').val()?.replace(/\s/g, '');
 			const email = $('#email').val();
 			const nationality = (me.nationality_field && me.nationality_field.get_value()) || '';
 
@@ -280,58 +259,51 @@ load_company_details() {
 				return;
 			}
 
-			const address_data = {
-				address_line1: $('#address_line1').val(),
-				city: $('#city').val(),
-				state: $('#state').val(),
-				country: nationality, // Use nationality (Country) as the address country
-				pincode: $('#pincode').val(),
-				post_office: $('#post_office').val(),
-				district: $('#district').val(),
+			// Collect all guest data
+			const guestData = {
+				first_name: first,
+				middle_name: middle,
+				last_name: last,
+				full_name: full_name,
+				mobile_no: mobile,
+				email: email,
+				gender: $('#gender').val(),
+				nationality: nationality,
+				address_data: {
+					address_line1: $('#address_line1').val(),
+					city: $('#city').val(),
+					state: $('#state').val(),
+					country: nationality,
+					pincode: $('#pincode').val(),
+					post_office: $('#post_office').val(),
+					district: $('#district').val(),
+				}
 			};
 
+			// Store in localStorage
+			localStorage.setItem("guest_signup_data", JSON.stringify(guestData));
+
+			// Send OTP
 			frappe.call({
-				method: "igusto.igusto.page.guest_signup.guest_signup.create_guest_with_address",
+				method: "igusto.igusto.page.verification.verification.send_otp",
 				args: {
-					first_name: first,
-					middle_name: middle,
-					last_name: last,
-					full_name: full_name,
-					mobile_no: mobile,
 					email: email,
-					gender: $('#gender').val(),
-					nationality: nationality,
-					address_data: address_data
+					mobile_no: mobile
 				},
 				callback: function (r) {
-					if (r.message) {
-						guest_name = r.message.guest;
-
-						const guestData = {
-							guest: guest_name,
-							mobile: mobile,
-							email: email,
-							nationality: nationality
-						};
-						localStorage.setItem("guest_data", JSON.stringify(guestData));
-
-						$('#success-msg')
-							.text(`Signup Completed!`)
-							.removeClass('hidden');
-						$('#book_now_btn').removeClass('hidden');
-						$('#signup_btn').addClass('hidden');
+					if (r.message && r.message.success) {
+						frappe.show_alert({
+							message: r.message.message,
+							indicator: 'green'
+						});
+						
+						// Redirect to verification page
+						frappe.set_route('verification');
+					} else {
+						frappe.msgprint(r.message.message || 'Failed to send OTP');
 					}
 				}
 			});
-		});
-
-		// Book Now
-		this.$body.find('#book_now_btn').on('click', function () {
-			if (!guest_name) {
-				frappe.msgprint("Guest not found, please register first!");
-				return;
-			}
-			frappe.set_route('room-booking', { guest: guest_name });
 		});
 	}
 }
