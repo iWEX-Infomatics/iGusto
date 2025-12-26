@@ -1,0 +1,388 @@
+<!-- HTML Template -->
+<div class="room-dashboard">
+  <div class="filter-container">
+    <!-- First Row: Room Type + Status -->
+    <div class="filter-row">
+      <!-- Room Type Filter Buttons -->
+      <div class="filter-group">
+        <label class="filter-label">Room Type</label>
+        <div class="button-group" id="roomtype-buttons">
+          <button class="filter-btn roomtype-btn all-btn active" data-value="all">All</button>
+          <!-- Dynamic room types will be added here -->
+        </div>
+      </div>
+      
+      <!-- Vertical Divider -->
+      <div class="filter-divider"></div>
+      
+      <!-- Status Filter Buttons -->
+      <div class="filter-group">
+        <label class="filter-label">Room Status</label>
+        <div class="button-group" id="status-buttons">
+          <button class="filter-btn status-btn all-btn active" data-value="all">All</button>
+          <!-- Dynamic statuses will be added here -->
+        </div>
+      </div>
+    </div>
+    
+    <!-- Second Row: Search + Clear Button -->
+    <div class="filter-row">
+      <!-- Room Number Search -->
+      <div class="filter-group search-group">
+        <label class="filter-label">Search Room Number</label>
+        <input type="text" id="roomnumber-filter" class="filter-input" placeholder="Enter room number...">
+      </div>
+      
+      <!-- Clear Button -->
+      <div class="filter-group">
+        <button id="clear-filters" class="clear-btn">Clear All Filters</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="stats-bar">
+    <span class="stat-item">Total Rooms: <strong id="total-rooms">0</strong></span>
+    <span class="stat-item">Showing: <strong id="filtered-rooms">0</strong></span>
+  </div>
+  
+  <div id="room-grid" class="room-grid"></div>
+</div>
+
+<!-- ========================================= -->
+<!-- CSS STYLES -->
+<!-- ========================================= -->
+<style>
+.room-dashboard {
+  padding: 10px;
+}
+
+.filter-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.filter-row:last-child {
+  margin-bottom: 0;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-divider {
+  width: 1px;
+  background: #d1d5db;
+  align-self: stretch;
+  margin: 0 10px;
+}
+
+.filter-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 2px;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-btn {
+  padding: 6px 10px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-width: 110px;
+  text-align: center;
+}
+
+.filter-btn:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+.filter-btn.active {
+  border-color: transparent;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Status Button Colors */
+.all-btn.active {
+  background: #3b82f6;
+}
+
+.vacant-btn.active {
+  background: #22c55e;
+}
+
+.booked-btn.active {
+  background: #06b6d4;
+}
+
+.occupied-btn.active {
+  background: #06b6d4;
+}
+
+.dirty-btn.active {
+  background: #6b7280;
+}
+
+.clean-btn.active {
+  background: #6b7280;
+}
+
+.maintenance-btn.active {
+  background: #6b7280;
+}
+
+.blocked-btn.active {
+  background: #6b7280;
+}
+
+/* Room Type buttons - dynamic styling */
+.roomtype-btn.active {
+  background: #3b82f6;
+}
+
+.filter-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 8px 12px;
+  border: 2px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.filter-input:focus {
+  border-color: #3b82f6;
+}
+
+.page-content {
+  padding: 0 !important;
+}
+
+.page-body {
+  padding: 0 !important;
+}
+
+.room-dashboard {
+  margin: 0 !important;
+  padding: 10px !important;
+}
+
+.page-content:has(.room-dashboard),
+.page-body:has(.room-dashboard) {
+  padding: 0 !important;
+}
+
+.clear-btn {
+  padding: 10px 20px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+  white-space: nowrap;
+  margin-top: 23px;
+}
+
+.page-title .title-area .title-text{
+  max-width: 100vw;
+}
+
+.clear-btn:hover {
+  background: #dc2626;
+}
+
+.stats-bar {
+  display: flex;
+  gap: 24px;
+  padding: 12px 20px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.stat-item {
+  color: #4b5563;
+}
+
+.stat-item strong {
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+/* Room Card with Progress */
+.room-card-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.room-card-wrapper:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Regular Room Card */
+.room-card {
+  padding: 16px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  transition: transform 0.2s;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.room-no {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.room-type {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.room-status {
+  margin-top: 10px;
+  padding: 6px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+  font-size: 13px;
+}
+
+.room-status-icon {
+  margin-right: 4px;
+}
+
+/* Room Card Status Colors */
+.vacant { 
+  background: #22c55e; /* Green for vacant */
+}
+
+.available { 
+  background: #22c55e; /* Green for available */
+}
+
+.booked { 
+  background: #06b6d4; /* Cyan for active */
+}
+
+.occupied { 
+  background: #06b6d4; /* Cyan for active */
+}
+
+.dirty { 
+  background: #6b7280; /* Grey for unavailable */
+}
+
+.clean { 
+  background: #6b7280; /* Grey for unavailable */
+  color: white;
+}
+
+.maintenance { 
+  background: #6b7280; /* Grey for unavailable */
+}
+
+.blocked { 
+  background: #6b7280; /* Grey for unavailable */
+}
+
+.na {
+  background: #9e9e9e;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .room-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .filter-row {
+    flex-wrap: wrap;
+  }
+  
+  .filter-divider {
+    display: none;
+  }
+  
+  .room-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .room-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .button-group {
+    gap: 6px;
+  }
+  
+  .filter-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-width: 90px;
+  }
+  
+  .search-group {
+    flex: 1;
+  }
+  
+  .filter-label {
+    display: block;
+    font-size: 11px;
+  }
+}
+</style>
